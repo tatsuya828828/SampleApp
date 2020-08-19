@@ -1,0 +1,19 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<div th:fragment="top_contents">
+			<div class=" text-center jumbotron" style="margin-top: 20vh;">
+				<h1><Strong>Bookers</Strong></h1>
+				<form method="get" th:action="@{/login}">
+					<button class="btn btn-primary">ログイン</button>
+				</form>
+				<form method="get" th:action="@{/signup}">
+					<button class="btn btn-success">新規登録</button>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
