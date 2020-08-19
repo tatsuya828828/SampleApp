@@ -18,13 +18,15 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping("/")
-	public String getTop() {
-		return "/top";
+	public String getTop(Model model) {
+		model.addAttribute("contents", "top :: top_contents");
+		return "/header";
 	}
 
 	@GetMapping("/signup")
 	public String getSignUp(@ModelAttribute SignupForm form, Model model) {
-		return "user/signup";
+		model.addAttribute("contents", "user/signup :: signup_contents");
+		return "/header";
 	}
 	@PostMapping("/signup")
 	public String postSignup(@ModelAttribute SignupForm form, BindingResult bindingResult, Model model) {
