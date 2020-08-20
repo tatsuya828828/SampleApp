@@ -6,7 +6,43 @@
 	</head>
 	<body>
 		<div th:fragment="signup_contents">
-			<h1>新規登録画面作成予定</h1>
+			<h1 class="text-center">新規登録</h1>
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<form method="post" th:action="@{/signup}" th:object="${signupForm}" style="margin-top: 10vh;">
+						<table class="table table-bordered table-hover">
+							<tr>
+								<th class="active col-sm-3">ユーザーID</th>
+								<td>
+									<div class="form-group" th:classappend="${#fields.hasErrors('userId')} ? 'has-error'">
+										<input type="text" class="form-control" th:field="*{userId}">
+										<span class="text-danger" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">userId error</span>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th class="active col-sm-3">パスワード</th>
+								<td>
+									<div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
+										<input type="text" class="form-control" th:field="*{password}">
+										<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</span>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th class="active col-sm-3">名前</th>
+								<td>
+									<div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+										<input type="text" class="form-control" th:field="*{name}">
+										<span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</span>
+									</div>
+								</td>
+							</tr>
+						</table>
+						<button class="btn btn-success form-control" type="submit">新規登録</button>
+					</form>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
