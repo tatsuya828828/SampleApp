@@ -1,0 +1,23 @@
+<html>
+	<body>
+		<div th:fragment="login_contents">
+			<div class="col-lg-8 col-lg-offset-2">
+				<h1>ログイン</h1>
+				<form method="post" th:action="@{/login}">
+					<p th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']} != null"
+						th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}" class="text-danger">
+						ログインエラーメッセージ
+					</p>
+					<label>ユーザーID</label>
+					<input type="text" name="userId" class="form-control">
+					<br>
+					<label>パスワード</label>
+					<input type="text" name="password" class="form-control">
+					<br>
+					<button class="btn btn-primary form-control" type="submit">ログイン</button>
+				</form>
+				<a th:href="@{'/signup'}">新規登録はこちら</a>
+			</div>
+		</div>
+	</body>
+</html>
