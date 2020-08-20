@@ -49,4 +49,10 @@ public class UserController {
 		}
 		return "redirect:/login";
 	}
+
+	@GetMapping("/login")
+	public String getLogin(Model model) {
+		model.addAttribute("contents", "user/login :: login_contents");
+		return "/header";
+	}
 }
