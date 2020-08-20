@@ -34,7 +34,7 @@ public class UserController {
 		if(bindingResult.hasErrors()) {
 			return getSignUp(form, model);
 		}
-
+		System.out.println(form);
 		UserModel user = new UserModel();
 		user.setUserId(form.getUserId());
 		user.setPassword(form.getPassword());
@@ -53,6 +53,17 @@ public class UserController {
 	@GetMapping("/login")
 	public String getLogin(Model model) {
 		model.addAttribute("contents", "user/login :: login_contents");
+		return "/header";
+	}
+
+	@PostMapping("/login")
+	public String postLogin(Model model) {
+		return "redirect:/userList";
+	}
+
+	@GetMapping("/userList")
+	public String getUserList(Model model) {
+		model.addAttribute("contents", "user/userList :: userList_contents");
 		return "/header";
 	}
 }
