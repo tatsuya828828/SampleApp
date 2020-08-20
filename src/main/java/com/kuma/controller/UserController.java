@@ -28,6 +28,7 @@ public class UserController {
 		model.addAttribute("contents", "user/signup :: signup_contents");
 		return "/header";
 	}
+
 	@PostMapping("/signup")
 	public String postSignup(@ModelAttribute SignupForm form, BindingResult bindingResult, Model model) {
 		if(bindingResult.hasErrors()) {
