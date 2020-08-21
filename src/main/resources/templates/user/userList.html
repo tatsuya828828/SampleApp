@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head><meta charset="UTF-8"></head>
+	<body>
+		<div th:fragment="userList_contents">
+			<h1 class="text-center">ユーザー一覧</h1>
+			<table class="table table-bordered table-hover table-striped">
+				<tr>
+					<th class="info col-lg-4">ユーザーID</th>
+					<th class="info col-lg-4">名前</th>
+					<th></th>
+				</tr>
+				<tr th:each="user: ${userList}">
+					<td th:text="${user.userId}"></td>
+					<td th:text="${user.name}"></td>
+					<td>
+						<a th:href="@{'/userDetail/' + ${user.userId}}">詳細</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>
