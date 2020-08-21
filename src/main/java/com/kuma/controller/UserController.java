@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.kuma.model.SignupForm;
@@ -63,11 +64,30 @@ public class UserController {
 		return "redirect:/userList";
 	}
 
+	@GetMapping("/mypage")
+	public String getHome(Model model) {
+		model.addAttribute("contents", "user/mypage :: mypage_contents");
+		return "/header";
+	}
+
 	@GetMapping("/userList")
 	public String getUserList(Model model) {
 		model.addAttribute("contents", "user/userList :: userList_contents");
 		List<UserModel> userList = userService.selectMany();
 		model.addAttribute("userList", userList);
+		return "/header";
+	}
+
+	@GetMapping("/userDetail/{id:.+}")
+	public String getUserDetail(@ModelAttribute SignupForm form, Model model, @PathVariable("id") String userId) {
+		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
+		if(userId != null && userId.length()>0) {
+			UserModel user = userService.selectOne(userId);
+			form.setUserId(user.getUserId());
+			form.setPassword(user.getPassword());
+			form.setName(user.getName());
+			model.addAttribute("signupForm", form);
+		}
 		return "/header";
 	}
 }
