@@ -1,5 +1,7 @@
 package com.kuma.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,6 +66,8 @@ public class UserController {
 	@GetMapping("/userList")
 	public String getUserList(Model model) {
 		model.addAttribute("contents", "user/userList :: userList_contents");
+		List<UserModel> userList = userService.selectMany();
+		model.addAttribute("userList", userList);
 		return "/header";
 	}
 }
