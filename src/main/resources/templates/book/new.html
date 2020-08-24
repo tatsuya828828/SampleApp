@@ -1,0 +1,32 @@
+<body>
+	<div th:fragment="bookNew_contents">
+		<h1 class="text-center">本の投稿</h1>
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2">
+				<form method="post" th:action="@{/bookNew}" th:object="${bookForm}" style="margin-top: 10vh;">
+					<table class="table table-bordered table-hover">
+						<tr>
+							<th class="active col-sm-3">タイトル</th>
+							<td>
+								<div class="form-group" th:classappend="${#fields.hasErrors('title')} ? 'has-error'">
+									<input type="text" class="form-control" th:field="*{title}">
+									<span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title error</span>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th class="active col-sm-3">感想</th>
+							<td>
+								<div class="form-group" th:classappend="${#fields.hasErrors('body')} ? 'has-error'">
+									<input type="text" class="form-control" th:field="*{body}">
+									<span class="text-danger" th:if="${#fields.hasErrors('body')}" th:errors="*{body}">body error</span>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<button class="btn btn-success form-control" type="submit">投稿</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
