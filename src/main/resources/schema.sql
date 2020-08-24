@@ -1,2 +1,5 @@
 CREATE TABLE IF NOT EXISTS user_table(
 	user_id VARCHAR(50) PRIMARY KEY, password VARCHAR(100), name VARCHAR(50));
+
+CREATE TABLE IF NOT EXISTS book_table(
+	title VARCHAR(50) PRIMARY KEY, body VARCHAR(100), user_id VARCHAR(50));
