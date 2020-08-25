@@ -24,6 +24,12 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	public UserModel currentUser(HttpServletRequest httpServletRequest) {
+		String userId = httpServletRequest.getRemoteUser();
+		UserModel user = userService.selectOne(userId);
+		return user;
+	}
+
 	@GetMapping("/")
 	public String getTop(Model model) {
 		model.addAttribute("contents", "top :: top_contents");
@@ -78,16 +84,15 @@ public class UserController {
 	}
 
 	@GetMapping("/userDetail/{id:.+}")
-	public String getUserDetail(@ModelAttribute SignupForm form, @ModelAttribute BookForm bookForm
-			, Model model, @PathVariable("id") String userId) {
+	public String getUserDetail(@ModelAttribute BookForm bookForm
+			, Model model, @PathVariable("id") String userId, HttpServletRequest httpServletRequest) {
 		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
 		if(userId != null && userId.length()>0) {
 			UserModel user = userService.selectOne(userId);
-			System.out.println(user);
-			form.setUserId(user.getUserId());
-			form.setPassword(user.getPassword());
-			form.setName(user.getName());
-			model.addAttribute("signupForm", form);
+			if(user.equals(currentUser(httpServletRequest))) {
+				return "redirect:/mypage";
+			}
+			model.addAttribute("signupForm", user);
 			List<BookModel> books = userService.hasBook(user.getUserId());
 			model.addAttribute("books", books);
 		}
@@ -97,8 +102,7 @@ public class UserController {
 	@GetMapping("/mypage")
 	public String getMyPage(@ModelAttribute SignupForm form, @ModelAttribute BookForm bookForm, Model model, HttpServletRequest httpServletRequest) {
 		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
-		String userId = httpServletRequest.getRemoteUser();
-		UserModel user = userService.selectOne(userId);
+		UserModel user = currentUser(httpServletRequest);
 		form.setUserId(user.getUserId());
 		form.setPassword(user.getPassword());
 		form.setName(user.getName());
