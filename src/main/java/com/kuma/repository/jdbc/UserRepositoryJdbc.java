@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import com.kuma.model.BookModel;
 import com.kuma.model.UserModel;
 import com.kuma.repository.UserRepository;
 
@@ -24,6 +25,7 @@ public class UserRepositoryJdbc implements UserRepository {
 	public int insert(UserModel user) throws DataAccessException {
 		// パスワードを暗号化
 		String password = passwordEncoder.encode(user.getPassword());
+		System.out.println("暗号化されたパスワードは: "+ password);
 		// DBにデータを登録
 		int userRowNumber = jdbc.update("INSERT INTO user_table(user_id, "+"password, "+"name)"
 							+" VALUES(?,?,?)",
@@ -37,8 +39,21 @@ public class UserRepositoryJdbc implements UserRepository {
 		UserModel user = new UserModel();
 		user.setUserId((String) map.get("user_id"));
 		user.setPassword((String) map.get("password"));
-		user.setName((String) map.get("hero_name"));
+		user.setName((String) map.get("name"));
 		return user;
+	}
+
+	public List<BookModel> hasBook(String userId) throws DataAccessException {
+		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book_table"+" WHERE user_id=?", userId);
+		List<BookModel> books = new ArrayList<>();
+		for(Map<String, Object> map: getList) {
+			BookModel book = new BookModel();
+			book.setTitle((String) map.get("title"));
+			book.setBody((String) map.get("body"));
+			book.setUserId((String) map.get("user_id"));
+			books.add(book);
+		}
+		return books;
 	}
 
 	@Override
