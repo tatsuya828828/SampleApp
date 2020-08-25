@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kuma.model.BookModel;
 import com.kuma.model.UserModel;
 import com.kuma.repository.UserRepository;
 
@@ -30,6 +31,11 @@ public class UserService {
 	public UserModel selectOne(String userId) {
 		// selectOne実行
 		return userRepository.selectOne(userId);
+	}
+
+	// 紐づいている本を取得
+	public List<BookModel> hasBook(String userId) {
+		return userRepository.hasBook(userId);
 	}
 
 	// 全権取得用
