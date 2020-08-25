@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						.failureUrl("/login") // ログイン失敗時の遷移先
 						.usernameParameter("userId") // ユーザー名欄の値指定
 						.passwordParameter("password") // パスワード欄の値指定
-						.defaultSuccessUrl("/home", true); // ログイン成功後の遷移先
+						.defaultSuccessUrl("/bookList", true); // ログイン成功後の遷移先
 
 		// ログアウト処理
 		http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
