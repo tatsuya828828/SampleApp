@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import com.kuma.model.BookForm;
 import com.kuma.model.BookModel;
 import com.kuma.model.SignupForm;
 import com.kuma.model.UserModel;
+import com.kuma.model.ValidGroup;
 import com.kuma.service.UserService;
 
 @Controller
@@ -43,7 +45,7 @@ public class UserController {
 	}
 
 	@PostMapping("/signup")
-	public String postSignup(@ModelAttribute SignupForm form, BindingResult bindingResult, Model model) {
+	public String postSignup(@ModelAttribute @Validated(ValidGroup.class) SignupForm form, BindingResult bindingResult, Model model) {
 		if(bindingResult.hasErrors()) {
 			return getSignUp(form, model);
 		}
