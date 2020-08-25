@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.kuma.model.BookForm;
 import com.kuma.model.BookModel;
 import com.kuma.model.UserModel;
+import com.kuma.model.ValidGroup;
 import com.kuma.service.BookService;
 import com.kuma.service.UserService;
 
@@ -32,7 +34,7 @@ public class BookController {
 	}
 
 	@PostMapping("/bookNew")
-	public String postBookNew(@ModelAttribute BookForm bookForm
+	public String postBookNew(@ModelAttribute @Validated(ValidGroup.class) BookForm bookForm
 			, BindingResult bindingResult, Model model, HttpServletRequest httpServletRequest) {
 		if(bindingResult.hasErrors()) {
 			return getBookNew(bookForm, model);
