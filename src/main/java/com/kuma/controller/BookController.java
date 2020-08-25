@@ -1,5 +1,7 @@
 package com.kuma.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +51,13 @@ public class BookController {
 			System.out.println("登録失敗");
 		}
 		return "redirect:/mypage";
+	}
+
+	@GetMapping("/bookList")
+	public String getBookList(Model model) {
+		model.addAttribute("contents", "book/bookList :: bookList_contents");
+		List<BookModel> bookList = bookService.selectMany();
+		model.addAttribute("bookList", bookList);
+		return "/header";
 	}
 }
