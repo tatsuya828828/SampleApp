@@ -14,7 +14,7 @@ public class SignupForm {
 	@Email(groups = Valid2.class)
 	private String userId;
 	@NotBlank(groups= Valid1.class)
-	@Length(min = 4, max = 100, groups = Valid2.class)
+	@Length(min = 6, max = 100, groups = Valid2.class)
 	@Pattern(regexp = "^[a-zA-Z0-9]+$", groups = Valid3.class)
 	private String password;
 	@NotBlank(groups= Valid1.class)
