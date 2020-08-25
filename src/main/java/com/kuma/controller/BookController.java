@@ -35,17 +35,14 @@ public class BookController {
 		if(bindingResult.hasErrors()) {
 			return getBookNew(bookForm, model);
 		}
-		System.out.println(bookForm);
 		String userId = httpServletRequest.getRemoteUser();
 		UserModel user = userService.selectOne(userId);
-		System.out.println("ログイン中のユーザー情報:"+ user);
 		BookModel book = new BookModel();
 		book.setTitle(bookForm.getTitle());
 		book.setBody(bookForm.getBody());
 		book.setUserId((String)user.getUserId());
-		System.out.println(user.getUserId());
-		System.out.println(book);
 		boolean result = bookService.insert(book);
+		System.out.println(book);
 		if(result == true) {
 			System.out.println("登録成功");
 		} else {
