@@ -1,0 +1,16 @@
+<body>
+	<div th:fragment="bookList_contents">
+		<table class="table">
+			<tr>
+				<th>タイトル</th>
+				<th>投稿者</th>
+				<th></th>
+			</tr>
+			<tr th:each="book: ${bookList}">
+				<td th:text="${book.title}"></td>
+				<td th:text="${book.userId}"></td>
+				<td><button class="btn btn-primary">詳細</button></td>
+			</tr>
+		</table>
+	</div>
+</body>
