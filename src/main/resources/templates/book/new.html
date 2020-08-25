@@ -9,7 +9,7 @@
 							<th class="active col-sm-3">タイトル</th>
 							<td>
 								<div class="form-group" th:classappend="${#fields.hasErrors('title')} ? 'has-error'">
-									<input type="text" class="form-control" th:field="*{title}">
+									<input type="text" class="form-control" th:field="*{title}" required="true">
 									<span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title error</span>
 								</div>
 							</td>
@@ -18,7 +18,7 @@
 							<th class="active col-sm-3">感想</th>
 							<td>
 								<div class="form-group" th:classappend="${#fields.hasErrors('body')} ? 'has-error'">
-									<input type="text" class="form-control" th:field="*{body}">
+									<input type="text" class="form-control" th:field="*{body}" required="true">
 									<span class="text-danger" th:if="${#fields.hasErrors('body')}" th:errors="*{body}">body error</span>
 								</div>
 							</td>

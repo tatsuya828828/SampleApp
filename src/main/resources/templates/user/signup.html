@@ -12,28 +12,28 @@
 					<form method="post" th:action="@{/signup}" th:object="${signupForm}" style="margin-top: 10vh;">
 						<table class="table table-bordered table-hover">
 							<tr>
-								<th class="active col-sm-3">ユーザーID</th>
+								<th class="active col-lg4">ユーザーID<br><small><em>(メールアドレス形式)</em></small></th>
 								<td>
 									<div class="form-group" th:classappend="${#fields.hasErrors('userId')} ? 'has-error'">
-										<input type="text" class="form-control" th:field="*{userId}">
+										<input type="email" class="form-control" th:field="*{userId}" required="true">
 										<span class="text-danger" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">userId error</span>
 									</div>
 								</td>
 							</tr>
 							<tr>
-								<th class="active col-sm-3">パスワード</th>
+								<th class="active col-lg-4">パスワード<br><small><em>(6~100文字)</em></small></th>
 								<td>
 									<div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
-										<input type="text" class="form-control" th:field="*{password}">
+										<input type="password" class="form-control" th:field="*{password}" required="true">
 										<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</span>
 									</div>
 								</td>
 							</tr>
 							<tr>
-								<th class="active col-sm-3">名前</th>
+								<th class="active col-lg-4">名前</th>
 								<td>
 									<div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
-										<input type="text" class="form-control" th:field="*{name}">
+										<input type="text" class="form-control" th:field="*{name}" required="true">
 										<span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</span>
 									</div>
 								</td>
