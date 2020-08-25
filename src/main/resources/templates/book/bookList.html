@@ -1,10 +1,11 @@
 <body>
 	<div th:fragment="bookList_contents">
-		<table class="table">
+		<h1 class="text-center">投稿一覧</h1>
+		<table class="table table-bordered">
 			<tr>
-				<th>タイトル</th>
-				<th>投稿者</th>
-				<th></th>
+				<th class="info col-lg-4">タイトル</th>
+				<th class="info col-lg-4">投稿者</th>
+				<th class="info col-lg-4"></th>
 			</tr>
 			<tr th:each="book: ${bookList}">
 				<td th:text="${book.title}"></td>

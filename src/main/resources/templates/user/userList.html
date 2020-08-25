@@ -4,11 +4,11 @@
 	<body>
 		<div th:fragment="userList_contents">
 			<h1 class="text-center">ユーザー一覧</h1>
-			<table class="table table-bordered table-hover table-striped">
+			<table class="table table-bordered">
 				<tr>
 					<th class="info col-lg-4">ユーザーID</th>
 					<th class="info col-lg-4">名前</th>
-					<th></th>
+					<th class="info"></th>
 				</tr>
 				<tr th:each="user: ${userList}">
 					<td th:text="${user.userId}"></td>
