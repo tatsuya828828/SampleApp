@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.kuma.model.BookForm;
@@ -60,6 +61,16 @@ public class BookController {
 		model.addAttribute("contents", "book/bookList :: bookList_contents");
 		List<BookModel> bookList = bookService.selectMany();
 		model.addAttribute("bookList", bookList);
+		return "/header";
+	}
+
+	@GetMapping("/bookDetail/{title}")
+	public String getBookDetail(Model model, @PathVariable("title") String title) {
+		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
+		if(title != null && title.length()>0) {
+			BookModel book = bookService.selectOne(title);
+			model.addAttribute("book", book);
+		}
 		return "/header";
 	}
 }
