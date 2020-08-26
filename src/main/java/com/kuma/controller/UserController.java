@@ -94,11 +94,26 @@ public class UserController {
 			if(user.equals(currentUser(httpServletRequest))) {
 				return "redirect:/mypage";
 			}
-			model.addAttribute("signupForm", user);
+			model.addAttribute("user", user);
 			List<BookModel> books = userService.hasBook(user.getUserId());
 			model.addAttribute("books", books);
 		}
 		return "/header";
+	}
+
+	@GetMapping("/userEdit/{id:.+}")
+	public String getUserEdit(@ModelAttribute SignupForm signupForm
+			, Model model, @PathVariable("id") String userId, HttpServletRequest httpServletRequest) {
+		UserModel user1 = currentUser(httpServletRequest);
+		UserModel user2 = userService.selectOne(userId);
+		if(userId != null && userId.length()>0) {
+			if(user1.equals(user2)) {
+				model.addAttribute("contents", "user/userEdit :: userEdit_contents");
+				model.addAttribute("signupForm", user1);
+				return "/header";
+			}
+		}
+		return "redirect:/mypage";
 	}
 
 	@GetMapping("/mypage")
