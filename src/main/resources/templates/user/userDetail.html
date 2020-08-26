@@ -44,7 +44,7 @@
 				</form>
 			</div>
 			<div class="col-lg-8">
-				<h1 class="text-center">投稿一覧</h1>
+				<h1 class="text-center" th:each="user: ${signupForm}"><span th:text="*{user.name}"></span>さんの投稿一覧</h1>
 				<table class="table">
 					<tr>
 						<th>タイトル</th>
