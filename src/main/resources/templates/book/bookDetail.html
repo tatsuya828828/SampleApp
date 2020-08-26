@@ -1,0 +1,15 @@
+<body>
+	<div th:fragment="bookDetail_contents" th:each="book: ${book}">
+		<h1><span th:text="*{book.title}"></span>の詳細</h1>
+		<table class="table table-bordered">
+			<tr>
+				<th class="info">タイトル</th>
+				<td th:text="*{book.title}"></td>
+			</tr>
+			<tr>
+				<th class="info">感想</th>
+				<td th:text="*{book.body}"></td>
+			</tr>
+		</table>
+	</div>
+</body>
