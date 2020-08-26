@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -101,6 +102,16 @@ public class UserController {
 		return "/header";
 	}
 
+	@GetMapping("/mypage")
+	public String getMyPage(@ModelAttribute BookForm bookForm, Model model, HttpServletRequest httpServletRequest) {
+		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
+		UserModel user = currentUser(httpServletRequest);
+		model.addAttribute("user", user);
+		List<BookModel> books = userService.hasBook(user.getUserId());
+		model.addAttribute("books", books);
+		return "/header";
+	}
+
 	@GetMapping("/userEdit/{id:.+}")
 	public String getUserEdit(@ModelAttribute SignupForm signupForm
 			, Model model, @PathVariable("id") String userId, HttpServletRequest httpServletRequest) {
@@ -116,13 +127,22 @@ public class UserController {
 		return "redirect:/mypage";
 	}
 
-	@GetMapping("/mypage")
-	public String getMyPage(@ModelAttribute BookForm bookForm, Model model, HttpServletRequest httpServletRequest) {
-		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
-		UserModel user = currentUser(httpServletRequest);
-		model.addAttribute("user", user);
-		List<BookModel> books = userService.hasBook(user.getUserId());
-		model.addAttribute("books", books);
-		return "/header";
+	@PostMapping(value="userEdit", params="update")
+	public String postUserEdit(@ModelAttribute SignupForm form, Model model) {
+		UserModel user = new UserModel();
+		user.setUserId(form.getUserId());
+		user.setPassword(form.getPassword());
+		user.setName(form.getName());
+		try {
+			boolean result = userService.updateOne(user);
+			if(result == true) {
+				model.addAttribute("result", "更新成功");
+			} else {
+				model.addAttribute("result", "更新失敗");
+			}
+		} catch(DataAccessException e) {
+			model.addAttribute("result", "更新失敗(トランザクションテスト)");
+		}
+		return getUserList(model);
 	}
 }
