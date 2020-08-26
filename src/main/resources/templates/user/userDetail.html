@@ -1,50 +1,29 @@
 <body>
 	<div th:fragment="userDetail_contents">
-		<div class="row">
+		<div class="row" th:each="user: ${user}">
 			<div class="col-lg-4">
-				<form method="post" th:action="@{/userDetail}" th:object="${signupForm}" style="margin-top: 10vh;">
+				<div style="margin-top: 10vh;">
 					<table>
 						<tr>
-							<th class="active col-lg-2">ユーザーID</th>
-							<td class="col-lg-3">
-								<div class="form-group">
-									<input type="text" class="form-control" th:field="*{userId}" readonly="readonly">
-								</div>
-							</td>
+							<th class="active">ユーザーID</th>
 						</tr>
 						<tr>
-							<th class="active col-lg-2">パスワード</th>
-							<td class="col-lg-3">
-								<div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
-									<input type="password" class="form-control" th:field="*{password}">
-									<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
-										password error
-									</span>
-								</div>
-							</td>
+							<td class="col-lg-3" th:text="*{user.userId}"></td>
 						</tr>
 						<tr>
-							<th class="active col-lg-2">ユーザー名</th>
-							<td class="col-lg-3">
-								<div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
-									<input type="text" class="form-control" th:field="*{name}">
-									<span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
-										name error
-									</span>
-								</div>
-							</td>
+							<th class="active">ユーザー名</th>
+						</tr>
+						<tr>
+							<td class="col-lg-3" th:text="*{user.name}"></td>
+						</tr>
+						<tr>
+							<td><br><br><a class="btn btn-primary col-lg-6" th:href="@{'/userEdit/' + ${user.userId}}">編集</a></td>
 						</tr>
 					</table>
-					<button class="btn btn-danger btn-lg pull-right" type="submit" name="delete">
-						削除
-					</button>
-					<button class="btn btn-primary btn-lg pull-right" type="submit" name="update">
-						更新
-					</button>
-				</form>
+				</div>
 			</div>
 			<div class="col-lg-8">
-				<h1 class="text-center" th:each="user: ${signupForm}"><span th:text="*{user.name}"></span>さんの投稿一覧</h1>
+				<h1 class="text-center"><span th:text="*{user.name}"></span>さんの投稿一覧</h1>
 				<table class="table">
 					<tr>
 						<th>タイトル</th>

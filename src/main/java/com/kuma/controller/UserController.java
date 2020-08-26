@@ -117,13 +117,10 @@ public class UserController {
 	}
 
 	@GetMapping("/mypage")
-	public String getMyPage(@ModelAttribute SignupForm form, @ModelAttribute BookForm bookForm, Model model, HttpServletRequest httpServletRequest) {
+	public String getMyPage(@ModelAttribute BookForm bookForm, Model model, HttpServletRequest httpServletRequest) {
 		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
 		UserModel user = currentUser(httpServletRequest);
-		form.setUserId(user.getUserId());
-		form.setPassword(user.getPassword());
-		form.setName(user.getName());
-		model.addAttribute("signupForm", form);
+		model.addAttribute("user", user);
 		List<BookModel> books = userService.hasBook(user.getUserId());
 		model.addAttribute("books", books);
 		return "/header";
