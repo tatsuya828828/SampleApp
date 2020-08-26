@@ -145,4 +145,16 @@ public class UserController {
 		}
 		return getUserList(model);
 	}
+
+	@PostMapping(value = "/userEdit", params = "delete")
+	public String postUserDelete(@ModelAttribute SignupForm form, Model model) {
+		boolean result = userService.deleteOne(form.getUserId());
+		if(result == true) {
+			model.addAttribute("result", "削除成功");
+		} else {
+			model.addAttribute("result", "削除失敗");
+		}
+		// ヒーロー一覧画面を表示
+		return getUserList(model);
+	}
 }
