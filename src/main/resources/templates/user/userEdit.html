@@ -1,0 +1,43 @@
+<div th:fragment="userEdit_contents">
+	<form method="post" th:action="@{/userEdit}" th:object="${signupForm}">
+		<h1 class="text-center">編集ページ</h1>
+		<table style="margin-top: 10vh;">
+			<tr>
+				<th class="active col-lg-2">ユーザーID</th>
+				<td class="col-lg-3">
+					<div class="form-group">
+						<input type="text" class="form-control" th:field="*{userId}" readonly="readonly">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th class="active col-lg-2">パスワード</th>
+				<td class="col-lg-3">
+					<div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
+						<input type="password" class="form-control" th:field="*{password}">
+						<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+							password error
+						</span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th class="active col-lg-2">ユーザー名</th>
+				<td class="col-lg-3">
+					<div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+						<input type="text" class="form-control" th:field="*{name}">
+						<span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+							name error
+						</span>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<button class="btn btn-danger btn-lg pull-right" type="submit" name="delete">
+			削除
+		</button>
+		<button class="btn btn-primary btn-lg pull-right" type="submit" name="update">
+			更新
+		</button>
+	</form>
+</div>
