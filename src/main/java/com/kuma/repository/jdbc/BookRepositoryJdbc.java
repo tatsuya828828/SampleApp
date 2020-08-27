@@ -53,8 +53,8 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int updateOne(BookModel book) throws DataAccessException {
-		int bookRowNumber = jdbc.update("UPDATE book_table "+"SET "+"body=?, "+"userId=? "+"WHERE title=?",
-							book.getBody(),book.getUserId(),book.getTitle());
+		int bookRowNumber = jdbc.update("UPDATE book_table "+"SET "+"title=?, "+"body=?, "+"user_id=? "+"WHERE title=?",
+							book.getNewTitle(),book.getBody(),book.getUserId(),book.getTitle());
 		return bookRowNumber;
 	}
 
