@@ -115,4 +115,15 @@ public class BookController {
 		}
 		return getBookList(model);
 	}
+
+	@PostMapping(value = "/bookEdit", params = "delete")
+	public String postBookDelete(@ModelAttribute BookForm form, Model model) {
+		boolean result = bookService.deleteOne(form.getTitle());
+		if(result == true) {
+			model.addAttribute("result", "削除成功");
+		} else {
+			model.addAttribute("result", "削除失敗");
+		}
+		return getBookList(model);
+	}
 }
