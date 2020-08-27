@@ -164,7 +164,7 @@ public class UserController {
 		} else {
 			model.addAttribute("result", "削除失敗");
 		}
-		return "/userList";
+		return "redirect:/userList";
 	}
 
 	@PostMapping("/logout")
