@@ -27,12 +27,10 @@
 				<table class="table">
 					<tr>
 						<th>タイトル</th>
-						<th>感想</th>
 						<th></th>
 					</tr>
 					<tr th:each="book: ${books}">
-						<td th:text="${book.title}"></td>
-						<td th:text="${book.body}"></td>
+						<td><a th:href="@{'/bookDetail/' + ${book.title}}" th:text="${book.title}"></a></td>
 						<td th:text="${book.userId}"></td>
 					</tr>
 				</table>

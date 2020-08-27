@@ -3,7 +3,7 @@
 		<h1><span th:text="*{book.title}"></span>の詳細</h1>
 		<table class="table table-bordered">
 			<tr>
-				<th class="info">タイトル</th>
+				<th class="info col-lg-2">タイトル</th>
 				<td th:text="*{book.title}"></td>
 			</tr>
 			<tr>
@@ -12,6 +12,6 @@
 			</tr>
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.userId}}"><span th:text="*{book.userId}"></span></a></h4>
-		<a class="btn btn-primary" th:href="@{'/bookEdit/' + ${title}}">編集</a>
+		<a class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${title}}">編集</a>
 	</div>
 </body>
