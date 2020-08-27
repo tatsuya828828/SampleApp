@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -72,5 +73,43 @@ public class BookController {
 			model.addAttribute("book", book);
 		}
 		return "/header";
+	}
+
+	@GetMapping("/bookEdit/{title}")
+	public String getBookEdit(@ModelAttribute BookForm form, Model model
+			, @PathVariable("title") String title, HttpServletRequest httpServletRequest) {
+		String userId = httpServletRequest.getRemoteUser();
+		UserModel user = userService.selectOne(userId);
+		BookModel book = bookService.selectOne(title);
+		if(title != null && title.length()>0) {
+			if(book.getUserId().equals(user.getUserId())) {
+				form.setTitle(book.getTitle());
+				form.setBody(book.getBody());
+				form.setUserId(book.getUserId());
+				model.addAttribute("contents", "book/bookEdit :: bookEdit_contents");
+				model.addAttribute("bookForm", form);
+				return "/header";
+			}
+		}
+		return "redirect:/bookDetail/{title}";
+	}
+	@PostMapping(value="/bookEdit", params="update")
+	public String postBookEdit(@ModelAttribute BookForm form, Model model) {
+		BookModel book = new BookModel();
+		book.setTitle(form.getTitle());
+		book.setBody(form.getBody());
+		book.setUserId(form.getUserId());
+		try {
+			// 更新実行
+			boolean result = bookService.updateOne(book);
+			if(result == true) {
+				model.addAttribute("result", "更新成功");
+			} else {
+				model.addAttribute("result", "更新失敗");
+			}
+		} catch(DataAccessException e) {
+			model.addAttribute("result", "更新失敗(トランザクションテスト)");
+		}
+		return getBookList(model);
 	}
 }
