@@ -113,21 +113,24 @@ public class UserController {
 	}
 
 	@GetMapping("/userEdit/{id:.+}")
-	public String getUserEdit(@ModelAttribute SignupForm signupForm
+	public String getUserEdit(@ModelAttribute SignupForm form
 			, Model model, @PathVariable("id") String userId, HttpServletRequest httpServletRequest) {
 		UserModel user1 = currentUser(httpServletRequest);
 		UserModel user2 = userService.selectOne(userId);
 		if(userId != null && userId.length()>0) {
 			if(user1.equals(user2)) {
+				form.setUserId(user1.getUserId());
+				form.setPassword(user1.getPassword());
+				form.setName(user1.getName());
 				model.addAttribute("contents", "user/userEdit :: userEdit_contents");
-				model.addAttribute("signupForm", user1);
+				model.addAttribute("signupForm", form);
 				return "/header";
 			}
 		}
 		return "redirect:/mypage";
 	}
 
-	@PostMapping(value="userEdit", params="update")
+	@PostMapping(value="/userEdit", params="update")
 	public String postUserEdit(@ModelAttribute SignupForm form, Model model) {
 		UserModel user = new UserModel();
 		user.setUserId(form.getUserId());

@@ -11,5 +11,7 @@
 				<td th:text="*{book.body}"></td>
 			</tr>
 		</table>
+		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.userId}}"><span th:text="*{book.userId}"></span></a></h4>
+		<a class="btn btn-primary" th:href="@{'/bookEdit/' + ${title}}">編集</a>
 	</div>
 </body>

@@ -9,7 +9,7 @@
 			</tr>
 			<tr th:each="book: ${bookList}">
 				<td th:text="${book.title}"></td>
-				<td th:text="${book.userId}"></td>
+				<td><a th:href="@{'/userDetail/' + ${book.userId}}"><span th:text="${book.userId}"></span></td>
 				<td><a class="btn btn-primary" th:href="@{'/bookDetail/' + ${book.title}}">詳細</a></td>
 			</tr>
 		</table>
