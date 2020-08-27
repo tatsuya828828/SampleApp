@@ -2,6 +2,7 @@ package com.kuma.controller;
 
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,14 +151,20 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/userEdit", params = "delete")
-	public String postUserDelete(@ModelAttribute SignupForm form, Model model) {
+	public String postUserDelete(@ModelAttribute SignupForm form, Model model, HttpServletRequest httpServletRequest) {
 		boolean result = userService.deleteOne(form.getUserId());
 		if(result == true) {
 			model.addAttribute("result", "削除成功");
+			try {
+				httpServletRequest.logout();
+			} catch (ServletException e) {
+				e.printStackTrace();
+			}
+			return "redirect:/login";
 		} else {
 			model.addAttribute("result", "削除失敗");
 		}
-		return getUserList(model);
+		return "/userList";
 	}
 
 	@PostMapping("/logout")
