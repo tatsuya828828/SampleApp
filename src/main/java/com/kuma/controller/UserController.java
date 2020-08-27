@@ -159,4 +159,10 @@ public class UserController {
 		}
 		return getUserList(model);
 	}
+
+	@PostMapping("/logout")
+	public String postLogout() {
+		// ログイン画面へリダイレクト
+		return "redirect:/login";
+	}
 }
