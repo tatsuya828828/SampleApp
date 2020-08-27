@@ -1,0 +1,44 @@
+<div th:fragment="bookEdit_contents">
+	<form method="post" th:action="@{/bookEdit}" th:object="${bookForm}">
+		<h1 class="text-center">編集ページ</h1>
+		<table style="margin-top: 10vh;">
+			<tr>
+				<th class="active col-lg-2">タイトル</th>
+				<td class="col-lg-3">
+					<div class="form-group" th:classappend="${#fields.hasErrors('newTitle')} ? 'has-error'">
+						<input type="hidden" th:field="*{title}">
+						<input type="text" class="form-control" th:field="*{newTitle}">
+						<span class="text-danger" th:if="${#fields.hasErrors('newTitle')}" th:errors="*{newTitle}">
+							newTitle error
+						</span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th class="active col-lg-2" th:classappend="${#fields.hasErrors('body')} ? 'has-error'">感想</th>
+				<td class="col-lg-3">
+					<div class="form-group">
+						<input type="text" class="form-control" th:field="*{body}">
+					</div>
+					<span class="text-danger" th:if="${#fields.hasErrors('body')}" th:errors="*{body}">
+						title error
+					</span>
+				</td>
+			</tr>
+			<tr>
+				<th class="active col-lg-2">ユーザーID</th>
+				<td class="col-lg-3">
+					<div class="form-group">
+						<input type="text" class="form-control" th:field="*{userId}" readonly="readonly">
+					</div>
+				</td>
+			</tr>
+		</table>
+		<button class="btn btn-danger btn-lg pull-right" type="submit" name="delete">
+			削除
+		</button>
+		<button class="btn btn-primary btn-lg pull-right" type="submit" name="update">
+			更新
+		</button>
+	</form>
+</div>
