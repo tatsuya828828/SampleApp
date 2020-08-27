@@ -84,6 +84,7 @@ public class BookController {
 		if(title != null && title.length()>0) {
 			if(book.getUserId().equals(user.getUserId())) {
 				form.setTitle(book.getTitle());
+				form.setNewTitle(book.getTitle());
 				form.setBody(book.getBody());
 				form.setUserId(book.getUserId());
 				model.addAttribute("contents", "book/bookEdit :: bookEdit_contents");
@@ -93,14 +94,16 @@ public class BookController {
 		}
 		return "redirect:/bookDetail/{title}";
 	}
+
 	@PostMapping(value="/bookEdit", params="update")
 	public String postBookEdit(@ModelAttribute BookForm form, Model model) {
 		BookModel book = new BookModel();
 		book.setTitle(form.getTitle());
+		book.setNewTitle(form.getNewTitle());
 		book.setBody(form.getBody());
 		book.setUserId(form.getUserId());
+		System.out.println(book);
 		try {
-			// 更新実行
 			boolean result = bookService.updateOne(book);
 			if(result == true) {
 				model.addAttribute("result", "更新成功");
