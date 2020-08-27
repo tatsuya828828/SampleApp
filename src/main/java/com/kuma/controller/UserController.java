@@ -157,7 +157,6 @@ public class UserController {
 		} else {
 			model.addAttribute("result", "削除失敗");
 		}
-		// ヒーロー一覧画面を表示
 		return getUserList(model);
 	}
 }
