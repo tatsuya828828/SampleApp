@@ -44,14 +44,14 @@ public class UserRepositoryJdbc implements UserRepository {
 	}
 
 	public List<BookModel> hasBook(String id) throws DataAccessException {
+		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book"+" WHERE user_id=?", id);
 		UserModel user = selectOne(id);
-		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book"+" WHERE user=?", user);
 		List<BookModel> books = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			BookModel book = new BookModel();
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
-			book.setUser((UserModel) map.get("user"));
+			book.setUser(user);
 			books.add(book);
 		}
 		return books;
