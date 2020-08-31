@@ -12,11 +12,11 @@
 					<form method="post" th:action="@{/signup}" th:object="${signupForm}" style="margin-top: 10vh;">
 						<table class="table table-bordered table-hover">
 							<tr>
-								<th class="active col-lg4">ユーザーID<br><small><em>(メールアドレス形式)</em></small></th>
+								<th class="active col-lg4">ID<br><small><em>(メールアドレス形式)</em></small></th>
 								<td>
-									<div class="form-group" th:classappend="${#fields.hasErrors('userId')} ? 'has-error'">
-										<input type="email" class="form-control" th:field="*{userId}" required="true">
-										<span class="text-danger" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">userId error</span>
+									<div class="form-group" th:classappend="${#fields.hasErrors('id')} ? 'has-error'">
+										<input type="email" class="form-control" th:field="*{id}" required="true">
+										<span class="text-danger" th:if="${#fields.hasErrors('id')}" th:errors="*{id}">userId error</span>
 									</div>
 								</td>
 							</tr>

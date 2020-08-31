@@ -5,10 +5,10 @@
 				<div style="margin-top: 10vh;">
 					<table>
 						<tr>
-							<th class="active">ユーザーID</th>
+							<th class="active">ID</th>
 						</tr>
 						<tr>
-							<td class="col-lg-3" th:text="*{user.userId}"></td>
+							<td class="col-lg-3" th:text="*{user.id}"></td>
 						</tr>
 						<tr>
 							<th class="active">ユーザー名</th>
@@ -17,7 +17,7 @@
 							<td class="col-lg-3" th:text="*{user.name}"></td>
 						</tr>
 						<tr>
-							<td><br><br><a class="btn btn-primary col-lg-6" th:href="@{'/userEdit/' + ${user.userId}}">編集</a></td>
+							<td><br><br><a class="btn btn-primary col-lg-6" th:href="@{'/userEdit/' + ${user.id}}">編集</a></td>
 						</tr>
 					</table>
 				</div>
@@ -31,7 +31,7 @@
 					</tr>
 					<tr th:each="book: ${books}">
 						<td><a th:href="@{'/bookDetail/' + ${book.title}}" th:text="${book.title}"></a></td>
-						<td th:text="${book.userId}"></td>
+						<td th:text="${book.user.name}"></td>
 					</tr>
 				</table>
 			</div>
