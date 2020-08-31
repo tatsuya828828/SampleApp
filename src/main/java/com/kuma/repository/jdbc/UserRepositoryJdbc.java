@@ -27,30 +27,31 @@ public class UserRepositoryJdbc implements UserRepository {
 		String password = passwordEncoder.encode(user.getPassword());
 		System.out.println("暗号化されたパスワードは: "+ password);
 		// DBにデータを登録
-		int userRowNumber = jdbc.update("INSERT INTO user_table(user_id, "+"password, "+"name)"
+		int userRowNumber = jdbc.update("INSERT INTO user(id, "+"password, "+"name)"
 							+" VALUES(?,?,?)",
-							user.getUserId(), password, user.getName());
+							user.getId(), password, user.getName());
 		return userRowNumber;
 	}
 
 	@Override
-	public UserModel selectOne(String userId) throws DataAccessException {
-		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM user_table"+" WHERE user_id = ?", userId);
+	public UserModel selectOne(String id) throws DataAccessException {
+		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM user"+" WHERE id = ?", id);
 		UserModel user = new UserModel();
-		user.setUserId((String) map.get("user_id"));
+		user.setId((String) map.get("id"));
 		user.setPassword((String) map.get("password"));
 		user.setName((String) map.get("name"));
 		return user;
 	}
 
-	public List<BookModel> hasBook(String userId) throws DataAccessException {
-		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book_table"+" WHERE user_id=?", userId);
+	public List<BookModel> hasBook(String id) throws DataAccessException {
+		UserModel user = selectOne(id);
+		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book"+" WHERE user=?", user);
 		List<BookModel> books = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			BookModel book = new BookModel();
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
-			book.setUserId((String) map.get("user_id"));
+			book.setUser((UserModel) map.get("user"));
 			books.add(book);
 		}
 		return books;
@@ -59,7 +60,7 @@ public class UserRepositoryJdbc implements UserRepository {
 	@Override
 	public List<UserModel> selectMany() throws DataAccessException {
 		// テーブルのデータを全権取得
-		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM user_table");
+		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM user");
 		// 結果返却用の変数
 		List<UserModel> userList = new ArrayList<>();
 		// 取得した結果をListに格納していく
@@ -67,7 +68,7 @@ public class UserRepositoryJdbc implements UserRepository {
 			// Userインスタンスの生成
 			UserModel user = new UserModel();
 			// Userインスタンスに取得したデータをセット
-			user.setUserId((String) map.get("user_id"));
+			user.setId((String) map.get("id"));
 			user.setPassword((String) map.get("password"));
 			user.setName((String) map.get("name"));
 			// 結果返却用のListに追加
@@ -80,15 +81,15 @@ public class UserRepositoryJdbc implements UserRepository {
 	public int updateOne(UserModel user) throws DataAccessException {
 		// パスワード暗号化
 		String password = passwordEncoder.encode(user.getPassword());
-		int userRowNumber = jdbc.update("UPDATE user_table "+"SET "+"password=?, "+"name=? "+"WHERE user_id=?",
-							password, user.getName(), user.getUserId());
+		int userRowNumber = jdbc.update("UPDATE user "+"SET "+"password=?, "+"name=? "+"WHERE id=?",
+							password, user.getName(), user.getId());
 		return userRowNumber;
 	}
 
 	@Override
-	public int deleteOne(String userId) throws DataAccessException {
+	public int deleteOne(String id) throws DataAccessException {
 		// 1件削除
-		int userRowNumber = jdbc.update("DELETE FROM user_table WHERE user_id=?", userId);
+		int userRowNumber = jdbc.update("DELETE FROM user WHERE id=?", id);
 		return userRowNumber;
 	}
 }

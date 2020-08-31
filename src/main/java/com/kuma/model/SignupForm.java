@@ -12,7 +12,7 @@ import lombok.Data;
 public class SignupForm {
 	@NotBlank(groups= Valid1.class)
 	@Email(groups = Valid2.class)
-	private String userId;
+	private String id;
 	@NotBlank(groups= Valid1.class)
 	@Length(min = 6, max = 100, groups = Valid2.class)
 	@Pattern(regexp = "^[a-zA-Z0-9]+$", groups = Valid3.class)

@@ -28,14 +28,14 @@ public class UserService {
 	}
 
 	// 1件取得用
-	public UserModel selectOne(String userId) {
+	public UserModel selectOne(String id) {
 		// selectOne実行
-		return userRepository.selectOne(userId);
+		return userRepository.selectOne(id);
 	}
 
 	// 紐づいている本を取得
-	public List<BookModel> hasBook(String userId) {
-		return userRepository.hasBook(userId);
+	public List<BookModel> hasBook(String id) {
+		return userRepository.hasBook(id);
 	}
 
 	// 全権取得用
@@ -57,9 +57,9 @@ public class UserService {
 	}
 
 	// 1件削除用
-	public boolean deleteOne(String userId) {
+	public boolean deleteOne(String id) {
 		// 1件削除
-		int rowNumber = userRepository.deleteOne(userId);
+		int rowNumber = userRepository.deleteOne(id);
 		// 判定用変数
 		boolean result = false;
 		if(rowNumber>0) {

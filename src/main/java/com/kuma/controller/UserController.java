@@ -53,7 +53,7 @@ public class UserController {
 		}
 		System.out.println(form);
 		UserModel user = new UserModel();
-		user.setUserId(form.getUserId());
+		user.setId(form.getId());
 		user.setPassword(form.getPassword());
 		user.setName(form.getName());
 		// サービスクラスのinsertを呼び出して変換
@@ -89,15 +89,15 @@ public class UserController {
 
 	@GetMapping("/userDetail/{id:.+}")
 	public String getUserDetail(@ModelAttribute BookForm bookForm
-			, Model model, @PathVariable("id") String userId, HttpServletRequest httpServletRequest) {
+			, Model model, @PathVariable("id") String id, HttpServletRequest httpServletRequest) {
 		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
-		if(userId != null && userId.length()>0) {
-			UserModel user = userService.selectOne(userId);
+		if(id != null && id.length()>0) {
+			UserModel user = userService.selectOne(id);
 			if(user.equals(currentUser(httpServletRequest))) {
 				return "redirect:/mypage";
 			}
 			model.addAttribute("user", user);
-			List<BookModel> books = userService.hasBook(user.getUserId());
+			List<BookModel> books = userService.hasBook(user.getId());
 			model.addAttribute("books", books);
 		}
 		return "/header";
@@ -108,19 +108,19 @@ public class UserController {
 		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
 		UserModel user = currentUser(httpServletRequest);
 		model.addAttribute("user", user);
-		List<BookModel> books = userService.hasBook(user.getUserId());
+		List<BookModel> books = userService.hasBook(user.getId());
 		model.addAttribute("books", books);
 		return "/header";
 	}
 
 	@GetMapping("/userEdit/{id:.+}")
 	public String getUserEdit(@ModelAttribute SignupForm form
-			, Model model, @PathVariable("id") String userId, HttpServletRequest httpServletRequest) {
+			, Model model, @PathVariable("id") String id, HttpServletRequest httpServletRequest) {
 		UserModel user1 = currentUser(httpServletRequest);
-		UserModel user2 = userService.selectOne(userId);
-		if(userId != null && userId.length()>0) {
+		UserModel user2 = userService.selectOne(id);
+		if(id != null && id.length()>0) {
 			if(user1.equals(user2)) {
-				form.setUserId(user1.getUserId());
+				form.setId(user1.getId());
 				form.setPassword(user1.getPassword());
 				form.setName(user1.getName());
 				model.addAttribute("contents", "user/userEdit :: userEdit_contents");
@@ -134,7 +134,7 @@ public class UserController {
 	@PostMapping(value="/userEdit", params="update")
 	public String postUserEdit(@ModelAttribute SignupForm form, Model model) {
 		UserModel user = new UserModel();
-		user.setUserId(form.getUserId());
+		user.setId(form.getId());
 		user.setPassword(form.getPassword());
 		user.setName(form.getName());
 		try {
@@ -152,7 +152,7 @@ public class UserController {
 
 	@PostMapping(value = "/userEdit", params = "delete")
 	public String postUserDelete(@ModelAttribute SignupForm form, Model model, HttpServletRequest httpServletRequest) {
-		boolean result = userService.deleteOne(form.getUserId());
+		boolean result = userService.deleteOne(form.getId());
 		if(result == true) {
 			model.addAttribute("result", "削除成功");
 			try {
