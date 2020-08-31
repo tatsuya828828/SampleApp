@@ -26,8 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 	// ユーザーIDとパスワードを取得するSQL
-	private static final String USER_SQL = "SELECT "+"user_id, "+"password, "+"true "+
-						"FROM "+"user_table "+"WHERE "+"user_id=?";
+	private static final String USER_SQL = "SELECT "+"id, "+"password, "+"true "+
+						"FROM "+"user "+"WHERE "+"id=?";
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin().loginProcessingUrl("/login") // ログイン処理のパス
 						.loginPage("/login") // ログインページの指定
 						.failureUrl("/login") // ログイン失敗時の遷移先
-						.usernameParameter("userId") // ユーザー名欄の値指定
+						.usernameParameter("id") // ユーザー名欄の値指定
 						.passwordParameter("password") // パスワード欄の値指定
 						.defaultSuccessUrl("/bookList", true); // ログイン成功後の遷移先
 
