@@ -11,5 +11,5 @@ public class BookForm {
 	public String newTitle;
 	@NotBlank(groups= Valid1.class)
 	public String body;
-	public String userId;
+	public UserModel user;
 }
