@@ -13,22 +13,29 @@ import com.kuma.model.BookModel;
 import com.kuma.model.CommentModel;
 import com.kuma.model.UserModel;
 import com.kuma.repository.CommentRepository;
+import com.kuma.service.BookService;
+import com.kuma.service.UserService;
 
 @Repository("CommentRepositoryJdbc")
 public class CommentRepositoryJdbc implements CommentRepository {
 	@Autowired
 	JdbcTemplate jdbc;
+	@Autowired
+	BookService bookService;
+	@Autowired
+	UserService userService;
 
 	@Override
-	public int insert(CommentModel comment, UserModel user, BookModel book) throws DataAccessException {
+	public int insert(CommentModel comment) throws DataAccessException {
 		int rowNumber= jdbc.update("INSERT INTO comment_table(user, "+"book, "+"comment) "+" VALUES(?,?,?)",
-				user, book, comment.getComment());
+				comment.getUser(), comment.getBook(), comment.getComment());
 		return rowNumber;
 	}
 
 	@Override
-	public List<CommentModel> selectMany(String bookId) throws DataAccessException {
-		List<Map<String, Object>> getList = jdbc.queryForList("SELECT FROM comment_table"+" WHERE book_id=?", bookId);
+	public List<CommentModel> selectMany(String bookTitle) throws DataAccessException {
+		BookModel book = bookService.selectOne(bookTitle);
+		List<Map<String, Object>> getList = jdbc.queryForList("SELECT FROM comment_table"+" WHERE book=?", book);
 		List<CommentModel> commentList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			CommentModel comment = new CommentModel();
@@ -41,8 +48,10 @@ public class CommentRepositoryJdbc implements CommentRepository {
 	}
 
 	@Override
-	public int delete(String userId, String bookId) throws DataAccessException {
-		int bookRowNumber = jdbc.update("DELETE FROM comment WHERE user_id=?, book_id=?", userId, bookId);
+	public int delete(String userId, String bookTitle) throws DataAccessException {
+		UserModel user = userService.selectOne(userId);
+		BookModel book = bookService.selectOne(bookTitle);
+		int bookRowNumber = jdbc.update("DELETE FROM comment WHERE user=?, book=?", user, book);
 		return bookRowNumber;
 	}
 }
