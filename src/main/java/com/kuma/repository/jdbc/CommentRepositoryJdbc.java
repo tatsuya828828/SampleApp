@@ -9,7 +9,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.kuma.model.BookModel;
 import com.kuma.model.CommentModel;
 import com.kuma.repository.CommentRepository;
 import com.kuma.service.BookService;
@@ -33,8 +32,7 @@ public class CommentRepositoryJdbc implements CommentRepository {
 
 	@Override
 	public List<CommentModel> selectMany(String bookTitle) throws DataAccessException {
-		BookModel book = bookService.selectOne(bookTitle);
-		List<Map<String, Object>> getList = jdbc.queryForList("SELECT FROM comment_table"+" WHERE book=?", book);
+		List<Map<String, Object>> getList = jdbc.queryForList("SELECT FROM comment_table"+" WHERE book_id=?", bookTitle);
 		List<CommentModel> commentList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			CommentModel comment = new CommentModel();
