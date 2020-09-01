@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kuma.model.BookModel;
 import com.kuma.repository.BookRepository;
+import com.kuma.service.UserService;
 
 @Repository("BookRepositoryJdbc")
 public class BookRepositoryJdbc implements BookRepository {
@@ -19,33 +20,35 @@ public class BookRepositoryJdbc implements BookRepository {
 	JdbcTemplate jdbc;
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	@Autowired
+	UserService userService;
 
 	@Override
 	public int insert(BookModel book) throws DataAccessException {
-		int bookRowNumber = jdbc.update("INSERT INTO book_table(title, "+"body, "+"user_id) "+"VALUES(?,?,?)",
-				book.getTitle(), book.getBody(), book.getUserId());
+		int bookRowNumber = jdbc.update("INSERT INTO book(title, "+"body, "+"user_id) "+"VALUES(?,?,?)",
+				book.getTitle(), book.getBody(), book.getUser().getId());
 		return bookRowNumber;
 	}
 
 	@Override
 	public BookModel selectOne(String title) throws DataAccessException {
-		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM book_table"+" WHERE title=?", title);
+		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM book"+" WHERE title=?", title);
 		BookModel book = new BookModel();
 		book.setTitle((String) map.get("title"));
 		book.setBody((String) map.get("body"));
-		book.setUserId((String) map.get("user_id"));
+		book.setUser(userService.selectOne((String)map.get("user_id")));
 		return book;
 	}
 
 	@Override
 	public List<BookModel> selectMany() throws DataAccessException {
-		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book_table");
+		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book");
 		List<BookModel> bookList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			BookModel book = new BookModel();
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
-			book.setUserId((String) map.get("user_id"));
+			book.setUser(userService.selectOne((String)map.get("user_id")));
 			bookList.add(book);
 		}
 		return bookList;
@@ -53,14 +56,14 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int updateOne(BookModel book) throws DataAccessException {
-		int bookRowNumber = jdbc.update("UPDATE book_table "+"SET "+"title=?, "+"body=?, "+"user_id=? "+"WHERE title=?",
-							book.getNewTitle(),book.getBody(),book.getUserId(),book.getTitle());
+		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "+"user_id=? "+"WHERE title=?",
+							book.getNewTitle(),book.getBody(),book.getUser().getId(),book.getTitle());
 		return bookRowNumber;
 	}
 
 	@Override
 	public int deleteOne(String title) throws DataAccessException {
-		int bookRowNumber = jdbc.update("DELETE FROM book_table WHERE title=?", title);
+		int bookRowNumber = jdbc.update("DELETE FROM book WHERE title=?", title);
 		return bookRowNumber;
 	}
 }
