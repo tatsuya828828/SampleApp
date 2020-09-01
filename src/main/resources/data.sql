@@ -5,4 +5,4 @@ INSERT INTO user(id, password, name)
 VALUES('a@a', '$2a$10$dAoAeR1J9bSBbqM5RzQOme1J9DstuGlqWbgPxG7km8FH6pknl0zQy', 'a');
 
 INSERT INTO book(title, body, user_id)
-VALUES('アヒルと鴨のコインロッカー', '面白い', NULL);
+VALUES('アヒルと鴨のコインロッカー', '面白い', 'satou@gmail.com');
