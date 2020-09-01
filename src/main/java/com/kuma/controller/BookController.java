@@ -46,7 +46,7 @@ public class BookController {
 		BookModel book = new BookModel();
 		book.setTitle(bookForm.getTitle());
 		book.setBody(bookForm.getBody());
-		book.setUserId((String)user.getUserId());
+		book.setUser(user);
 		boolean result = bookService.insert(book);
 		System.out.println(book);
 		if(result == true) {
@@ -62,6 +62,7 @@ public class BookController {
 		model.addAttribute("contents", "book/bookList :: bookList_contents");
 		List<BookModel> bookList = bookService.selectMany();
 		model.addAttribute("bookList", bookList);
+		System.out.println(bookList);
 		return "/header";
 	}
 
@@ -82,11 +83,11 @@ public class BookController {
 		UserModel user = userService.selectOne(userId);
 		BookModel book = bookService.selectOne(title);
 		if(title != null && title.length()>0) {
-			if(book.getUserId().equals(user.getUserId())) {
+			if(book.getUser().equals(user)) {
 				form.setTitle(book.getTitle());
 				form.setNewTitle(book.getTitle());
 				form.setBody(book.getBody());
-				form.setUserId(book.getUserId());
+				form.setUser(book.getUser());
 				model.addAttribute("contents", "book/bookEdit :: bookEdit_contents");
 				model.addAttribute("bookForm", form);
 				return "/header";
@@ -101,7 +102,7 @@ public class BookController {
 		book.setTitle(form.getTitle());
 		book.setNewTitle(form.getNewTitle());
 		book.setBody(form.getBody());
-		book.setUserId(form.getUserId());
+		book.setUser(form.getUser());
 		System.out.println(book);
 		try {
 			boolean result = bookService.updateOne(book);

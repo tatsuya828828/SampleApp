@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.kuma.model.BookModel;
 import com.kuma.model.CommentModel;
-import com.kuma.model.UserModel;
 import com.kuma.repository.CommentRepository;
 import com.kuma.service.BookService;
 import com.kuma.service.UserService;
@@ -27,8 +26,8 @@ public class CommentRepositoryJdbc implements CommentRepository {
 
 	@Override
 	public int insert(CommentModel comment) throws DataAccessException {
-		int rowNumber= jdbc.update("INSERT INTO comment_table(user, "+"book, "+"comment) "+" VALUES(?,?,?)",
-				comment.getUser(), comment.getBook(), comment.getComment());
+		int rowNumber= jdbc.update("INSERT INTO comment_table(user_id, "+"book_id, "+"comment) "+" VALUES(?,?,?)",
+				comment.getUser().getId(), comment.getBook().getTitle(), comment.getComment());
 		return rowNumber;
 	}
 
@@ -39,8 +38,8 @@ public class CommentRepositoryJdbc implements CommentRepository {
 		List<CommentModel> commentList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			CommentModel comment = new CommentModel();
-			comment.setUser((UserModel) map.get("user"));
-			comment.setBook((BookModel) map.get("book"));
+			comment.setUser(userService.selectOne((String) map.get("user_id")));
+			comment.setBook(bookService.selectOne((String)map.get("book_id")));
 			comment.setComment((String) map.get("comment"));
 			commentList.add(comment);
 		}
@@ -49,9 +48,7 @@ public class CommentRepositoryJdbc implements CommentRepository {
 
 	@Override
 	public int delete(String userId, String bookTitle) throws DataAccessException {
-		UserModel user = userService.selectOne(userId);
-		BookModel book = bookService.selectOne(bookTitle);
-		int bookRowNumber = jdbc.update("DELETE FROM comment WHERE user=?, book=?", user, book);
+		int bookRowNumber = jdbc.update("DELETE FROM comment WHERE user_id=? AND book_id=?", userId, bookTitle);
 		return bookRowNumber;
 	}
 }
