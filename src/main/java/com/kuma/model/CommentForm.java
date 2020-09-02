@@ -6,5 +6,5 @@ import lombok.Data;
 public class CommentForm {
 	public UserModel user;
 	public BookModel book;
-	public String Comment;
+	public String comment;
 }
