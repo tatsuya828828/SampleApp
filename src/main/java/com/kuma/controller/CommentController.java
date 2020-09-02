@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.kuma.model.BookModel;
@@ -25,9 +26,9 @@ public class CommentController {
 	@Autowired
 	private BookService bookService;
 
-	@PostMapping("/comment")
+	@PostMapping("/bookDetail/{bookTitle}/postComment")
 	public String postComment(@ModelAttribute CommentForm form,
-			Model model, HttpServletRequest httpServletRequest, String bookTitle) {
+			Model model, HttpServletRequest httpServletRequest, @PathVariable("bookTitle") String bookTitle) {
 		String userId = httpServletRequest.getRemoteUser();
 		UserModel user = userService.selectOne(userId);
 		BookModel book = bookService.selectOne(bookTitle);
@@ -41,6 +42,6 @@ public class CommentController {
 		} else {
 			System.out.println("登録失敗");
 		}
-		return "book/bookList";
+		return "redirect:/bookDetail/{bookTitle}";
 	}
 }
