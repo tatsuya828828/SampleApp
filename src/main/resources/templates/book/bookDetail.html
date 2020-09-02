@@ -13,5 +13,27 @@
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
 		<a class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${title}}">編集</a>
+		<div style="margin-top: 10vh;">
+			<form method="post" th:action="@{${book.title} + '/postComment'}" th:object="${commentForm}">
+				<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
+					<textarea rows="5" class="form-control" th:field="*{comment}" required="true"></textarea>
+					<span class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">comment error</span>
+				</div>
+				<div class="form-group">
+					<button class="btn btn-success form-control" type="submit">コメント投稿</button>
+				</div>
+			</form>
+		</div>
+		<h4>コメント一覧</h4>
+		<table class="table">
+			<tr>
+				<th class="col-lg-2">ユーザー名</th>
+				<th>コメント</th>
+			</tr>
+			<tr th:each="comment: ${comments}">
+				<td><a th:href="@{'/userDetail/' + ${comment.user.id}}" th:text="*{comment.user.name}"></a></td>
+				<td th:text="*{comment.comment}"></td>
+			</tr>
+		</table>
 	</div>
 </body>
