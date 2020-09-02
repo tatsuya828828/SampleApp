@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.kuma.model.BookForm;
 import com.kuma.model.BookModel;
+import com.kuma.model.CommentForm;
+import com.kuma.model.CommentModel;
 import com.kuma.model.UserModel;
 import com.kuma.model.ValidGroup;
 import com.kuma.service.BookService;
+import com.kuma.service.CommentService;
 import com.kuma.service.UserService;
 
 @Controller
@@ -28,6 +31,8 @@ public class BookController {
 	private BookService bookService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private CommentService commentService;
 
 	@GetMapping("/bookNew")
 	public String getBookNew(@ModelAttribute BookForm bookForm, Model model) {
@@ -67,11 +72,13 @@ public class BookController {
 	}
 
 	@GetMapping("/bookDetail/{title}")
-	public String getBookDetail(Model model, @PathVariable("title") String title) {
+	public String getBookDetail(@ModelAttribute CommentForm form, Model model, @PathVariable("title") String title) {
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 		if(title != null && title.length()>0) {
 			BookModel book = bookService.selectOne(title);
 			model.addAttribute("book", book);
+			List<CommentModel> comments = commentService.selectMany(title);
+			model.addAttribute("comments", comments);
 		}
 		return "/header";
 	}
