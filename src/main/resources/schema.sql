@@ -3,6 +3,6 @@ CREATE TABLE IF NOT EXISTS user(
 
 CREATE TABLE IF NOT EXISTS book(
 	title VARCHAR(50) PRIMARY KEY, new_title VARCHAR(50), body VARCHAR(100), user_id VARCHAR(50) REFERENCES user(id));
-CREATE TABLE IF NOT EXISTS comment_table(
+CREATE TABLE IF NOT EXISTS comment(
 	user_id VARCHAR(50) REFERENCES user(id), book_id VARCHAR(50) REFERENCES book(title)
 	, comment VARCHAR(50));
