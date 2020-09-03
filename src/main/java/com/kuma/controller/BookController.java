@@ -53,7 +53,6 @@ public class BookController {
 		book.setBody(bookForm.getBody());
 		book.setUser(user);
 		boolean result = bookService.insert(book);
-		System.out.println(book);
 		if(result == true) {
 			System.out.println("登録成功");
 		} else {
@@ -67,7 +66,6 @@ public class BookController {
 		model.addAttribute("contents", "book/bookList :: bookList_contents");
 		List<BookModel> bookList = bookService.selectMany();
 		model.addAttribute("bookList", bookList);
-		System.out.println(bookList);
 		return "/header";
 	}
 
@@ -110,7 +108,6 @@ public class BookController {
 		book.setNewTitle(form.getNewTitle());
 		book.setBody(form.getBody());
 		book.setUser(form.getUser());
-		System.out.println(book);
 		try {
 			boolean result = bookService.updateOne(book);
 			if(result == true) {
