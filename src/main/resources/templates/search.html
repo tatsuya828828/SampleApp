@@ -1,0 +1,13 @@
+<div th:fragment="search_contents">
+	<h1><span th:text="${word}"></span>の検索結果</h1>
+	<table class="table">
+		<tr>
+			<th class="col-lg-8 info">タイトル</th>
+			<th class="info">投稿者</th>
+		</tr>
+		<tr th:each="book: ${searches}">
+			<td th:text="*{book.title}"></td>
+			<td th:text="*{book.user.name}"></td>
+		</tr>
+	</table>
+</div>
