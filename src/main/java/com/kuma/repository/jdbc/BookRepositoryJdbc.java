@@ -25,8 +25,8 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int insert(BookModel book) throws DataAccessException {
-		int bookRowNumber = jdbc.update("INSERT INTO book(title, "+"body, "+"user_id) "+"VALUES(?,?,?)",
-				book.getTitle(), book.getBody(), book.getUser().getId());
+		int bookRowNumber = jdbc.update("INSERT INTO book(title, "+"body, "+"author, "+"user_id) "+"VALUES(?,?,?,?)",
+				book.getTitle(), book.getBody(), book.getAuthor(), book.getUser().getId());
 		return bookRowNumber;
 	}
 
@@ -36,6 +36,7 @@ public class BookRepositoryJdbc implements BookRepository {
 		BookModel book = new BookModel();
 		book.setTitle((String) map.get("title"));
 		book.setBody((String) map.get("body"));
+		book.setAuthor((String) map.get("author"));
 		book.setUser(userService.selectOne((String)map.get("user_id")));
 		return book;
 	}
@@ -48,6 +49,7 @@ public class BookRepositoryJdbc implements BookRepository {
 			BookModel book = new BookModel();
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
+			book.setAuthor((String) map.get("author"));
 			book.setUser(userService.selectOne((String)map.get("user_id")));
 			bookList.add(book);
 		}
@@ -56,8 +58,8 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int updateOne(BookModel book) throws DataAccessException {
-		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "+"user_id=? "+"WHERE title=?",
-							book.getNewTitle(),book.getBody(),book.getUser().getId(),book.getTitle());
+		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "+"author=?, "+"user_id=? "+"WHERE title=?",
+							book.getNewTitle(), book.getBody(), book.getAuthor(), book.getUser().getId(), book.getTitle());
 		return bookRowNumber;
 	}
 

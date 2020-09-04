@@ -41,16 +41,17 @@ public class BookController {
 	}
 
 	@PostMapping("/bookNew")
-	public String postBookNew(@ModelAttribute @Validated(ValidGroup.class) BookForm bookForm
+	public String postBookNew(@ModelAttribute @Validated(ValidGroup.class) BookForm form
 			, BindingResult bindingResult, Model model, HttpServletRequest httpServletRequest) {
 		if(bindingResult.hasErrors()) {
-			return getBookNew(bookForm, model);
+			return getBookNew(form, model);
 		}
 		String userId = httpServletRequest.getRemoteUser();
 		UserModel user = userService.selectOne(userId);
 		BookModel book = new BookModel();
-		book.setTitle(bookForm.getTitle());
-		book.setBody(bookForm.getBody());
+		book.setTitle(form.getTitle());
+		book.setBody(form.getBody());
+		book.setAuthor(form.getAuthor());
 		book.setUser(user);
 		boolean result = bookService.insert(book);
 		if(result == true) {
@@ -92,6 +93,7 @@ public class BookController {
 				form.setTitle(book.getTitle());
 				form.setNewTitle(book.getTitle());
 				form.setBody(book.getBody());
+				form.setAuthor(book.getAuthor());
 				form.setUser(book.getUser());
 				model.addAttribute("contents", "book/bookEdit :: bookEdit_contents");
 				model.addAttribute("bookForm", form);
@@ -107,6 +109,7 @@ public class BookController {
 		book.setTitle(form.getTitle());
 		book.setNewTitle(form.getNewTitle());
 		book.setBody(form.getBody());
+		book.setAuthor(form.getAuthor());
 		book.setUser(form.getUser());
 		try {
 			boolean result = bookService.updateOne(book);

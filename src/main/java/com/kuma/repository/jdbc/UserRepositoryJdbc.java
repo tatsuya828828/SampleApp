@@ -51,6 +51,7 @@ public class UserRepositoryJdbc implements UserRepository {
 			BookModel book = new BookModel();
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
+			book.setAuthor((String) map.get("author"));
 			book.setUser(user);
 			books.add(book);
 		}
