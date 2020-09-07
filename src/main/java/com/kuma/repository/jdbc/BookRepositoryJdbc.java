@@ -38,6 +38,7 @@ public class BookRepositoryJdbc implements BookRepository {
 		book.setBody((String) map.get("body"));
 		book.setAuthor((String) map.get("author"));
 		book.setUser(userService.selectOne((String)map.get("user_id")));
+		book.setEvaluation((int) map.get("evaluation"));
 		return book;
 	}
 
@@ -51,6 +52,7 @@ public class BookRepositoryJdbc implements BookRepository {
 			book.setBody((String) map.get("body"));
 			book.setAuthor((String) map.get("author"));
 			book.setUser(userService.selectOne((String)map.get("user_id")));
+			book.setEvaluation((int) map.get("evaluation"));
 			bookList.add(book);
 		}
 		return bookList;
@@ -67,5 +69,19 @@ public class BookRepositoryJdbc implements BookRepository {
 	public int deleteOne(String title) throws DataAccessException {
 		int bookRowNumber = jdbc.update("DELETE FROM book WHERE title=?", title);
 		return bookRowNumber;
+	}
+
+	@Override
+	public int insertEvaluation(com.kuma.model.EvaluationModel evaluation) throws DataAccessException{
+		int rowNumber = jdbc.update("INSERT INTO evaluation(evaluation, "+"user_id, "+"book_id) "+"VALUES(?,?,?)",
+				evaluation.getEvaluation(), evaluation.getUser().getId(), evaluation.getBook().getTitle());
+		return rowNumber;
+	}
+
+	@Override
+	public int evaluationAvg(String bookTitle)throws DataAccessException {
+		int num = jdbc.queryForObject("SELECT AVG(evaluation) FROM evaluation WHERE book_id="+"'"+bookTitle+"'", Integer.class);
+		int rowNumber = jdbc.update("UPDATE book SET evaluation=? "+"WHERE title=?", num, bookTitle);
+		return rowNumber;
 	}
 }
