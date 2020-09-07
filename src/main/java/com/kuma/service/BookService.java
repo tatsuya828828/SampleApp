@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kuma.model.BookModel;
+import com.kuma.model.EvaluationModel;
 import com.kuma.repository.BookRepository;
 
 @Service
@@ -41,6 +42,24 @@ public class BookService {
 
 	public boolean deleteOne(String title) {
 		int rowNumber = bookRepository.deleteOne(title);
+		boolean result = false;
+		if(rowNumber>0) {
+			result = true;
+		}
+		return result;
+	}
+
+	public boolean insertEvaluation(EvaluationModel evaluation) {
+		int rowNumber = bookRepository.insertEvaluation(evaluation);
+		boolean result = false;
+		if(rowNumber>0) {
+			result = true;
+		}
+		return result;
+	}
+
+	public boolean evaluationAvg(String bookTitle) {
+		int rowNumber = bookRepository.evaluationAvg(bookTitle);
 		boolean result = false;
 		if(rowNumber>0) {
 			result = true;
