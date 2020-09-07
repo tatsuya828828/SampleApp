@@ -13,4 +13,5 @@ public class BookForm {
 	public String body;
 	public String author;
 	public UserModel user;
+	public int evaluation;
 }
