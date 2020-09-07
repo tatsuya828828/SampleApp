@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kuma.model.BookForm;
 import com.kuma.model.BookModel;
 import com.kuma.model.CommentForm;
 import com.kuma.model.CommentModel;
+import com.kuma.model.EvaluationModel;
 import com.kuma.model.UserModel;
 import com.kuma.model.ValidGroup;
 import com.kuma.service.BookService;
@@ -133,5 +135,30 @@ public class BookController {
 			model.addAttribute("result", "削除失敗");
 		}
 		return getBookList(model);
+	}
+
+	@PostMapping(value="/bookDetail/{bookTitle}/postEvaluation")
+	public String postEvaluation(@RequestParam("num") int num, Model model,
+			HttpServletRequest httpServletRequest, @PathVariable("bookTitle") String bookTitle) {
+		String userId = httpServletRequest.getRemoteUser();
+		UserModel user = userService.selectOne(userId);
+		BookModel book = bookService.selectOne(bookTitle);
+		EvaluationModel evaluation = new EvaluationModel();
+		evaluation.setEvaluation(num);
+		evaluation.setBook(book);
+		evaluation.setUser(user);
+		boolean result = bookService.insertEvaluation(evaluation);
+		if(result == true) {
+			System.out.println("登録成功");
+		} else {
+			System.out.println("登録失敗");
+		}
+		boolean result2 = bookService.evaluationAvg(bookTitle);
+		if(result2 == true) {
+			System.out.println("更新成功");
+		} else {
+			System.out.println("更新失敗");
+		}
+		return "redirect:/bookDetail/{bookTitle}";
 	}
 }
