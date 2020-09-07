@@ -9,4 +9,5 @@ public class BookModel {
 	private String body;
 	private String author;
 	private UserModel user;
+	private int evaluation;
 }
