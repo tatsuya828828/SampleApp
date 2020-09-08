@@ -14,9 +14,27 @@
 				<th class="info">感想</th>
 				<td th:text="*{book.body}"></td>
 			</tr>
+			<tr>
+				<th class="info">評価</th>
+				<td th:text="*{book.evaluation}"></td>
+			</tr>
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
 		<a class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${title}}">編集</a>
+		<div class="pull-left">
+			<form method="post" th:action="@{'/bookDetail/'+ ${book.title} +'/postEvaluation'}">
+				<script>
+				  $.fn.raty.defaults.path = "/webjars/jquery-raty/2.7.0/images";
+			      $(function(){
+			        $('#star').raty({number: 5, scoreName: 'num'});
+			      });
+			    </script>
+			    <div class="form-group" id="star">
+			    	<span>評価:</span><input type="hidden" th:value="${num}">
+			    	<input class="pull-right btn btn-success" type="submit" value="評価送信" style="margin-left: 1vh;">
+			    </div>
+			</form>
+		</div>
 		<div style="margin-top: 10vh;">
 			<form method="post" th:action="@{${book.title} + '/postComment'}" th:object="${commentForm}">
 				<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
