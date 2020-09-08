@@ -30,6 +30,7 @@ public class SearchController {
 		List<Object> searchList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			BookModel book = new BookModel();
+			book.setId((int) map.get("id"));
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
 			book.setUser(userService.selectOne((int)map.get("user_id")));
