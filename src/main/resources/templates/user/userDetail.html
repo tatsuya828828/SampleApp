@@ -35,7 +35,7 @@
 						<th>著者</th>
 					</tr>
 					<tr th:each="book: ${books}">
-						<td><a th:href="@{'/bookDetail/' + ${book.title}}" th:text="${book.title}"></a></td>
+						<td><a th:href="@{'/bookDetail/' + ${book.id}}" th:text="${book.title}"></a></td>
 						<td th:text="${book.author}"></td>
 					</tr>
 				</table>

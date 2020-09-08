@@ -122,6 +122,7 @@ public class UserController {
 		if(String.valueOf(id).length() > 0) {
 			if(user1.equals(user2)) {
 				form.setId(user1.getId());
+				form.setSelfId(user1.getSelfId());
 				form.setPassword(user1.getPassword());
 				form.setName(user1.getName());
 				model.addAttribute("contents", "user/userEdit :: userEdit_contents");
