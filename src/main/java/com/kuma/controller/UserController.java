@@ -30,7 +30,7 @@ public class UserController {
 
 	public UserModel currentUser(HttpServletRequest httpServletRequest) {
 		String userId = httpServletRequest.getRemoteUser();
-		UserModel user = userService.selectOne(userId);
+		UserModel user = userService.currentUser(userId);
 		return user;
 	}
 
@@ -47,13 +47,13 @@ public class UserController {
 	}
 
 	@PostMapping("/signup")
-	public String postSignup(@ModelAttribute @Validated(ValidGroup.class) SignupForm form, BindingResult bindingResult, Model model) {
+	public String postSignup(@ModelAttribute @Validated(ValidGroup.class) SignupForm form
+			,BindingResult bindingResult, Model model) {
 		if(bindingResult.hasErrors()) {
 			return getSignUp(form, model);
 		}
-		System.out.println(form);
 		UserModel user = new UserModel();
-		user.setId(form.getId());
+		user.setSelfId(form.getSelfId());
 		user.setPassword(form.getPassword());
 		user.setName(form.getName());
 		// サービスクラスのinsertを呼び出して変換
@@ -89,15 +89,15 @@ public class UserController {
 
 	@GetMapping("/userDetail/{id:.+}")
 	public String getUserDetail(@ModelAttribute BookForm bookForm
-			, Model model, @PathVariable("id") String id, HttpServletRequest httpServletRequest) {
+			, Model model, @PathVariable("id") int id, HttpServletRequest httpServletRequest) {
 		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
-		if(id != null && id.length()>0) {
-			UserModel user = userService.selectOne(id);
+		if(String.valueOf(id).length() > 0) {
+			UserModel user = userService.selectOne((int) id);
 			if(user.equals(currentUser(httpServletRequest))) {
 				return "redirect:/mypage";
 			}
 			model.addAttribute("user", user);
-			List<BookModel> books = userService.hasBook(user.getId());
+			List<BookModel> books = userService.hasBook(id);
 			model.addAttribute("books", books);
 		}
 		return "/header";
@@ -116,10 +116,10 @@ public class UserController {
 
 	@GetMapping("/userEdit/{id:.+}")
 	public String getUserEdit(@ModelAttribute SignupForm form
-			, Model model, @PathVariable("id") String id, HttpServletRequest httpServletRequest) {
+			, Model model, @PathVariable("id") int id, HttpServletRequest httpServletRequest) {
 		UserModel user1 = currentUser(httpServletRequest);
 		UserModel user2 = userService.selectOne(id);
-		if(id != null && id.length()>0) {
+		if(String.valueOf(id).length() > 0) {
 			if(user1.equals(user2)) {
 				form.setId(user1.getId());
 				form.setPassword(user1.getPassword());
