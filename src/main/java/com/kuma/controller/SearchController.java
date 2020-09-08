@@ -32,7 +32,7 @@ public class SearchController {
 			BookModel book = new BookModel();
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
-			book.setUser(userService.selectOne((String)map.get("user_id")));
+			book.setUser(userService.selectOne((int)map.get("user_id")));
 			searchList.add(book);
 		}
 		System.out.println(searchList);
