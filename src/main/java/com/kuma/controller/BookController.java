@@ -140,6 +140,7 @@ public class BookController {
 	@PostMapping(value="/bookDetail/{bookTitle}/postEvaluation")
 	public String postEvaluation(@RequestParam("num") int num, Model model,
 			HttpServletRequest httpServletRequest, @PathVariable("bookTitle") String bookTitle) {
+		System.out.println("数値:"+ num);
 		String userId = httpServletRequest.getRemoteUser();
 		UserModel user = userService.selectOne(userId);
 		BookModel book = bookService.selectOne(bookTitle);
