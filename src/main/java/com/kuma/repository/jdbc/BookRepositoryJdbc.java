@@ -31,13 +31,14 @@ public class BookRepositoryJdbc implements BookRepository {
 	}
 
 	@Override
-	public BookModel selectOne(String title) throws DataAccessException {
-		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM book"+" WHERE title=?", title);
+	public BookModel selectOne(int id) throws DataAccessException {
+		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM book"+" WHERE id=?", id);
 		BookModel book = new BookModel();
+		book.setId((int) map.get("id"));
 		book.setTitle((String) map.get("title"));
 		book.setBody((String) map.get("body"));
 		book.setAuthor((String) map.get("author"));
-		book.setUser(userService.selectOne((String)map.get("user_id")));
+		book.setUser(userService.selectOne((int)map.get("user_id")));
 		book.setEvaluation((int) map.get("evaluation"));
 		return book;
 	}
@@ -48,10 +49,11 @@ public class BookRepositoryJdbc implements BookRepository {
 		List<BookModel> bookList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			BookModel book = new BookModel();
+			book.setId((int) map.get("id"));
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
 			book.setAuthor((String) map.get("author"));
-			book.setUser(userService.selectOne((String)map.get("user_id")));
+			book.setUser(userService.selectOne((int)map.get("user_id")));
 			book.setEvaluation((int) map.get("evaluation"));
 			bookList.add(book);
 		}
@@ -60,28 +62,28 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int updateOne(BookModel book) throws DataAccessException {
-		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "+"author=?, "+"user_id=? "+"WHERE title=?",
-							book.getNewTitle(), book.getBody(), book.getAuthor(), book.getUser().getId(), book.getTitle());
+		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "+"author=?, "+"user_id=? "+"WHERE id=?",
+							book.getTitle(), book.getBody(), book.getAuthor(), book.getUser().getId(), book.getId());
 		return bookRowNumber;
 	}
 
 	@Override
-	public int deleteOne(String title) throws DataAccessException {
-		int bookRowNumber = jdbc.update("DELETE FROM book WHERE title=?", title);
+	public int deleteOne(int id) throws DataAccessException {
+		int bookRowNumber = jdbc.update("DELETE FROM book WHERE id=?", id);
 		return bookRowNumber;
 	}
 
 	@Override
 	public int insertEvaluation(com.kuma.model.EvaluationModel evaluation) throws DataAccessException{
 		int rowNumber = jdbc.update("INSERT INTO evaluation(evaluation, "+"user_id, "+"book_id) "+"VALUES(?,?,?)",
-				evaluation.getEvaluation(), evaluation.getUser().getId(), evaluation.getBook().getTitle());
+				evaluation.getEvaluation(), evaluation.getUser().getId(), evaluation.getBook().getId());
 		return rowNumber;
 	}
 
 	@Override
-	public int evaluationAvg(String bookTitle)throws DataAccessException {
-		int num = jdbc.queryForObject("SELECT AVG(evaluation) FROM evaluation WHERE book_id="+"'"+bookTitle+"'", Integer.class);
-		int rowNumber = jdbc.update("UPDATE book SET evaluation=? "+"WHERE title=?", num, bookTitle);
+	public int evaluationAvg(int bookId)throws DataAccessException {
+		int num = jdbc.queryForObject("SELECT AVG(evaluation) FROM evaluation WHERE book_id="+ bookId, Integer.class);
+		int rowNumber = jdbc.update("UPDATE book SET evaluation=? "+"WHERE id=?", num, bookId);
 		return rowNumber;
 	}
 }

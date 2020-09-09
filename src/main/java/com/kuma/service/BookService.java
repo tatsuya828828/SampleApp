@@ -23,8 +23,8 @@ public class BookService {
 		return result;
 	}
 
-	public BookModel selectOne(String title) {
-		return bookRepository.selectOne(title);
+	public BookModel selectOne(int id) {
+		return bookRepository.selectOne(id);
 	}
 
 	public List<BookModel> selectMany(){
@@ -40,8 +40,8 @@ public class BookService {
 		return result;
 	}
 
-	public boolean deleteOne(String title) {
-		int rowNumber = bookRepository.deleteOne(title);
+	public boolean deleteOne(int id) {
+		int rowNumber = bookRepository.deleteOne(id);
 		boolean result = false;
 		if(rowNumber>0) {
 			result = true;
@@ -58,8 +58,8 @@ public class BookService {
 		return result;
 	}
 
-	public boolean evaluationAvg(String bookTitle) {
-		int rowNumber = bookRepository.evaluationAvg(bookTitle);
+	public boolean evaluationAvg(int bookId) {
+		int rowNumber = bookRepository.evaluationAvg(bookId);
 		boolean result = false;
 		if(rowNumber>0) {
 			result = true;
