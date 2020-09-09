@@ -96,8 +96,8 @@ public class UserRepositoryJdbc implements UserRepository {
 	public int updateOne(UserModel user) throws DataAccessException {
 		// パスワード暗号化
 		String password = passwordEncoder.encode(user.getPassword());
-		int userRowNumber = jdbc.update("UPDATE user "+"SET "+"password=?, "+"name=? "+"WHERE id=?",
-							password, user.getName(), user.getId());
+		int userRowNumber = jdbc.update("UPDATE user "+"SET "+"self_id=?, "+"password=?, "+"name=? "+"WHERE id=?",
+							user.getSelfId(), password, user.getName(), user.getId());
 		return userRowNumber;
 	}
 
