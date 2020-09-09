@@ -6,7 +6,7 @@
 			<th class="info">投稿者</th>
 		</tr>
 		<tr th:each="book: ${searches}">
-			<td><a th:href="@{'/bookDetail/' + *{book.title}}" th:text="*{book.title}"></a></td>
+			<td><a th:href="@{'/bookDetail/' + *{book.id}}" th:text="*{book.title}"></a></td>
 			<td><a th:href="@{'/userDetail/' + *{book.user.id}}" th:text="*{book.user.name}"></a></td>
 		</tr>
 	</table>
