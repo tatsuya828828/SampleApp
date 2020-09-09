@@ -26,12 +26,11 @@ public class CommentController {
 	@Autowired
 	private BookService bookService;
 
-	@PostMapping("/bookDetail/{bookTitle}/postComment")
+	@PostMapping("/bookDetail/{bookId}/postComment")
 	public String postComment(@ModelAttribute CommentForm form,
-			Model model, HttpServletRequest httpServletRequest, @PathVariable("bookTitle") String bookTitle) {
-		String userId = httpServletRequest.getRemoteUser();
-		UserModel user = userService.selectOne(userId);
-		BookModel book = bookService.selectOne(bookTitle);
+			Model model, HttpServletRequest httpServletRequest, @PathVariable("bookId") int bookId) {
+		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
+		BookModel book = bookService.selectOne(bookId);
 		CommentModel comment = new CommentModel();
 		comment.setUser(user);
 		comment.setBook(book);
@@ -42,6 +41,6 @@ public class CommentController {
 		} else {
 			System.out.println("登録失敗");
 		}
-		return "redirect:/bookDetail/{bookTitle}";
+		return "redirect:/bookDetail/{bookId}";
 	}
 }

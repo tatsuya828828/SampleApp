@@ -114,7 +114,7 @@ public class UserController {
 		return "/header";
 	}
 
-	@GetMapping("/userEdit/{id:.+}")
+	@GetMapping("/userEdit/{id}")
 	public String getUserEdit(@ModelAttribute SignupForm form
 			, Model model, @PathVariable("id") int id, HttpServletRequest httpServletRequest) {
 		UserModel user1 = currentUser(httpServletRequest);
