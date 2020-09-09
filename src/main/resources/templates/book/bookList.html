@@ -3,16 +3,20 @@
 		<h1 class="text-center">投稿一覧</h1>
 		<table class="table table-bordered">
 			<tr>
+				<th class="info col-lg-1">No.</th>
 				<th class="info col-lg-3">タイトル</th>
 				<th class="info col-lg-3">著者</th>
 				<th class="info col-lg-3">投稿者</th>
-				<th class="info col-lg-3"></th>
+				<th class="info col-lg-2"></th>
 			</tr>
 			<tr th:each="book: ${bookList}">
-				<td th:text="${book.title}"></td>
-				<td th:text="${book.author}"></td>
-				<td><a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="${book.user.name}"></span></td>
-				<td><a class="btn btn-primary" th:href="@{'/bookDetail/' + ${book.title}}">詳細</a></td>
+				<td th:text="*{book.id}"></td>
+				<td><a th:href="@{'/bookDetail/' + *{book.id}}" th:text="*{book.title}"></a></td>
+				<td th:text="*{book.author}"></td>
+				<td><a th:href="@{'/userDetail/' + *{book.user.id}}"><span th:text="*{book.user.name}"></span></td>
+				<td>
+				    <p th:text="*{book.evaluation}"></p>
+				</td>
 			</tr>
 		</table>
 	</div>

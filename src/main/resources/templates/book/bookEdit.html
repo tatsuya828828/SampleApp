@@ -3,22 +3,21 @@
 		<h1 class="text-center">編集ページ</h1>
 		<table style="margin-top: 10vh;">
 			<tr>
+				<input type="hidden" th:field="*{id}">
 				<th class="active col-lg-2">タイトル</th>
 				<td class="col-lg-3">
-					<div class="form-group" th:classappend="${#fields.hasErrors('newTitle')} ? 'has-error'">
-						<input type="hidden" th:field="*{title}">
-						<input type="text" class="form-control" th:field="*{newTitle}">
-						<span class="text-danger" th:if="${#fields.hasErrors('newTitle')}" th:errors="*{newTitle}">
+					<div class="form-group" th:classappend="${#fields.hasErrors('title')} ? 'has-error'">
+						<input type="text" class="form-control" th:field="*{title}">
+						<span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
 							newTitle error
 						</span>
 					</div>
 				</td>
-			</tr
+			</tr>
 			<tr>
 				<th class="active col-lg-2">著者</th>
 				<td class="col-lg-3">
 					<div class="form-group" th:classappend="${#fields.hasErrors('author')} ? 'has-error'">
-						<input type="hidden" th:field="*{author}">
 						<input type="text" class="form-control" th:field="*{author}">
 						<span class="text-danger" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">
 							newTitle error
@@ -46,7 +45,7 @@
 				</td>
 			</tr>
 		</table>
-		<a class="btn btn-default btn-lg pull-left" th:href="@{'/bookDetail/' + *{title}}">戻る</a>
+		<a class="btn btn-default btn-lg pull-left" th:href="@{'/bookDetail/' + *{id}}">戻る</a>
 		<button class="btn btn-danger btn-lg pull-right" type="submit" name="delete">
 			削除
 		</button>

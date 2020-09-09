@@ -20,9 +20,9 @@
 			</tr>
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
-		<a class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${title}}">編集</a>
+		<a class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${id}}">編集</a>
 		<div class="pull-left">
-			<form method="post" th:action="@{'/bookDetail/'+ ${book.title} +'/postEvaluation'}">
+			<form method="post" th:action="@{'/bookDetail/'+ ${book.id} +'/postEvaluation'}">
 				<script>
 				  $.fn.raty.defaults.path = "/webjars/jquery-raty/2.7.0/images";
 			      $(function(){
@@ -36,7 +36,7 @@
 			</form>
 		</div>
 		<div style="margin-top: 10vh;">
-			<form method="post" th:action="@{${book.title} + '/postComment'}" th:object="${commentForm}">
+			<form method="post" th:action="@{${book.id} + '/postComment'}" th:object="${commentForm}">
 				<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
 					<textarea rows="5" class="form-control" th:field="*{comment}" required="true"></textarea>
 					<span class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">comment error</span>
