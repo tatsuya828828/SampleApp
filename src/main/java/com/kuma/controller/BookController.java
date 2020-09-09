@@ -48,8 +48,7 @@ public class BookController {
 		if(bindingResult.hasErrors()) {
 			return getBookNew(form, model);
 		}
-		String userId = httpServletRequest.getRemoteUser();
-		UserModel user = userService.selectOne(userId);
+		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 		BookModel book = new BookModel();
 		book.setTitle(form.getTitle());
 		book.setBody(form.getBody());
@@ -72,28 +71,27 @@ public class BookController {
 		return "/header";
 	}
 
-	@GetMapping("/bookDetail/{title}")
-	public String getBookDetail(@ModelAttribute CommentForm form, Model model, @PathVariable("title") String title) {
+	@GetMapping("/bookDetail/{id}")
+	public String getBookDetail(@ModelAttribute CommentForm form, Model model, @PathVariable("id") int id) {
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
-		if(title != null && title.length()>0) {
-			BookModel book = bookService.selectOne(title);
+		if(String.valueOf(id).length() > 0) {
+			BookModel book = bookService.selectOne(id);
 			model.addAttribute("book", book);
-			List<CommentModel> comments = commentService.selectMany(title);
+			List<CommentModel> comments = commentService.selectMany(id);
 			model.addAttribute("comments", comments);
 		}
 		return "/header";
 	}
 
-	@GetMapping("/bookEdit/{title}")
+	@GetMapping("/bookEdit/{id}")
 	public String getBookEdit(@ModelAttribute BookForm form, Model model
-			, @PathVariable("title") String title, HttpServletRequest httpServletRequest) {
-		String userId = httpServletRequest.getRemoteUser();
-		UserModel user = userService.selectOne(userId);
-		BookModel book = bookService.selectOne(title);
-		if(title != null && title.length()>0) {
+			, @PathVariable("id") int id, HttpServletRequest httpServletRequest) {
+		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
+		BookModel book = bookService.selectOne(id);
+		if(String.valueOf(id).length() > 0) {
 			if(book.getUser().equals(user)) {
+				form.setId(id);
 				form.setTitle(book.getTitle());
-				form.setNewTitle(book.getTitle());
 				form.setBody(book.getBody());
 				form.setAuthor(book.getAuthor());
 				form.setUser(book.getUser());
@@ -102,19 +100,22 @@ public class BookController {
 				return "/header";
 			}
 		}
-		return "redirect:/bookDetail/{title}";
+		return "redirect:/bookDetail/{id}";
 	}
 
 	@PostMapping(value="/bookEdit", params="update")
 	public String postBookEdit(@ModelAttribute BookForm form, Model model) {
 		BookModel book = new BookModel();
+		book.setId(form.getId());
 		book.setTitle(form.getTitle());
-		book.setNewTitle(form.getNewTitle());
 		book.setBody(form.getBody());
 		book.setAuthor(form.getAuthor());
 		book.setUser(form.getUser());
+		System.out.println(book);
 		try {
+			System.out.println("2");
 			boolean result = bookService.updateOne(book);
+			System.out.println(result);
 			if(result == true) {
 				model.addAttribute("result", "更新成功");
 			} else {
@@ -128,7 +129,7 @@ public class BookController {
 
 	@PostMapping(value = "/bookEdit", params = "delete")
 	public String postBookDelete(@ModelAttribute BookForm form, Model model) {
-		boolean result = bookService.deleteOne(form.getTitle());
+		boolean result = bookService.deleteOne(form.getId());
 		if(result == true) {
 			model.addAttribute("result", "削除成功");
 		} else {
@@ -137,13 +138,12 @@ public class BookController {
 		return getBookList(model);
 	}
 
-	@PostMapping(value="/bookDetail/{bookTitle}/postEvaluation")
+	@PostMapping(value="/bookDetail/{bookId}/postEvaluation")
 	public String postEvaluation(@RequestParam("num") int num, Model model,
-			HttpServletRequest httpServletRequest, @PathVariable("bookTitle") String bookTitle) {
+			HttpServletRequest httpServletRequest, @PathVariable("bookId") int bookId) {
 		System.out.println("数値:"+ num);
-		String userId = httpServletRequest.getRemoteUser();
-		UserModel user = userService.selectOne(userId);
-		BookModel book = bookService.selectOne(bookTitle);
+		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
+		BookModel book = bookService.selectOne(bookId);
 		EvaluationModel evaluation = new EvaluationModel();
 		evaluation.setEvaluation(num);
 		evaluation.setBook(book);
@@ -154,12 +154,12 @@ public class BookController {
 		} else {
 			System.out.println("登録失敗");
 		}
-		boolean result2 = bookService.evaluationAvg(bookTitle);
+		boolean result2 = bookService.evaluationAvg(bookId);
 		if(result2 == true) {
 			System.out.println("更新成功");
 		} else {
 			System.out.println("更新失敗");
 		}
-		return "redirect:/bookDetail/{bookTitle}";
+		return "redirect:/bookDetail/{bookId}";
 	}
 }
