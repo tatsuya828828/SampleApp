@@ -26,18 +26,18 @@ public class CommentRepositoryJdbc implements CommentRepository {
 	@Override
 	public int insert(CommentModel comment) throws DataAccessException {
 		int rowNumber= jdbc.update("INSERT INTO comment(user_id, "+"book_id, "+"comment) "+" VALUES(?,?,?)",
-				comment.getUser().getId(), comment.getBook().getTitle(), comment.getComment());
+				comment.getUser().getId(), comment.getBook().getId(), comment.getComment());
 		return rowNumber;
 	}
 
 	@Override
-	public List<CommentModel> selectMany(String bookTitle) throws DataAccessException {
-		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM comment"+" WHERE book_id=?", bookTitle);
+	public List<CommentModel> selectMany(int bookId) throws DataAccessException {
+		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM comment"+" WHERE book_id=?", bookId);
 		List<CommentModel> commentList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			CommentModel comment = new CommentModel();
-			comment.setUser(userService.selectOne((String) map.get("user_id")));
-			comment.setBook(bookService.selectOne((String) map.get("book_id")));
+			comment.setUser(userService.selectOne((int) map.get("user_id")));
+			comment.setBook(bookService.selectOne((int) map.get("book_id")));
 			comment.setComment((String) map.get("comment"));
 			commentList.add(comment);
 		}
@@ -45,8 +45,8 @@ public class CommentRepositoryJdbc implements CommentRepository {
 	}
 
 	@Override
-	public int delete(String userId, String bookTitle) throws DataAccessException {
-		int bookRowNumber = jdbc.update("DELETE FROM comment WHERE user_id=? AND book_id=?", userId, bookTitle);
+	public int delete(int userId, int bookId) throws DataAccessException {
+		int bookRowNumber = jdbc.update("DELETE FROM comment WHERE user_id=? AND book_id=?", userId, bookId);
 		return bookRowNumber;
 	}
 }

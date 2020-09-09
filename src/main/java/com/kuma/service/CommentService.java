@@ -22,12 +22,12 @@ public class CommentService {
 		return result;
 	}
 
-	public List<CommentModel> selectMany(String bookTitle) {
-		return commentRepository.selectMany(bookTitle);
+	public List<CommentModel> selectMany(int bookId) {
+		return commentRepository.selectMany(bookId);
 	}
 
-	public boolean delete(String userId, String bookTitle) {
-		int rowNumber = commentRepository.delete(userId, bookTitle);
+	public boolean delete(int userId, int bookId) {
+		int rowNumber = commentRepository.delete(userId, bookId);
 		boolean result = false;
 		if(rowNumber>0) {
 			result = true;
