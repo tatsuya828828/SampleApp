@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS comment(
 	user_id INT REFERENCES user(id), book_id INT REFERENCES book(id)
 	, comment VARCHAR(50));
 CREATE TABLE IF NOT EXISTS evaluation(
-	evaluation INT, user_id INT REFERENCES user(id), book_id INT REFERENCES book(id))
+	evaluation INT, user_id INT REFERENCES user(id), book_id INT REFERENCES book(id), PRIMARY KEY(user_id, book_id))
