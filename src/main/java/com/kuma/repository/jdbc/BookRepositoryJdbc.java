@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.kuma.model.BookModel;
+import com.kuma.model.EvaluationModel;
 import com.kuma.repository.BookRepository;
 import com.kuma.service.UserService;
 
@@ -74,9 +75,33 @@ public class BookRepositoryJdbc implements BookRepository {
 	}
 
 	@Override
-	public int insertEvaluation(com.kuma.model.EvaluationModel evaluation) throws DataAccessException{
+	public void selectEvaluation(EvaluationModel evaluation) throws DataAccessException {
+		int num = jdbc.queryForObject("SELECT COUNT(user_id) FROM evaluation"
+	+" WHERE user_id="+ evaluation.getUser().getId() +"AND book_id="+ evaluation.getBook().getId(), Integer.class);
+		System.out.println("1");
+		System.out.println(num);
+		if(num == 0) {
+			System.out.println("評価登録中");
+			insertEvaluation(evaluation);
+			System.out.println("評価登録成功");
+		} else {
+			System.out.println("評価更新中");
+			updateEvaluation(evaluation);
+			System.out.println("評価更新成功");
+		}
+	}
+
+	@Override
+	public int insertEvaluation(com.kuma.model.EvaluationModel evaluation) throws DataAccessException {
 		int rowNumber = jdbc.update("INSERT INTO evaluation(evaluation, "+"user_id, "+"book_id) "+"VALUES(?,?,?)",
 				evaluation.getEvaluation(), evaluation.getUser().getId(), evaluation.getBook().getId());
+		return rowNumber;
+	}
+
+	@Override
+	public int updateEvaluation(EvaluationModel evaluation) throws DataAccessException {
+		int rowNumber = jdbc.update("UPDATE evaluation "+"SET "+"evaluation=? "+"WHERE user_id=?"+"AND book_id=?"
+					, evaluation.getEvaluation(), evaluation.getUser().getId(), evaluation.getBook().getId());
 		return rowNumber;
 	}
 

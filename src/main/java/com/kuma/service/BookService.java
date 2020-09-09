@@ -49,6 +49,10 @@ public class BookService {
 		return result;
 	}
 
+	public void selectEvaluation(EvaluationModel evaluation) {
+		bookRepository.selectEvaluation(evaluation);
+	}
+
 	public boolean insertEvaluation(EvaluationModel evaluation) {
 		int rowNumber = bookRepository.insertEvaluation(evaluation);
 		boolean result = false;

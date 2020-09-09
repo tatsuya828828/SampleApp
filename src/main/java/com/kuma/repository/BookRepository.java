@@ -13,6 +13,8 @@ public interface BookRepository {
 	public List<BookModel> selectMany() throws DataAccessException;
 	public int updateOne(BookModel book) throws DataAccessException;
 	public int deleteOne(int id) throws DataAccessException;
+	public void selectEvaluation(EvaluationModel evaluation) throws DataAccessException;
 	public int insertEvaluation(EvaluationModel evaluation) throws DataAccessException;
+	public int updateEvaluation(EvaluationModel evaluation) throws DataAccessException;
 	public int evaluationAvg(int bookId)throws DataAccessException;
 }
