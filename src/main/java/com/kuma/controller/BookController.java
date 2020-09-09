@@ -148,12 +148,7 @@ public class BookController {
 		evaluation.setEvaluation(num);
 		evaluation.setBook(book);
 		evaluation.setUser(user);
-		boolean result = bookService.insertEvaluation(evaluation);
-		if(result == true) {
-			System.out.println("登録成功");
-		} else {
-			System.out.println("登録失敗");
-		}
+		bookService.selectEvaluation(evaluation);
 		boolean result2 = bookService.evaluationAvg(bookId);
 		if(result2 == true) {
 			System.out.println("更新成功");
