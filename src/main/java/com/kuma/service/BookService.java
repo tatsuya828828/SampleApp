@@ -74,4 +74,8 @@ public class BookService {
 	public int evaluationCount(int bookId) {
 		return bookRepository.evaluationCount(bookId);
 	}
+
+	public List<BookModel> searchAuthor(String author) {
+		return bookRepository.searchAuthor(author);
+	}
 }

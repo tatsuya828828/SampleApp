@@ -117,4 +117,21 @@ public class BookRepositoryJdbc implements BookRepository {
 		int num = jdbc.queryForObject("SELECT COUNT(evaluation) FROM evaluation WHERE book_id="+ bookId, Integer.class);
 		return num;
 	}
+
+	@Override
+	public List<BookModel> searchAuthor(String author) throws DataAccessException {
+		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book"+" WHERE author=?", author);
+		List<BookModel> bookList = new ArrayList<>();
+		for(Map<String, Object> map: getList) {
+			BookModel book = new BookModel();
+			book.setId((int) map.get("id"));
+			book.setTitle((String) map.get("title"));
+			book.setBody((String) map.get("body"));
+			book.setAuthor(author);
+			book.setEvaluation((int) map.get("evaluation"));
+			book.setUser(userService.selectOne((int) map.get("user_id")));
+			bookList.add(book);
+		}
+		return bookList;
+	}
 }
