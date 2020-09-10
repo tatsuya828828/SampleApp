@@ -15,7 +15,13 @@
 				<td th:text="*{book.author}"></td>
 				<td><a th:href="@{'/userDetail/' + *{book.user.id}}"><span th:text="*{book.user.name}"></span></td>
 				<td>
-				    <p th:text="*{book.evaluation}"></p>
+				    <script th:inline="javascript">
+					  $.fn.raty.defaults.path = "/webjars/jquery-raty/2.7.0/images";
+				      $(function(){
+				        $('#evaluation'+ [[*{book.id}]]).raty({number: 5, score: /*[[*{book.evaluation}]]*/, readOnly: true});
+				      });
+				    </script>
+				    <div th:id="'evaluation' + *{book.id}"></div>
 				</td>
 			</tr>
 		</table>
