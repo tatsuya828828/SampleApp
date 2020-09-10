@@ -17,4 +17,5 @@ public interface BookRepository {
 	public int insertEvaluation(EvaluationModel evaluation) throws DataAccessException;
 	public int updateEvaluation(EvaluationModel evaluation) throws DataAccessException;
 	public int evaluationAvg(int bookId)throws DataAccessException;
+	public int evaluationCount(int bookId) throws DataAccessException;
 }

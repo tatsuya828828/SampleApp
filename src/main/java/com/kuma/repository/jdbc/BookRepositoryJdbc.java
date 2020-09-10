@@ -106,9 +106,15 @@ public class BookRepositoryJdbc implements BookRepository {
 	}
 
 	@Override
-	public int evaluationAvg(int bookId)throws DataAccessException {
+	public int evaluationAvg(int bookId) throws DataAccessException {
 		int num = jdbc.queryForObject("SELECT AVG(evaluation) FROM evaluation WHERE book_id="+ bookId, Integer.class);
 		int rowNumber = jdbc.update("UPDATE book SET evaluation=? "+"WHERE id=?", num, bookId);
 		return rowNumber;
+	}
+
+	@Override
+	public int evaluationCount(int bookId) throws DataAccessException {
+		int num = jdbc.queryForObject("SELECT COUNT(evaluation) FROM evaluation WHERE book_id="+ bookId, Integer.class);
+		return num;
 	}
 }

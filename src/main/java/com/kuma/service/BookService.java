@@ -70,4 +70,8 @@ public class BookService {
 		}
 		return result;
 	}
+
+	public int evaluationCount(int bookId) {
+		return bookRepository.evaluationCount(bookId);
+	}
 }
