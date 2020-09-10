@@ -159,4 +159,13 @@ public class BookController {
 		}
 		return "redirect:/bookDetail/{bookId}";
 	}
+
+	@GetMapping("/{author}")
+	public String getSearch(Model model, @PathVariable("author") String author) {
+		model.addAttribute("contents", "book/author :: author_contents");
+		model.addAttribute("author", author);
+		List<BookModel> bookList = bookService.searchAuthor(author);
+		model.addAttribute("bookList", bookList);
+		return "/header";
+	}
 }
