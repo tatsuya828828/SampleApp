@@ -79,6 +79,8 @@ public class BookController {
 			model.addAttribute("book", book);
 			List<CommentModel> comments = commentService.selectMany(id);
 			model.addAttribute("comments", comments);
+			int count = bookService.evaluationCount(id);
+			model.addAttribute("count", count);
 		}
 		return "/header";
 	}
