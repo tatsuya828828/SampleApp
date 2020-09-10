@@ -16,7 +16,16 @@
 			</tr>
 			<tr>
 				<th class="info">評価</th>
-				<td th:text="*{book.evaluation}"></td>
+				<td>
+					<script th:inline="javascript">
+					  $.fn.raty.defaults.path = "/webjars/jquery-raty/2.7.0/images";
+				      $(function(){
+				        $('#evaluation').raty({number: 5, score: [[${book.evaluation}]], readOnly: true});
+				      });
+				    </script>
+				    <div id="evaluation"></div>
+				   	<p>[[${book.evaluation}]]</p>
+				</td>
 			</tr>
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
@@ -26,7 +35,7 @@
 				<script>
 				  $.fn.raty.defaults.path = "/webjars/jquery-raty/2.7.0/images";
 			      $(function(){
-			        $('#star').raty({number: 5, scoreName: 'num'});
+			        $('#star').raty({number: 5, score: 1, scoreName: 'num'});
 			      });
 			    </script>
 			    <div class="form-group" id="star">
