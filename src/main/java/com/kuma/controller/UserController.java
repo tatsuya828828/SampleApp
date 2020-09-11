@@ -109,7 +109,6 @@ public class UserController {
 		UserModel user = currentUser(httpServletRequest);
 		model.addAttribute("user", user);
 		List<BookModel> books = userService.hasBook(user.getId());
-		System.out.println(books);
 		model.addAttribute("books", books);
 		return "/header";
 	}
