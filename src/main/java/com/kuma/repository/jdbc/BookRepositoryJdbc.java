@@ -26,8 +26,8 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int insert(BookModel book) throws DataAccessException {
-		int bookRowNumber = jdbc.update("INSERT INTO book(title, "+"body, "+"author, "+"user_id) "+"VALUES(?,?,?,?)",
-				book.getTitle(), book.getBody(), book.getAuthor(), book.getUser().getId());
+		int bookRowNumber = jdbc.update("INSERT INTO book(title, "+"body, "+"author, "+"user_id, "+"evaluation) "+"VALUES(?,?,?,?,?)",
+				book.getTitle(), book.getBody(), book.getAuthor(), book.getUser().getId(), 0);
 		return bookRowNumber;
 	}
 
@@ -54,7 +54,7 @@ public class BookRepositoryJdbc implements BookRepository {
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
 			book.setAuthor((String) map.get("author"));
-			book.setUser(userService.selectOne((int)map.get("user_id")));
+			book.setUser(userService.selectOne((int) map.get("user_id")));
 			book.setEvaluation((int) map.get("evaluation"));
 			bookList.add(book);
 		}
