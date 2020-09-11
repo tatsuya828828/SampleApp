@@ -24,8 +24,14 @@
 					Bookers
 				</a>
 			</div>
+			<div class="collapse navbar-collapse" id="navbarEexample3" sec:authorize="isAnonymous()">
+				<ul class="nav navbar-nav">
+					<li><a th:href="@{/login}">ログイン</a></li>
+					<li><a th:href="@{/signup}">新規登録</a></li>
+				</ul>
+			</div>
 
-			<div class="collapse navbar-collapse" id="navbarEexample3">
+			<div class="collapse navbar-collapse" id="navbarEexample3" sec:authorize="isAuthenticated()">
 				<ul class="nav navbar-nav">
 					<li><a th:href="@{/userList}">ユーザー一覧</a></li>
 					<li><a th:href="@{/bookList}">投稿一覧</a></li>
