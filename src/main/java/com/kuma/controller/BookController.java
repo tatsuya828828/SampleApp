@@ -113,11 +113,8 @@ public class BookController {
 		book.setBody(form.getBody());
 		book.setAuthor(form.getAuthor());
 		book.setUser(form.getUser());
-		System.out.println(book);
 		try {
-			System.out.println("2");
 			boolean result = bookService.updateOne(book);
-			System.out.println(result);
 			if(result == true) {
 				model.addAttribute("result", "更新成功");
 			} else {
