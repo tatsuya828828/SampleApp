@@ -12,7 +12,7 @@
 					<form method="post" th:action="@{/signup}" th:object="${signupForm}" style="margin-top: 10vh;">
 						<table class="table table-bordered table-hover">
 							<tr>
-								<th class="active col-lg-4">ログインID<br><small><em>(メールアドレス形式)</em></small></th>
+								<th class="active col-lg-4">ユーザーID<br><small><em>(メールアドレス形式)</em></small></th>
 								<td>
 									<div class="form-group" th:classappend="${#fields.hasErrors('selfId')} ? 'has-error'">
 										<input type="email" class="form-control" th:field="*{selfId}" required="true">
