@@ -26,8 +26,10 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int insert(BookModel book) throws DataAccessException {
-		int bookRowNumber = jdbc.update("INSERT INTO book(title, "+"body, "+"author, "+"user_id, "+"evaluation) "+"VALUES(?,?,?,?,?)",
-				book.getTitle(), book.getBody(), book.getAuthor(), book.getUser().getId(), 0);
+		int bookRowNumber = jdbc.update(
+				"INSERT INTO book(title, "+"body, "+"author, "+"genre,"+"user_id, "+"evaluation) "
+				+"VALUES(?,?,?,?,?,?)",
+				book.getTitle(), book.getBody(), book.getAuthor(), book.getGenre(), book.getUser().getId(), 0);
 		return bookRowNumber;
 	}
 
@@ -39,6 +41,7 @@ public class BookRepositoryJdbc implements BookRepository {
 		book.setTitle((String) map.get("title"));
 		book.setBody((String) map.get("body"));
 		book.setAuthor((String) map.get("author"));
+		book.setGenre((String) map.get("genre"));
 		book.setUser(userService.selectOne((int)map.get("user_id")));
 		book.setEvaluation((int) map.get("evaluation"));
 		return book;
@@ -54,6 +57,7 @@ public class BookRepositoryJdbc implements BookRepository {
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
 			book.setAuthor((String) map.get("author"));
+			book.setGenre((String) map.get("genre"));
 			book.setUser(userService.selectOne((int) map.get("user_id")));
 			book.setEvaluation((int) map.get("evaluation"));
 			bookList.add(book);
@@ -63,7 +67,7 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int updateOne(BookModel book) throws DataAccessException {
-		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "+"author=?, "+"user_id=? "+"WHERE id=?",
+		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "+"author=?, "+"genre=?, "+"user_id=? "+"WHERE id=?",
 							book.getTitle(), book.getBody(), book.getAuthor(), book.getUser().getId(), book.getId());
 		return bookRowNumber;
 	}
@@ -128,6 +132,7 @@ public class BookRepositoryJdbc implements BookRepository {
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
 			book.setAuthor(author);
+			book.setGenre((String) map.get("genre"));
 			book.setEvaluation((int) map.get("evaluation"));
 			book.setUser(userService.selectOne((int) map.get("user_id")));
 			bookList.add(book);
