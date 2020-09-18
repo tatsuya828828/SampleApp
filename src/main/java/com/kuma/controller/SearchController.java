@@ -33,6 +33,8 @@ public class SearchController {
 			book.setId((int) map.get("id"));
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
+			book.setAuthor((String) map.get("author"));
+			book.setGenre((String) map.get("genre"));
 			book.setUser(userService.selectOne((int)map.get("user_id")));
 			searchList.add(book);
 		}
