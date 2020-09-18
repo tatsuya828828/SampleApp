@@ -53,6 +53,7 @@ public class BookController {
 		book.setTitle(form.getTitle());
 		book.setBody(form.getBody());
 		book.setAuthor(form.getAuthor());
+		book.setGenre(form.getGenre());
 		book.setUser(user);
 		boolean result = bookService.insert(book);
 		if(result == true) {
@@ -96,6 +97,7 @@ public class BookController {
 				form.setTitle(book.getTitle());
 				form.setBody(book.getBody());
 				form.setAuthor(book.getAuthor());
+				form.setGenre(book.getGenre());
 				form.setUser(book.getUser());
 				model.addAttribute("contents", "book/bookEdit :: bookEdit_contents");
 				model.addAttribute("bookForm", form);
@@ -112,6 +114,7 @@ public class BookController {
 		book.setTitle(form.getTitle());
 		book.setBody(form.getBody());
 		book.setAuthor(form.getAuthor());
+		book.setGenre(form.getGenre());
 		book.setUser(form.getUser());
 		try {
 			boolean result = bookService.updateOne(book);
