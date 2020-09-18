@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS user(
 
 CREATE TABLE IF NOT EXISTS book(
 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, title VARCHAR(50),
-	body VARCHAR(100), author VARCHAR(50), user_id INT REFERENCES user(id), evaluation INT);
+	body VARCHAR(100), author VARCHAR(50), genre VARCHAR(50), user_id INT REFERENCES user(id), evaluation INT);
 CREATE TABLE IF NOT EXISTS comment(
 	user_id INT REFERENCES user(id), book_id INT REFERENCES book(id)
 	, comment VARCHAR(50));
