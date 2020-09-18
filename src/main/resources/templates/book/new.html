@@ -24,6 +24,15 @@
 							</td>
 						</tr>
 						<tr>
+							<th class="active col-sm-3">ジャンル</th>
+							<td>
+								<div class="form-group" th:classappend="${#fields.hasErrors('genre')} ? 'has-error'">
+									<input type="text" class="form-control" th:field="*{genre}">
+									<span class="text-danger" th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}">genre error</span>
+								</div>
+							</td>
+						</tr>
+						<tr>
 							<th class="active col-sm-3">感想</th>
 							<td>
 								<div class="form-group" th:classappend="${#fields.hasErrors('body')} ? 'has-error'">

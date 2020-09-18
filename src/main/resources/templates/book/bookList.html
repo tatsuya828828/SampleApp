@@ -5,14 +5,16 @@
 			<tr>
 				<th class="info col-lg-1">No.</th>
 				<th class="info col-lg-3">タイトル</th>
-				<th class="info col-lg-3">著者</th>
-				<th class="info col-lg-3">投稿者</th>
+				<th class="info col-lg-2">著者</th>
+				<th class="info col-lg-2">ジャンル</th>
+				<th class="info col-lg-2">投稿者</th>
 				<th class="info col-lg-2">評価</th>
 			</tr>
 			<tr th:each="book, stat: ${bookList}">
 				<td th:text="*{book.id}"></td>
 				<td><a th:href="@{'/bookDetail/' + *{book.id}}" th:text="*{book.title}"></a></td>
 				<td><a th:href="@{'/' + *{book.author}}" th:text="*{book.author}"></a></td>
+				<td><a th:href="@{/}" th:text="*{book.genre}"></a></td>
 				<td><a th:href="@{'/userDetail/' + *{book.user.id}}"><span th:text="*{book.user.name}"></span></td>
 				<td>
 				    <script th:inline="javascript">
