@@ -12,6 +12,7 @@ public class BookForm {
 	@NotBlank(groups= Valid1.class)
 	public String body;
 	public String author;
+	public String genre;
 	public UserModel user;
 	public int evaluation;
 }

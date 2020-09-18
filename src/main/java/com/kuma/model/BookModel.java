@@ -8,6 +8,7 @@ public class BookModel {
 	private String title;
 	private String body;
 	private String author;
+	private String genre;
 	private UserModel user;
 	private int evaluation;
 }
