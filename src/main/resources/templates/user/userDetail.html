@@ -33,10 +33,12 @@
 					<tr>
 						<th>タイトル</th>
 						<th>著者</th>
+						<th>ジャンル</th>
 					</tr>
 					<tr th:each="book: ${books}">
 						<td><a th:href="@{'/bookDetail/' + ${book.id}}" th:text="${book.title}"></a></td>
-						<td th:text="${book.author}"></td>
+						<td><a th:text="${book.author}" th:href="@{'/author/' + *{book.author}}"></a></td>
+						<td><a th:text="*{book.genre}" th:href="@{'/genre/' + *{book.genre}}"></a></td>
 					</tr>
 				</table>
 			</div>

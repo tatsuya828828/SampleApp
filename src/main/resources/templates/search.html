@@ -1,17 +1,19 @@
 <div th:fragment="search_contents">
-	<h1><span th:text="${word}"></span>の検索結果: <span th:text="${count}"></span>件</h1>
+	<h1><span th:text="${word}"></span><span th:text="${word2}"></span>: <span th:text="${count}"></span>件</h1>
 	<table class="table table-bordered">
 		<tr>
 			<th class="info col-lg-1">ID</th>
 			<th class="info col-lg-3">タイトル</th>
-			<th class="info col-lg-3">著者</th>
-			<th class="info col-lg-3">投稿者</th>
+			<th class="info col-lg-2">著者</th>
+			<th class="info col-lg-2">ジャンル</th>
+			<th class="info col-lg-2">投稿者</th>
 			<th class="info col-lg-2">評価</th>
 		</tr>
 		<tr th:each="book: ${bookList}">
 			<td th:text="*{book.id}"></td>
 			<td><a th:href="@{'/bookDetail/' + *{book.id}}" th:text="*{book.title}"></a></td>
-			<td><a th:href="@{'/' + *{book.author}}" th:text="*{book.author}"></a></td>
+			<td><a th:href="@{'/author/' + *{book.author}}" th:text="*{book.author}"></a></td>
+			<td><a th:href="@{'/genre/' + *{book.genre}}" th:text="*{book.genre}"></a></td>
 			<td><a th:href="@{'/userDetail/' + *{book.user.id}}"><span th:text="*{book.user.name}"></span></td>
 			<td>
 			    <script th:inline="javascript">

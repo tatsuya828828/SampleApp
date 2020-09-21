@@ -8,11 +8,11 @@
 			</tr>
 			<tr>
 				<th class="info col-lg-2">著者</th>
-				<td th:text="*{book.author}"></td>
+				<td><a th:href="@{'/author/' + *{book.author}}" th:text="*{book.author}"></a></td>
 			</tr>
 			<tr>
 				<th class="info col-lg-2">ジャンル</th>
-				<td th:text="*{book.genre}"></td>
+				<td><a th:href="@{'/genre/' + *{book.genre}}" th:text="*{book.genre}"></a></td>
 			</tr>
 			<tr>
 				<th class="info">感想</th>

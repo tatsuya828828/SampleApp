@@ -13,8 +13,8 @@
 			<tr th:each="book, stat: ${bookList}">
 				<td th:text="*{book.id}"></td>
 				<td><a th:href="@{'/bookDetail/' + *{book.id}}" th:text="*{book.title}"></a></td>
-				<td><a th:href="@{'/' + *{book.author}}" th:text="*{book.author}"></a></td>
-				<td><a th:href="@{/}" th:text="*{book.genre}"></a></td>
+				<td><a th:href="@{'/author/' + *{book.author}}" th:text="*{book.author}"></a></td>
+				<td><a th:href="@{'/genre/' + *{book.genre}}" th:text="*{book.genre}"></a></td>
 				<td><a th:href="@{'/userDetail/' + *{book.user.id}}"><span th:text="*{book.user.name}"></span></td>
 				<td>
 				    <script th:inline="javascript">
