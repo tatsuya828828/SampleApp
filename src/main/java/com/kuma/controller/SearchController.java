@@ -27,7 +27,7 @@ public class SearchController {
 		model.addAttribute("word", word);
 		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book WHERE title LIKE ?", "%"+ word +"%");
 		int count = jdbc.queryForObject("SELECT COUNT(*) FROM book WHERE title LIKE "+"'%"+ word +"%'", Integer.class);
-		List<Object> searchList = new ArrayList<>();
+		List<BookModel> bookList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			BookModel book = new BookModel();
 			book.setId((int) map.get("id"));
@@ -36,10 +36,9 @@ public class SearchController {
 			book.setAuthor((String) map.get("author"));
 			book.setGenre((String) map.get("genre"));
 			book.setUser(userService.selectOne((int)map.get("user_id")));
-			searchList.add(book);
+			bookList.add(book);
 		}
-		System.out.println(searchList);
-		model.addAttribute("searches", searchList);
+		model.addAttribute("bookList", bookList);
 		model.addAttribute("count", count);
 		return "/header";
 	}
