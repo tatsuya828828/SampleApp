@@ -86,4 +86,12 @@ public class BookService {
 	public List<String> selectGenres() {
 		return bookRepository.selectGenres();
 	}
+
+	public int count(String column, String word) {
+		return bookRepository.count(column, word);
+	}
+
+	public List<BookModel> searchBook(String word) {
+		return bookRepository.searchBook(word);
+	}
 }

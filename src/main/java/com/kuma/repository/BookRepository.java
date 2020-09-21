@@ -21,4 +21,6 @@ public interface BookRepository {
 	public List<BookModel> searchAuthor(String author) throws DataAccessException;
 	public List<BookModel> selectGenre(String genre) throws DataAccessException;
 	public List<String> selectGenres() throws DataAccessException;
+	public int count(String column, String word) throws DataAccessException;
+	public List<BookModel> searchBook(String word) throws DataAccessException;
 }
