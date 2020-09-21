@@ -69,6 +69,8 @@ public class BookController {
 		model.addAttribute("contents", "book/bookList :: bookList_contents");
 		List<BookModel> bookList = bookService.selectMany();
 		model.addAttribute("bookList", bookList);
+		List<String> genres = bookService.selectGenres();
+		model.addAttribute("genres", genres);
 		return "/header";
 	}
 
