@@ -160,12 +160,39 @@ public class BookController {
 		return "redirect:/bookDetail/{bookId}";
 	}
 
-	@GetMapping("/{author}")
-	public String getSearch(Model model, @PathVariable("author") String author) {
-		model.addAttribute("contents", "book/author :: author_contents");
-		model.addAttribute("author", author);
+	@GetMapping("/author/{author}")
+	public String getAuthor(Model model, @PathVariable("author") String author) {
+		model.addAttribute("contents", "search :: search_contents");
 		List<BookModel> bookList = bookService.searchAuthor(author);
 		model.addAttribute("bookList", bookList);
+		model.addAttribute("word", author);
+		model.addAttribute("word2", "の作品一覧");
+		int count = bookService.count("author", author);
+		model.addAttribute("count", count);
+		return "/header";
+	}
+
+	@GetMapping("/genre/{genre}")
+	public String getGenre(Model model, @PathVariable("genre") String genre) {
+		model.addAttribute("contents", "search :: search_contents");
+		List<BookModel> bookList = bookService.selectGenre(genre);
+		model.addAttribute("bookList", bookList);
+		model.addAttribute("word", genre);
+		model.addAttribute("word2", "一覧");
+		int count = bookService.count("genre", genre);
+		model.addAttribute("count", count);
+		return "/header";
+	}
+
+	@GetMapping("/search/{word}")
+	public String getSearch(Model model, @RequestParam("word") String word) {
+		model.addAttribute("contents", "search :: search_contents");
+		model.addAttribute("word", word);
+		model.addAttribute("word2", "の検索結果");
+		int count = bookService.count("title", word);
+		List<BookModel> bookList = bookService.searchBook(word);
+		model.addAttribute("bookList", bookList);
+		model.addAttribute("count", count);
 		return "/header";
 	}
 }
