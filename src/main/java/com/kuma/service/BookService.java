@@ -78,4 +78,12 @@ public class BookService {
 	public List<BookModel> searchAuthor(String author) {
 		return bookRepository.searchAuthor(author);
 	}
+
+	public List<BookModel> selectGenre(String genre) {
+		return bookRepository.selectGenre(genre);
+	}
+
+	public List<String> selectGenres() {
+		return bookRepository.selectGenres();
+	}
 }
