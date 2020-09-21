@@ -141,7 +141,7 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public List<String> selectGenres() throws DataAccessException {
-		List<Map<String, Object>> getGenre = jdbc.queryForList("SELECT genre book");
+		List<Map<String, Object>> getGenre = jdbc.queryForList("SELECT DISTINCT genre FROM book");
 		List<String> genreList = new ArrayList<>();
 		for(Map<String, Object> map: getGenre) {
 			genreList.add((String) map.get("genre"));
