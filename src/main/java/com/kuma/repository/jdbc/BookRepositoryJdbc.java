@@ -24,6 +24,22 @@ public class BookRepositoryJdbc implements BookRepository {
 	@Autowired
 	UserService userService;
 
+	public List<BookModel> getList(List<Map<String, Object>> getList) {
+		List<BookModel> bookList = new ArrayList<>();
+		for(Map<String, Object> map: getList) {
+			BookModel book = new BookModel();
+			book.setId((int) map.get("id"));
+			book.setTitle((String) map.get("title"));
+			book.setBody((String) map.get("body"));
+			book.setAuthor((String) map.get("author"));
+			book.setGenre((String) map.get("genre"));
+			book.setUser(userService.selectOne((int) map.get("user_id")));
+			book.setEvaluation((int) map.get("evaluation"));
+			bookList.add(book);
+		}
+		return bookList;
+	}
+
 	@Override
 	public int insert(BookModel book) throws DataAccessException {
 		int bookRowNumber = jdbc.update(
@@ -50,19 +66,7 @@ public class BookRepositoryJdbc implements BookRepository {
 	@Override
 	public List<BookModel> selectMany() throws DataAccessException {
 		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book");
-		List<BookModel> bookList = new ArrayList<>();
-		for(Map<String, Object> map: getList) {
-			BookModel book = new BookModel();
-			book.setId((int) map.get("id"));
-			book.setTitle((String) map.get("title"));
-			book.setBody((String) map.get("body"));
-			book.setAuthor((String) map.get("author"));
-			book.setGenre((String) map.get("genre"));
-			book.setUser(userService.selectOne((int) map.get("user_id")));
-			book.setEvaluation((int) map.get("evaluation"));
-			bookList.add(book);
-		}
-		return bookList;
+		return getList(getList);
 	}
 
 	@Override
@@ -125,18 +129,6 @@ public class BookRepositoryJdbc implements BookRepository {
 	@Override
 	public List<BookModel> searchAuthor(String author) throws DataAccessException {
 		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book"+" WHERE author=?", author);
-		List<BookModel> bookList = new ArrayList<>();
-		for(Map<String, Object> map: getList) {
-			BookModel book = new BookModel();
-			book.setId((int) map.get("id"));
-			book.setTitle((String) map.get("title"));
-			book.setBody((String) map.get("body"));
-			book.setAuthor(author);
-			book.setGenre((String) map.get("genre"));
-			book.setEvaluation((int) map.get("evaluation"));
-			book.setUser(userService.selectOne((int) map.get("user_id")));
-			bookList.add(book);
-		}
-		return bookList;
+		return getList(getList);
 	}
 }
