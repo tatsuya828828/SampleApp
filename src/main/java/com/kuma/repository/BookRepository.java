@@ -19,4 +19,6 @@ public interface BookRepository {
 	public int evaluationAvg(int bookId)throws DataAccessException;
 	public int evaluationCount(int bookId) throws DataAccessException;
 	public List<BookModel> searchAuthor(String author) throws DataAccessException;
+	public List<BookModel> selectGenre(String genre) throws DataAccessException;
+	public List<String> selectGenres() throws DataAccessException;
 }
