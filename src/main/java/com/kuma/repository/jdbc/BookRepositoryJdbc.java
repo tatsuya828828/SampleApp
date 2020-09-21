@@ -131,4 +131,21 @@ public class BookRepositoryJdbc implements BookRepository {
 		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book"+" WHERE author=?", author);
 		return getList(getList);
 	}
+
+
+	@Override
+	public List<BookModel> selectGenre(String genre) throws DataAccessException {
+		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book"+"WHERE genre=?", genre);
+		return getList(getList);
+	}
+
+	@Override
+	public List<String> selectGenres() throws DataAccessException {
+		List<Map<String, Object>> getGenre = jdbc.queryForList("SELECT genre book");
+		List<String> genreList = new ArrayList<>();
+		for(Map<String, Object> map: getGenre) {
+			genreList.add((String) map.get("genre"));
+		}
+		return genreList;
+	}
 }
