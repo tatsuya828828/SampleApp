@@ -151,15 +151,20 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int count(String column, String word) throws DataAccessException {
+		if(column.length() == 0) {
+			int count = jdbc.queryForObject("SELECT COUNT(*) FROM book "
+					+ "WHERE author LIKE "+"'%"+ word +"%' "+"OR title LIKE "+"'%"+ word +"%'", Integer.class);
+			return count;
+		}
 		int count = jdbc.queryForObject("SELECT COUNT(*) FROM book "
-				+ "WHERE "+ column +" LIKE "+"'%"+ word +"%'", Integer.class);
+					+ "WHERE "+ column +" LIKE "+"'%"+ word +"%'", Integer.class);
 		return count;
 	}
 
 	@Override
 	public List<BookModel> searchBook(String word) throws DataAccessException {
 		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book "
-				+ "WHERE title LIKE ?", "%"+ word +"%");
+				+ "WHERE title LIKE ? OR author LIKE ?", "%"+ word +"%", "%"+ word +"%");
 		return getList(getList);
 	}
 }
