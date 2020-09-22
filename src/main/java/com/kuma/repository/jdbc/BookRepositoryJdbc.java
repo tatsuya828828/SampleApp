@@ -1,6 +1,7 @@
 package com.kuma.repository.jdbc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ public class BookRepositoryJdbc implements BookRepository {
 		for(Map<String, Object> map: getList) {
 			BookModel book = new BookModel();
 			book.setId((int) map.get("id"));
+			book.setCreatedAt((Date) map.get("created_at"));
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
 			book.setAuthor((String) map.get("author"));
@@ -54,6 +56,7 @@ public class BookRepositoryJdbc implements BookRepository {
 		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM book"+" WHERE id=?", id);
 		BookModel book = new BookModel();
 		book.setId((int) map.get("id"));
+		book.setCreatedAt((Date) map.get("created_at"));
 		book.setTitle((String) map.get("title"));
 		book.setBody((String) map.get("body"));
 		book.setAuthor((String) map.get("author"));
