@@ -191,7 +191,7 @@ public class BookController {
 		model.addAttribute("contents", "search :: search_contents");
 		model.addAttribute("word", word);
 		model.addAttribute("word2", "の検索結果");
-		int count = bookService.count("title", word);
+		int count = bookService.count("", word);
 		List<BookModel> bookList = bookService.searchBook(word);
 		model.addAttribute("bookList", bookList);
 		model.addAttribute("count", count);
