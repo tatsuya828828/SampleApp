@@ -30,6 +30,10 @@
 				    <span id="evaluation"></span><small>([[${count}]]件)</small>
 				</td>
 			</tr>
+			<tr>
+				<th class="info">投稿日</th>
+				<td th:text="*{book.createdAt}"></td>
+			</tr>
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
 		<a class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${id}}">編集</a>
