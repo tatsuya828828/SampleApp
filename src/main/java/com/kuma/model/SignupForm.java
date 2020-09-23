@@ -1,5 +1,7 @@
 package com.kuma.model;
 
+import java.util.Date;
+
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Email;
@@ -11,6 +13,7 @@ import lombok.Data;
 @Data
 public class SignupForm {
 	private int id;
+	private Date createdAt;
 	@NotBlank(groups= Valid1.class)
 	@Email(groups = Valid2.class)
 	private String selfId;
