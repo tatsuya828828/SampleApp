@@ -1,6 +1,7 @@
 package com.kuma.repository.jdbc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class UserRepositoryJdbc implements UserRepository {
 		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM user"+" WHERE id = ?", id);
 		UserModel user = new UserModel();
 		user.setId((int) map.get("id"));
+		user.setCreatedAt((Date) map.get("created_at"));
 		user.setSelfId((String) map.get("self_id"));
 		user.setPassword((String) map.get("password"));
 		user.setName((String) map.get("name"));
@@ -49,6 +51,7 @@ public class UserRepositoryJdbc implements UserRepository {
 		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM user "+"WHERE self_id=?", selfId);
 		UserModel user = new UserModel();
 		user.setId((int) map.get("id"));
+		user.setCreatedAt((Date) map.get("created_at"));
 		user.setSelfId((String) map.get("self_id"));
 		user.setPassword((String) map.get("password"));
 		user.setName((String) map.get("name"));
@@ -62,6 +65,7 @@ public class UserRepositoryJdbc implements UserRepository {
 		for(Map<String, Object> map: getList) {
 			BookModel book = new BookModel();
 			book.setId((int) map.get("id"));
+			book.setCreatedAt((Date) map.get("created_at"));
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
 			book.setAuthor((String) map.get("author"));
@@ -84,6 +88,7 @@ public class UserRepositoryJdbc implements UserRepository {
 			UserModel user = new UserModel();
 			// Userインスタンスに取得したデータをセット
 			user.setId((int) map.get("id"));
+			user.setCreatedAt((Date) map.get("created_at"));
 			user.setSelfId((String) map.get("self_id"));
 			user.setPassword((String) map.get("password"));
 			user.setName((String) map.get("name"));
