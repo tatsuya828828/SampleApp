@@ -1,6 +1,7 @@
 package com.kuma.repository.jdbc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,8 @@ public class CommentRepositoryJdbc implements CommentRepository {
 
 	@Override
 	public int insert(CommentModel comment) throws DataAccessException {
-		int rowNumber= jdbc.update("INSERT INTO comment(user_id, "+"book_id, "+"comment) "+" VALUES(?,?,?)",
+		int rowNumber= jdbc.update("INSERT INTO comment(created_at, user_id, "+"book_id, "+"comment) "
+				+"VALUES(CURRENT_DATE,?,?,?)",
 				comment.getUser().getId(), comment.getBook().getId(), comment.getComment());
 		return rowNumber;
 	}
@@ -36,6 +38,7 @@ public class CommentRepositoryJdbc implements CommentRepository {
 		List<CommentModel> commentList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			CommentModel comment = new CommentModel();
+			comment.setCreatedAt((Date) map.get("created_at"));
 			comment.setUser(userService.selectOne((int) map.get("user_id")));
 			comment.setBook(bookService.selectOne((int) map.get("book_id")));
 			comment.setComment((String) map.get("comment"));
