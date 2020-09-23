@@ -63,14 +63,16 @@
 			</form>
 		</div>
 		<h4>コメント一覧</h4>
-		<table class="table">
+		<table class="table" th:each="comment: ${comments}">
 			<tr>
-				<th class="col-lg-2">ユーザー名</th>
-				<th>コメント</th>
+				<td th:text="*{comment.comment}" style="background-color: orange;"></td>
 			</tr>
-			<tr th:each="comment: ${comments}">
-				<td><a th:href="@{'/userDetail/' + ${comment.user.id}}" th:text="*{comment.user.name}"></a></td>
-				<td th:text="*{comment.comment}"></td>
+			<tr>
+				<td>
+					<a class="pull-right" th:href="@{'/userDetail/' + *{comment.user.id}}"
+					th:text="*{comment.user.name}" style="padding-left: 1vh;"></a>
+					<p class="pull-right" th:text="*{#dates.format(book.createdAt, 'yyyy/MM/dd')}"></p>
+				</td>
 			</tr>
 		</table>
 	</div>
