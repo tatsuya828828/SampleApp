@@ -17,7 +17,7 @@
 				<th class="info col-lg-2">評価</th>
 			</tr>
 			<tr th:each="book: ${bookList}">
-				<td th:text="*{book.createdAt}"></td>
+				<td th:text="*{#dates.format(book.createdAt, 'yyyy/MM/dd')}"></td>
 				<td><a th:href="@{'/bookDetail/' + *{book.id}}" th:text="*{book.title}"></a></td>
 				<td><a th:href="@{'/author/' + *{book.author}}" th:text="*{book.author}"></a></td>
 				<td><a th:href="@{'/genre/' + *{book.genre}}" th:text="*{book.genre}"></a></td>

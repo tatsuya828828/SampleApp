@@ -32,7 +32,7 @@
 			</tr>
 			<tr>
 				<th class="info">投稿日</th>
-				<td th:text="*{book.createdAt}"></td>
+				<td th:text="*{#dates.format(book.createdAt, 'yyyy/MM/dd')}"></td>
 			</tr>
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
