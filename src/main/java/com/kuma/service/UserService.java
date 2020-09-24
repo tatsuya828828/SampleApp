@@ -13,18 +13,18 @@ import com.kuma.repository.UserRepository;
 public class UserService {
 	@Autowired
 	UserRepository userRepository;
-
-	// insert用
-	public boolean insert(UserModel user) {
-		// insert実行
-		int rowNumber = userRepository.insert(user);
-		// 判定用変数
+	// 共通処理をまとめたメソッド
+	public boolean result(int rowNumber) {
 		boolean result = false;
-		// 戻り値が0より大きければ、insert成功
 		if(rowNumber>0) {
 			result = true;
 		}
 		return result;
+	}
+	// insert用
+	public boolean insert(UserModel user) {
+		int rowNumber = userRepository.insert(user);
+		return result(rowNumber);
 	}
 
 	// 1件取得用
@@ -50,25 +50,18 @@ public class UserService {
 
 	// 1件更新用
 	public boolean updateOne(UserModel user) {
-		// 1件更新
 		int rowNumber = userRepository.updateOne(user);
-		// 判定用変数
-		boolean result = false;
-		if(rowNumber>0) {
-			result = true;
-		}
-		return result;
+		return result(rowNumber);
 	}
 
 	// 1件削除用
 	public boolean deleteOne(int id) {
-		// 1件削除
 		int rowNumber = userRepository.deleteOne(id);
-		// 判定用変数
-		boolean result = false;
-		if(rowNumber>0) {
-			result = true;
-		}
-		return result;
+		return result(rowNumber);
+	}
+
+	public boolean saveLoginTime(String selfId) {
+		int rowNumber = userRepository.saveLoginTime(selfId);
+		return result(rowNumber);
 	}
 }
