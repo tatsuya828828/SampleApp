@@ -14,6 +14,7 @@ import lombok.Data;
 public class SignupForm {
 	private int id;
 	private Date createdAt;
+	private Date lastLogin;
 	@NotBlank(groups= Valid1.class)
 	@Email(groups = Valid2.class)
 	private String selfId;
