@@ -15,4 +15,5 @@ public interface UserRepository {
 	public List<UserModel> selectMany() throws DataAccessException;
 	public int updateOne(UserModel user) throws DataAccessException;
 	public int deleteOne(int id) throws DataAccessException;
+	public int saveLoginTime(String selfId) throws DataAccessException;
 }

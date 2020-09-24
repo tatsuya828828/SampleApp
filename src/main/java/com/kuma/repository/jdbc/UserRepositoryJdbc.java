@@ -28,8 +28,8 @@ public class UserRepositoryJdbc implements UserRepository {
 		String password = passwordEncoder.encode(user.getPassword());
 		System.out.println("暗号化されたパスワードは: "+ password);
 		// DBにデータを登録
-		int userRowNumber = jdbc.update("INSERT INTO user(self_id, "+"password, "+"name)"
-							+" VALUES(?,?,?)",
+		int userRowNumber = jdbc.update("INSERT INTO user(created_at, last_login, self_id, "+"password, "+"name)"
+							+" VALUES(CURRENT_DATE, LOCALTIME,?,?,?)",
 							user.getSelfId(), password, user.getName());
 		return userRowNumber;
 	}
@@ -40,6 +40,7 @@ public class UserRepositoryJdbc implements UserRepository {
 		UserModel user = new UserModel();
 		user.setId((int) map.get("id"));
 		user.setCreatedAt((Date) map.get("created_at"));
+		user.setLastLogin((Date) map.get("last_login"));
 		user.setSelfId((String) map.get("self_id"));
 		user.setPassword((String) map.get("password"));
 		user.setName((String) map.get("name"));
@@ -52,6 +53,7 @@ public class UserRepositoryJdbc implements UserRepository {
 		UserModel user = new UserModel();
 		user.setId((int) map.get("id"));
 		user.setCreatedAt((Date) map.get("created_at"));
+		user.setLastLogin((Date) map.get("last_login"));
 		user.setSelfId((String) map.get("self_id"));
 		user.setPassword((String) map.get("password"));
 		user.setName((String) map.get("name"));
@@ -89,6 +91,7 @@ public class UserRepositoryJdbc implements UserRepository {
 			// Userインスタンスに取得したデータをセット
 			user.setId((int) map.get("id"));
 			user.setCreatedAt((Date) map.get("created_at"));
+			user.setLastLogin((Date) map.get("last_login"));
 			user.setSelfId((String) map.get("self_id"));
 			user.setPassword((String) map.get("password"));
 			user.setName((String) map.get("name"));
@@ -111,6 +114,12 @@ public class UserRepositoryJdbc implements UserRepository {
 	public int deleteOne(int id) throws DataAccessException {
 		// 1件削除
 		int userRowNumber = jdbc.update("DELETE FROM user WHERE id=?", id);
+		return userRowNumber;
+	}
+
+	@Override
+	public int saveLoginTime(String selfId) throws DataAccessException {
+		int userRowNumber = jdbc.update("UPDATE user SET last_login = LOCALTIME WHERE self_id=?", selfId);
 		return userRowNumber;
 	}
 }
