@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.kuma.model.BookForm;
 import com.kuma.model.BookModel;
 import com.kuma.model.SignupForm;
 import com.kuma.model.UserModel;
@@ -73,11 +72,11 @@ public class UserController {
 		return "/header";
 	}
 
-	@PostMapping("/login")
-	public String postLogin(Model model) {
-		return "redirect:/userList";
+	@GetMapping("/loginTime")
+	public String getTest(Model model, HttpServletRequest httpServletRequest) {
+		userService.saveLoginTime(httpServletRequest.getRemoteUser());
+		return "redirect:/bookList";
 	}
-
 
 	@GetMapping("/userList")
 	public String getUserList(Model model) {
@@ -88,8 +87,7 @@ public class UserController {
 	}
 
 	@GetMapping("/userDetail/{id:.+}")
-	public String getUserDetail(@ModelAttribute BookForm bookForm
-			, Model model, @PathVariable("id") int id, HttpServletRequest httpServletRequest) {
+	public String getUserDetail(Model model, @PathVariable("id") int id, HttpServletRequest httpServletRequest) {
 		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
 		if(String.valueOf(id).length() > 0) {
 			UserModel user = userService.selectOne((int) id);
@@ -104,7 +102,7 @@ public class UserController {
 	}
 
 	@GetMapping("/mypage")
-	public String getMyPage(@ModelAttribute BookForm bookForm, Model model, HttpServletRequest httpServletRequest) {
+	public String getMyPage(Model model, HttpServletRequest httpServletRequest) {
 		model.addAttribute("contents", "user/userDetail :: userDetail_contents");
 		UserModel user = currentUser(httpServletRequest);
 		model.addAttribute("user", user);
