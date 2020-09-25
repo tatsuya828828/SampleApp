@@ -10,6 +10,7 @@ import lombok.Data;
 public class BookForm {
 	public int id;
 	public Date createdAt;
+	public String image;
 	@NotBlank(groups= Valid1.class)
 	public String title;
 	@NotBlank(groups= Valid1.class)

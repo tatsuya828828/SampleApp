@@ -8,6 +8,7 @@ import lombok.Data;
 public class BookModel {
 	private int id;
 	private Date createdAt;
+	private String image;
 	private String title;
 	private String body;
 	private String author;
