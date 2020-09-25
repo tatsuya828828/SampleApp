@@ -13,6 +13,10 @@
 					<button class="btn btn-success">新規登録</button>
 				</form>
 			</div>
+			<form th:action="@{/imageUpload}" method="post" enctype="multipart/form-data">
+				<input type="file" name="image">
+				<input type="submit" value="送信">
+			</form>
 		</div>
 	</body>
 </html>
