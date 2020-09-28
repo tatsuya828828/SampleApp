@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kuma.model.BookModel;
 import com.kuma.model.EvaluationModel;
@@ -93,5 +94,9 @@ public class BookService {
 
 	public List<BookModel> searchBook(String word) {
 		return bookRepository.searchBook(word);
+	}
+
+	public String postImageUpload(MultipartFile multipartFile) {
+		return bookRepository.postImageUpload(multipartFile);
 	}
 }

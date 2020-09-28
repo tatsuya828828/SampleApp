@@ -3,6 +3,7 @@ package com.kuma.repository;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kuma.model.BookModel;
 import com.kuma.model.EvaluationModel;
@@ -23,4 +24,5 @@ public interface BookRepository {
 	public List<String> selectGenres() throws DataAccessException;
 	public int count(String column, String word) throws DataAccessException;
 	public List<BookModel> searchBook(String word) throws DataAccessException;
+	public String postImageUpload(MultipartFile multipartFile) throws DataAccessException;
 }

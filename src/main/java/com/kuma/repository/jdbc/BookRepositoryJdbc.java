@@ -1,5 +1,8 @@
 package com.kuma.repository.jdbc;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kuma.model.BookModel;
 import com.kuma.model.EvaluationModel;
@@ -30,6 +34,7 @@ public class BookRepositoryJdbc implements BookRepository {
 		for(Map<String, Object> map: getList) {
 			BookModel book = new BookModel();
 			book.setId((int) map.get("id"));
+			book.setImage((String) map.get("image"));
 			book.setCreatedAt((Date) map.get("created_at"));
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
@@ -45,9 +50,10 @@ public class BookRepositoryJdbc implements BookRepository {
 	@Override
 	public int insert(BookModel book) throws DataAccessException {
 		int bookRowNumber = jdbc.update(
-				"INSERT INTO book(title, "+"body, "+"author, "+"genre,"+"user_id, "+"evaluation) "
-				+"VALUES(?,?,?,?,?,?)",
-				book.getTitle(), book.getBody(), book.getAuthor(), book.getGenre(), book.getUser().getId(), 0);
+				"INSERT INTO book(created_at, title, "+"body, "+"author, "+"genre,"+"user_id, "+"evaluation, "+"image) "
+				+"VALUES(CURRENT_DATE,?,?,?,?,?,?,?)",
+				book.getTitle(), book.getBody(), book.getAuthor(), book.getGenre()
+				, book.getUser().getId(), 0, book.getImage());
 		return bookRowNumber;
 	}
 
@@ -57,6 +63,7 @@ public class BookRepositoryJdbc implements BookRepository {
 		BookModel book = new BookModel();
 		book.setId((int) map.get("id"));
 		book.setCreatedAt((Date) map.get("created_at"));
+		book.setImage((String) map.get("image"));
 		book.setTitle((String) map.get("title"));
 		book.setBody((String) map.get("body"));
 		book.setAuthor((String) map.get("author"));
@@ -74,8 +81,10 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int updateOne(BookModel book) throws DataAccessException {
-		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "+"author=?, "+"genre=?, "+"user_id=? "+"WHERE id=?",
-							book.getTitle(), book.getBody(), book.getAuthor(), book.getGenre(), book.getUser().getId(), book.getId());
+		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "
+				+"author=?, "+"genre=?, "+"user_id=?, "+"image=? "+"WHERE id=?",
+				book.getTitle(), book.getBody(), book.getAuthor(), book.getGenre()
+				, book.getUser().getId(), book.getImage(), book.getId());
 		return bookRowNumber;
 	}
 
@@ -103,7 +112,7 @@ public class BookRepositoryJdbc implements BookRepository {
 	}
 
 	@Override
-	public int insertEvaluation(com.kuma.model.EvaluationModel evaluation) throws DataAccessException {
+	public int insertEvaluation(EvaluationModel evaluation) throws DataAccessException {
 		int rowNumber = jdbc.update("INSERT INTO evaluation(evaluation, "+"user_id, "+"book_id) "+"VALUES(?,?,?)",
 				evaluation.getEvaluation(), evaluation.getUser().getId(), evaluation.getBook().getId());
 		return rowNumber;
@@ -169,5 +178,24 @@ public class BookRepositoryJdbc implements BookRepository {
 		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book "
 				+ "WHERE title LIKE ? OR author LIKE ?", "%"+ word +"%", "%"+ word +"%");
 		return getList(getList);
+	}
+
+	@Override
+	public String postImageUpload(MultipartFile multipartFile) {
+		if(!multipartFile.isEmpty()) {
+			try {
+				String uploadPath = "src/main/resources/static/images/";
+				byte[] bytes = multipartFile.getBytes();
+				File file = new File(uploadPath+multipartFile.getOriginalFilename());
+				BufferedOutputStream stream = new BufferedOutputStream(
+						new FileOutputStream(file));
+				stream.write(bytes);
+				stream.close();
+				System.out.println("登録成功");
+			} catch(Exception e) {
+				System.out.println(e);
+			}
+		}
+		return multipartFile.getOriginalFilename();
 	}
 }
