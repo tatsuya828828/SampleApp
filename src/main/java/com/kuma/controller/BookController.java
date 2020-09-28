@@ -1,5 +1,8 @@
 package com.kuma.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kuma.model.BookForm;
 import com.kuma.model.BookModel;
@@ -36,6 +40,24 @@ public class BookController {
 	@Autowired
 	private CommentService commentService;
 
+	public String postImageUpload(MultipartFile multipartFile) {
+		if(!multipartFile.isEmpty()) {
+			try {
+				String uploadPath = "src/main/resources/static/images/";
+				byte[] bytes = multipartFile.getBytes();
+				File file = new File(uploadPath+multipartFile.getOriginalFilename());
+				BufferedOutputStream stream = new BufferedOutputStream(
+						new FileOutputStream(file));
+				stream.write(bytes);
+				stream.close();
+				System.out.println("登録成功");
+			} catch(Exception e) {
+				System.out.println(e);
+			}
+		}
+		return multipartFile.getOriginalFilename();
+	}
+
 	@GetMapping("/bookNew")
 	public String getBookNew(@ModelAttribute BookForm bookForm, Model model) {
 		model.addAttribute("contents", "book/new :: bookNew_contents");
@@ -44,12 +66,16 @@ public class BookController {
 
 	@PostMapping("/bookNew")
 	public String postBookNew(@ModelAttribute @Validated(ValidGroup.class) BookForm form
-			, BindingResult bindingResult, Model model, HttpServletRequest httpServletRequest) {
-		if(bindingResult.hasErrors()) {
-			return getBookNew(form, model);
-		}
+			, BindingResult bindingResult, Model model, HttpServletRequest httpServletRequest
+			, @RequestParam("image") MultipartFile multipartFile) {
+		System.out.println(multipartFile.getOriginalFilename());
+//		if(bindingResult.hasErrors()) {
+//			return getBookNew(form, model);
+//		}
+		String imageName = "/images/"+ postImageUpload(multipartFile);
 		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 		BookModel book = new BookModel();
+		book.setImage(imageName);
 		book.setTitle(form.getTitle());
 		book.setBody(form.getBody());
 		book.setAuthor(form.getAuthor());
@@ -103,6 +129,7 @@ public class BookController {
 				form.setUser(book.getUser());
 				model.addAttribute("contents", "book/bookEdit :: bookEdit_contents");
 				model.addAttribute("bookForm", form);
+				model.addAttribute("image", book.getImage());
 				return "/header";
 			}
 		}
@@ -110,7 +137,8 @@ public class BookController {
 	}
 
 	@PostMapping(value="/bookEdit", params="update")
-	public String postBookEdit(@ModelAttribute BookForm form, Model model) {
+	public String postBookEdit(@ModelAttribute BookForm form, Model model
+			, @RequestParam("image") MultipartFile multipartFile) {
 		BookModel book = new BookModel();
 		book.setId(form.getId());
 		book.setTitle(form.getTitle());
@@ -118,6 +146,11 @@ public class BookController {
 		book.setAuthor(form.getAuthor());
 		book.setGenre(form.getGenre());
 		book.setUser(form.getUser());
+		System.out.println(multipartFile.getOriginalFilename());
+		if(!multipartFile.isEmpty()) {
+			String imageName = "/images/"+ postImageUpload(multipartFile);
+			book.setImage(imageName);
+		}
 		try {
 			boolean result = bookService.updateOne(book);
 			if(result == true) {
