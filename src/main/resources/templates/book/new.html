@@ -3,8 +3,17 @@
 		<h1 class="text-center">本の投稿</h1>
 		<div class="row">
 			<div class="col-lg-8 col-lg-offset-2">
-				<form method="post" th:action="@{/bookNew}" th:object="${bookForm}" style="margin-top: 10vh;">
+				<form method="post" th:action="@{/bookNew}" th:object="${bookForm}"
+					 style="margin-top: 10vh;" enctype="multipart/form-data">
 					<table class="table table-bordered table-hover">
+						<tr>
+							<th class="active col-sm-3">画像</th>
+							<td>
+								<div class="form-group">
+									<input type="file" name="image">
+								</div>
+							</td>
+						</tr>
 						<tr>
 							<th class="active col-sm-3">タイトル</th>
 							<td>

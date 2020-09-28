@@ -1,9 +1,19 @@
 <div th:fragment="bookEdit_contents">
-	<form method="post" th:action="@{/bookEdit}" th:object="${bookForm}">
+	<form method="post" th:action="@{/bookEdit}" th:object="${bookForm}" enctype="multipart/form-data">
 		<h1 class="text-center">編集ページ</h1>
+		<input type="hidden" th:field="*{id}">
 		<table style="margin-top: 10vh;">
 			<tr>
-				<input type="hidden" th:field="*{id}">
+				<th class="active col-sm-3">画像</th>
+				<td>
+					<div class="form-group">
+						<img th:src="@{${image}}" width="80" height="100">
+						<br><br>
+						<input type="file" required="true" name="image">
+					</div>
+				</td>
+			</tr>
+			<tr>
 				<th class="active col-lg-2">タイトル</th>
 				<td class="col-lg-3">
 					<div class="form-group" th:classappend="${#fields.hasErrors('title')} ? 'has-error'">
