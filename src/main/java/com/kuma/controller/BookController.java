@@ -1,8 +1,5 @@
 package com.kuma.controller;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,24 +37,6 @@ public class BookController {
 	@Autowired
 	private CommentService commentService;
 
-	public String postImageUpload(MultipartFile multipartFile) {
-		if(!multipartFile.isEmpty()) {
-			try {
-				String uploadPath = "src/main/resources/static/images/";
-				byte[] bytes = multipartFile.getBytes();
-				File file = new File(uploadPath+multipartFile.getOriginalFilename());
-				BufferedOutputStream stream = new BufferedOutputStream(
-						new FileOutputStream(file));
-				stream.write(bytes);
-				stream.close();
-				System.out.println("登録成功");
-			} catch(Exception e) {
-				System.out.println(e);
-			}
-		}
-		return multipartFile.getOriginalFilename();
-	}
-
 	@GetMapping("/bookNew")
 	public String getBookNew(@ModelAttribute BookForm bookForm, Model model) {
 		model.addAttribute("contents", "book/new :: bookNew_contents");
@@ -72,7 +51,7 @@ public class BookController {
 //		if(bindingResult.hasErrors()) {
 //			return getBookNew(form, model);
 //		}
-		String imageName = "/images/"+ postImageUpload(multipartFile);
+		String imageName = "/images/"+ bookService.postImageUpload(multipartFile);
 		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 		BookModel book = new BookModel();
 		book.setImage(imageName);
@@ -148,7 +127,7 @@ public class BookController {
 		book.setUser(form.getUser());
 		System.out.println(multipartFile.getOriginalFilename());
 		if(!multipartFile.isEmpty()) {
-			String imageName = "/images/"+ postImageUpload(multipartFile);
+			String imageName = "/images/"+ bookService.postImageUpload(multipartFile);
 			book.setImage(imageName);
 		}
 		try {
