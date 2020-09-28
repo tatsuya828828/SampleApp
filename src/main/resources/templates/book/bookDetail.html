@@ -3,6 +3,10 @@
 		<h1><span th:text="*{book.title}"></span>の詳細</h1>
 		<table class="table table-bordered">
 			<tr>
+				<th class="info col-lg-2">画像</th>
+				<td><img th:src="@{*{book.image}}" width="200" height="250"></td>
+			</tr>
+			<tr>
 				<th class="info col-lg-2">タイトル</th>
 				<td th:text="*{book.title}"></td>
 			</tr>
