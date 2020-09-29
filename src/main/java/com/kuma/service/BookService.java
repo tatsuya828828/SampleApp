@@ -15,8 +15,8 @@ public class BookService {
 	@Autowired
 	BookRepository bookRepository;
 
-	public boolean insert(BookModel book) {
-		int rowNumber = bookRepository.insert(book);
+	public boolean insert(BookModel book, MultipartFile multipartFile) {
+		int rowNumber = bookRepository.insert(book, multipartFile);
 		boolean result = false;
 		if(rowNumber>0) {
 			result = true;
@@ -32,8 +32,8 @@ public class BookService {
 		return bookRepository.selectMany();
 	}
 
-	public boolean updateOne(BookModel book) {
-		int rowNumber = bookRepository.updateOne(book);
+	public boolean updateOne(BookModel book, MultipartFile multipartFile) {
+		int rowNumber = bookRepository.updateOne(book, multipartFile);
 		boolean result = false;
 		if(rowNumber>0) {
 			result = true;
@@ -94,9 +94,5 @@ public class BookService {
 
 	public List<BookModel> searchBook(String word) {
 		return bookRepository.searchBook(word);
-	}
-
-	public String postImageUpload(MultipartFile multipartFile) {
-		return bookRepository.postImageUpload(multipartFile);
 	}
 }
