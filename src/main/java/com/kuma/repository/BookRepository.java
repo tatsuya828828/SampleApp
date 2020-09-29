@@ -9,10 +9,10 @@ import com.kuma.model.BookModel;
 import com.kuma.model.EvaluationModel;
 
 public interface BookRepository {
-	public int insert (BookModel book) throws DataAccessException;
+	public int insert (BookModel book, MultipartFile multipartFile) throws DataAccessException;
 	public BookModel selectOne(int id) throws DataAccessException;
 	public List<BookModel> selectMany() throws DataAccessException;
-	public int updateOne(BookModel book) throws DataAccessException;
+	public int updateOne(BookModel book, MultipartFile multipartFile) throws DataAccessException;
 	public int deleteOne(int id) throws DataAccessException;
 	public void selectEvaluation(EvaluationModel evaluation) throws DataAccessException;
 	public int insertEvaluation(EvaluationModel evaluation) throws DataAccessException;
@@ -24,5 +24,5 @@ public interface BookRepository {
 	public List<String> selectGenres() throws DataAccessException;
 	public int count(String column, String word) throws DataAccessException;
 	public List<BookModel> searchBook(String word) throws DataAccessException;
-	public String postImageUpload(MultipartFile multipartFile) throws DataAccessException;
+	public String postImageUpload(MultipartFile multipartFile, String id) throws DataAccessException;
 }
