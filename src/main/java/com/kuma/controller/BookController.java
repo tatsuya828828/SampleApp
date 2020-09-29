@@ -47,20 +47,17 @@ public class BookController {
 	public String postBookNew(@ModelAttribute @Validated(ValidGroup.class) BookForm form
 			, BindingResult bindingResult, Model model, HttpServletRequest httpServletRequest
 			, @RequestParam("image") MultipartFile multipartFile) {
-		System.out.println(multipartFile.getOriginalFilename());
-//		if(bindingResult.hasErrors()) {
-//			return getBookNew(form, model);
-//		}
-		String imageName = "/images/"+ bookService.postImageUpload(multipartFile);
+		if(bindingResult.hasErrors()) {
+			return getBookNew(form, model);
+		}
 		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 		BookModel book = new BookModel();
-		book.setImage(imageName);
 		book.setTitle(form.getTitle());
 		book.setBody(form.getBody());
 		book.setAuthor(form.getAuthor());
 		book.setGenre(form.getGenre());
 		book.setUser(user);
-		boolean result = bookService.insert(book);
+		boolean result = bookService.insert(book, multipartFile);
 		if(result == true) {
 			System.out.println("登録成功");
 		} else {
@@ -126,12 +123,8 @@ public class BookController {
 		book.setGenre(form.getGenre());
 		book.setUser(form.getUser());
 		System.out.println(multipartFile.getOriginalFilename());
-		if(!multipartFile.isEmpty()) {
-			String imageName = "/images/"+ bookService.postImageUpload(multipartFile);
-			book.setImage(imageName);
-		}
 		try {
-			boolean result = bookService.updateOne(book);
+			boolean result = bookService.updateOne(book, multipartFile);
 			if(result == true) {
 				model.addAttribute("result", "更新成功");
 			} else {
