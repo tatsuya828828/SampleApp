@@ -48,12 +48,15 @@ public class BookRepositoryJdbc implements BookRepository {
 	}
 
 	@Override
-	public int insert(BookModel book) throws DataAccessException {
+	public int insert(BookModel book, MultipartFile multipartFile) throws DataAccessException {
+		String id = String.valueOf(jdbc.queryForObject("SELECT MAX(id) FROM book", Integer.class)+1);
+		String imageName = postImageUpload(multipartFile, id);
 		int bookRowNumber = jdbc.update(
-				"INSERT INTO book(created_at, title, "+"body, "+"author, "+"genre,"+"user_id, "+"evaluation, "+"image) "
-				+"VALUES(CURRENT_DATE,?,?,?,?,?,?,?)",
+				"INSERT INTO book(created_at, title, "+"body, "+"author, "
+						+"genre,"+"user_id, "+"evaluation, "+"image) "
+				+"VALUES(CURRENT_DATE,?,?,?,?,?,?,?); ",
 				book.getTitle(), book.getBody(), book.getAuthor(), book.getGenre()
-				, book.getUser().getId(), 0, book.getImage());
+				, book.getUser().getId(), 0, imageName);
 		return bookRowNumber;
 	}
 
@@ -80,11 +83,14 @@ public class BookRepositoryJdbc implements BookRepository {
 	}
 
 	@Override
-	public int updateOne(BookModel book) throws DataAccessException {
+	public int updateOne(BookModel book, MultipartFile multipartFile) throws DataAccessException {
+		String id = String.valueOf(book.getId());
+		String imageName = postImageUpload(multipartFile, id);
+		System.out.println(imageName);
 		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "
 				+"author=?, "+"genre=?, "+"user_id=?, "+"image=? "+"WHERE id=?",
 				book.getTitle(), book.getBody(), book.getAuthor(), book.getGenre()
-				, book.getUser().getId(), book.getImage(), book.getId());
+				, book.getUser().getId(), imageName, book.getId());
 		return bookRowNumber;
 	}
 
@@ -181,12 +187,12 @@ public class BookRepositoryJdbc implements BookRepository {
 	}
 
 	@Override
-	public String postImageUpload(MultipartFile multipartFile) {
+	public String postImageUpload(MultipartFile multipartFile, String id) {
 		if(!multipartFile.isEmpty()) {
 			try {
 				String uploadPath = "src/main/resources/static/images/";
 				byte[] bytes = multipartFile.getBytes();
-				File file = new File(uploadPath+multipartFile.getOriginalFilename());
+				File file = new File(uploadPath+ id+"_"+ multipartFile.getOriginalFilename());
 				BufferedOutputStream stream = new BufferedOutputStream(
 						new FileOutputStream(file));
 				stream.write(bytes);
@@ -195,7 +201,8 @@ public class BookRepositoryJdbc implements BookRepository {
 			} catch(Exception e) {
 				System.out.println(e);
 			}
+			return "/images/"+ id +"_"+ multipartFile.getOriginalFilename();
 		}
-		return multipartFile.getOriginalFilename();
+		return "/images/NOIMAGE.png";
 	}
 }
