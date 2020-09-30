@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class UserModel {
 	private int id;
+	private String image;
 	private Date lastLogin;
 	private Date createdAt;
 	private String selfId;
