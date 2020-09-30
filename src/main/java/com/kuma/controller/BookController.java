@@ -122,16 +122,21 @@ public class BookController {
 		book.setAuthor(form.getAuthor());
 		book.setGenre(form.getGenre());
 		book.setUser(form.getUser());
-		System.out.println(multipartFile.getOriginalFilename());
-		try {
-			boolean result = bookService.updateOne(book, multipartFile);
-			if(result == true) {
-				model.addAttribute("result", "更新成功");
-			} else {
-				model.addAttribute("result", "更新失敗");
+		if(multipartFile.isEmpty()) {
+			String image = bookService.selectOne(form.getId()).getImage();
+			book.setImage(image);
+		} else {
+			System.out.println(multipartFile.getOriginalFilename());
+			try {
+				boolean result = bookService.updateOne(book, multipartFile);
+				if(result == true) {
+					model.addAttribute("result", "更新成功");
+				} else {
+					model.addAttribute("result", "更新失敗");
+				}
+			} catch(DataAccessException e) {
+				model.addAttribute("result", "更新失敗(トランザクションテスト)");
 			}
-		} catch(DataAccessException e) {
-			model.addAttribute("result", "更新失敗(トランザクションテスト)");
 		}
 		return getBookList(model);
 	}
