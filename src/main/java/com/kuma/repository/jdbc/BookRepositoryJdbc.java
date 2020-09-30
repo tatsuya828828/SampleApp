@@ -121,7 +121,13 @@ public class BookRepositoryJdbc implements BookRepository {
 	@Override
 	public int updateOne(BookModel book, MultipartFile multipartFile) throws DataAccessException {
 		String id = String.valueOf(book.getId());
-		String imageName = postImageUpload(multipartFile, id);
+		String imageName = null;
+		if(!multipartFile.isEmpty()) {
+			imageName = postImageUpload(multipartFile, id);
+		} else {
+			System.out.println(book.getImage());
+			imageName = book.getImage();
+		}
 		System.out.println(imageName);
 		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "
 				+"author=?, "+"genre=?, "+"user_id=?, "+"image=? "+"WHERE id=?",
