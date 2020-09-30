@@ -3,6 +3,8 @@ package com.kuma.repository.jdbc;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,16 +51,48 @@ public class BookRepositoryJdbc implements BookRepository {
 		return bookList;
 	}
 
+	public String postImageUpload(MultipartFile multipartFile, String id) {
+		if(!multipartFile.isEmpty()) {
+			try {
+				String uploadPath = "src/main/resources/static/images/";
+				byte[] bytes = multipartFile.getBytes();
+				File file = new File(uploadPath+ id+"_"+ multipartFile.getOriginalFilename());
+				BufferedOutputStream stream = new BufferedOutputStream(
+						new FileOutputStream(file));
+				stream.write(bytes);
+				stream.close();
+				System.out.println("画像登録成功");
+			} catch(Exception e) {
+				System.out.println(e);
+			}
+			return "/images/"+ id +"_"+ multipartFile.getOriginalFilename();
+		}
+		return "/images/NOIMAGE.png";
+	}
+
+	public int insertAndGetId(BookModel book) throws DataAccessException {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+	    jdbc.update(connection -> {
+	        PreparedStatement ps = connection
+	          .prepareStatement("INSERT INTO book(created_at, title, "+"body, "+"author, "
+						+"genre,"+"user_id, "+"evaluation) "
+				+"VALUES(CURRENT_DATE,?,?,?,?,?,?); ", Statement.RETURN_GENERATED_KEYS);
+	          ps.setString(1, book.getTitle());
+	          ps.setString(2,book.getBody());
+	          ps.setString(3, book.getAuthor());
+	          ps.setString(4, book.getGenre());
+	          ps.setInt(5, book.getUser().getId());
+	          ps.setInt(6, 0);
+	          return ps;
+	    }, keyHolder);
+	    return (int) keyHolder.getKeys().get("id");
+	}
+
 	@Override
 	public int insert(BookModel book, MultipartFile multipartFile) throws DataAccessException {
-		String id = String.valueOf(jdbc.queryForObject("SELECT MAX(id) FROM book", Integer.class)+1);
-		String imageName = postImageUpload(multipartFile, id);
-		int bookRowNumber = jdbc.update(
-				"INSERT INTO book(created_at, title, "+"body, "+"author, "
-						+"genre,"+"user_id, "+"evaluation, "+"image) "
-				+"VALUES(CURRENT_DATE,?,?,?,?,?,?,?); ",
-				book.getTitle(), book.getBody(), book.getAuthor(), book.getGenre()
-				, book.getUser().getId(), 0, imageName);
+		int id = insertAndGetId(book);
+		String imageName = postImageUpload(multipartFile, String.valueOf(id));
+		int bookRowNumber = jdbc.update("UPDATE book SET image=?"+" WHERE id=?", imageName, id);
 		return bookRowNumber;
 	}
 
@@ -107,11 +143,9 @@ public class BookRepositoryJdbc implements BookRepository {
 		System.out.println("1");
 		System.out.println(num);
 		if(num == 0) {
-			System.out.println("評価登録中");
 			insertEvaluation(evaluation);
 			System.out.println("評価登録成功");
 		} else {
-			System.out.println("評価更新中");
 			updateEvaluation(evaluation);
 			System.out.println("評価更新成功");
 		}
@@ -184,25 +218,5 @@ public class BookRepositoryJdbc implements BookRepository {
 		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM book "
 				+ "WHERE title LIKE ? OR author LIKE ?", "%"+ word +"%", "%"+ word +"%");
 		return getList(getList);
-	}
-
-	@Override
-	public String postImageUpload(MultipartFile multipartFile, String id) {
-		if(!multipartFile.isEmpty()) {
-			try {
-				String uploadPath = "src/main/resources/static/images/";
-				byte[] bytes = multipartFile.getBytes();
-				File file = new File(uploadPath+ id+"_"+ multipartFile.getOriginalFilename());
-				BufferedOutputStream stream = new BufferedOutputStream(
-						new FileOutputStream(file));
-				stream.write(bytes);
-				stream.close();
-				System.out.println("登録成功");
-			} catch(Exception e) {
-				System.out.println(e);
-			}
-			return "/images/"+ id +"_"+ multipartFile.getOriginalFilename();
-		}
-		return "/images/NOIMAGE.png";
 	}
 }
