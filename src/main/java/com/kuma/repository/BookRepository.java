@@ -24,5 +24,4 @@ public interface BookRepository {
 	public List<String> selectGenres() throws DataAccessException;
 	public int count(String column, String word) throws DataAccessException;
 	public List<BookModel> searchBook(String word) throws DataAccessException;
-	public String postImageUpload(MultipartFile multipartFile, String id) throws DataAccessException;
 }
