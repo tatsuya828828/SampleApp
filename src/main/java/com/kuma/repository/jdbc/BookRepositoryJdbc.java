@@ -1,8 +1,5 @@
 package com.kuma.repository.jdbc;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -51,32 +48,13 @@ public class BookRepositoryJdbc implements BookRepository {
 		return bookList;
 	}
 
-	public String postImageUpload(MultipartFile multipartFile, String id) {
-		if(!multipartFile.isEmpty()) {
-			try {
-				String uploadPath = "src/main/resources/static/images/";
-				byte[] bytes = multipartFile.getBytes();
-				File file = new File(uploadPath+ id+"_"+ multipartFile.getOriginalFilename());
-				BufferedOutputStream stream = new BufferedOutputStream(
-						new FileOutputStream(file));
-				stream.write(bytes);
-				stream.close();
-				System.out.println("画像登録成功");
-			} catch(Exception e) {
-				System.out.println(e);
-			}
-			return "/images/"+ id +"_"+ multipartFile.getOriginalFilename();
-		}
-		return "/images/NOIMAGE.png";
-	}
-
 	public int insertAndGetId(BookModel book) throws DataAccessException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 	    jdbc.update(connection -> {
 	        PreparedStatement ps = connection
-	          .prepareStatement("INSERT INTO book(created_at, title, "+"body, "+"author, "
-						+"genre,"+"user_id, "+"evaluation) "
-				+"VALUES(CURRENT_DATE,?,?,?,?,?,?); ", Statement.RETURN_GENERATED_KEYS);
+	          .prepareStatement("INSERT INTO book(created_at, title, body, author, "
+	          		+ "genre, user_id, evaluation)"
+				+"VALUES(CURRENT_DATE,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 	          ps.setString(1, book.getTitle());
 	          ps.setString(2,book.getBody());
 	          ps.setString(3, book.getAuthor());
@@ -91,7 +69,7 @@ public class BookRepositoryJdbc implements BookRepository {
 	@Override
 	public int insert(BookModel book, MultipartFile multipartFile) throws DataAccessException {
 		int id = insertAndGetId(book);
-		String imageName = postImageUpload(multipartFile, String.valueOf(id));
+		String imageName = ImageUpload.postImage(multipartFile, String.valueOf(id));
 		int bookRowNumber = jdbc.update("UPDATE book SET image=?"+" WHERE id=?", imageName, id);
 		return bookRowNumber;
 	}
@@ -123,12 +101,11 @@ public class BookRepositoryJdbc implements BookRepository {
 		String id = String.valueOf(book.getId());
 		String imageName = null;
 		if(!multipartFile.isEmpty()) {
-			imageName = postImageUpload(multipartFile, id);
+			imageName = ImageUpload.postImage(multipartFile, id);
 		} else {
 			System.out.println(book.getImage());
 			imageName = book.getImage();
 		}
-		System.out.println(imageName);
 		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "
 				+"author=?, "+"genre=?, "+"user_id=?, "+"image=? "+"WHERE id=?",
 				book.getTitle(), book.getBody(), book.getAuthor(), book.getGenre()
