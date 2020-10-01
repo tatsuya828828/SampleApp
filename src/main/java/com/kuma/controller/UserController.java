@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kuma.model.BookModel;
 import com.kuma.model.SignupForm;
@@ -47,7 +49,8 @@ public class UserController {
 
 	@PostMapping("/signup")
 	public String postSignup(@ModelAttribute @Validated(ValidGroup.class) SignupForm form
-			,BindingResult bindingResult, Model model) {
+			,BindingResult bindingResult, Model model
+			, @RequestParam("image") MultipartFile multipartFile) {
 		if(bindingResult.hasErrors()) {
 			return getSignUp(form, model);
 		}
@@ -56,7 +59,7 @@ public class UserController {
 		user.setPassword(form.getPassword());
 		user.setName(form.getName());
 		// サービスクラスのinsertを呼び出して変換
-		boolean result = userService.insert(user);
+		boolean result = userService.insert(user, multipartFile);
 		// 登録結果の判定
 		if(result == true) {
 			System.out.println("登録成功");
@@ -114,16 +117,17 @@ public class UserController {
 	@GetMapping("/userEdit/{id}")
 	public String getUserEdit(@ModelAttribute SignupForm form
 			, Model model, @PathVariable("id") int id, HttpServletRequest httpServletRequest) {
-		UserModel user1 = currentUser(httpServletRequest);
-		UserModel user2 = userService.selectOne(id);
+		UserModel currentUser = currentUser(httpServletRequest);
+		UserModel user = userService.selectOne(id);
 		if(String.valueOf(id).length() > 0) {
-			if(user1.equals(user2)) {
-				form.setId(user1.getId());
-				form.setSelfId(user1.getSelfId());
-				form.setPassword(user1.getPassword());
-				form.setName(user1.getName());
+			if(currentUser.equals(user)) {
+				form.setId(currentUser.getId());
+				form.setSelfId(currentUser.getSelfId());
+				form.setPassword(currentUser.getPassword());
+				form.setName(currentUser.getName());
 				model.addAttribute("contents", "user/userEdit :: userEdit_contents");
 				model.addAttribute("signupForm", form);
+				model.addAttribute("image", currentUser.getImage());
 				return "/header";
 			}
 		}
@@ -131,13 +135,14 @@ public class UserController {
 	}
 
 	@PostMapping(value="/userEdit", params="update")
-	public String postUserEdit(@ModelAttribute SignupForm form, Model model) {
+	public String postUserEdit(@ModelAttribute SignupForm form, Model model
+			, @RequestParam("image") MultipartFile multipartFile) {
 		UserModel user = new UserModel();
 		user.setId(form.getId());
 		user.setPassword(form.getPassword());
 		user.setName(form.getName());
 		try {
-			boolean result = userService.updateOne(user);
+			boolean result = userService.updateOne(user, multipartFile);
 			if(result == true) {
 				model.addAttribute("result", "更新成功");
 			} else {
