@@ -1,7 +1,17 @@
 <div th:fragment="userEdit_contents">
-	<form method="post" th:action="@{/userEdit}" th:object="${signupForm}">
+	<form method="post" th:action="@{/userEdit}" th:object="${signupForm}" enctype="multipart/form-data">
 		<h1 class="text-center">編集ページ</h1>
 		<table style="margin-top: 10vh;">
+			<tr>
+				<th class="active col-sm-3">画像</th>
+				<td>
+					<div class="form-group">
+						<img th:src="@{${image}}" width="80" height="100">
+						<br><br>
+						<input type="file" name="image">
+					</div>
+				</td>
+			</tr>
 			<tr>
 				<th class="active col-lg-2">ID</th>
 				<td class="col-lg-3">
