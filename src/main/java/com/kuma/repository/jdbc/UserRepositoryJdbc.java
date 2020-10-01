@@ -1,5 +1,8 @@
 package com.kuma.repository.jdbc;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -32,21 +35,42 @@ public class UserRepositoryJdbc implements UserRepository {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 	    jdbc.update(connection -> {
 	        PreparedStatement ps = connection
-	          .prepareStatement("INSERT INTO user(created_at, last_login, self_id, password, name"
-	          		+ " VALUES(CURRENT_DATE, LOCALTIME,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+	          .prepareStatement("INSERT INTO user(created_at, last_login, self_id, password, name)"
+	          		+" VALUES(CURRENT_DATE,LOCALTIME,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 	          ps.setString(1, user.getSelfId());
 	          ps.setString(2, password);
 	          ps.setString(3, user.getName());
+	          System.out.println("aiueo");
 	          return ps;
 	    }, keyHolder);
 	    return (int) keyHolder.getKeys().get("id");
 	}
 
+	public static String postImage(MultipartFile multipartFile, String selfId) {
+		if(!multipartFile.isEmpty()) {
+			try {
+				String uploadPath = "src/main/resources/static/images/";
+				byte[] bytes = multipartFile.getBytes();
+				File file = new File(uploadPath+ selfId+"_"+ multipartFile.getOriginalFilename());
+				BufferedOutputStream stream = new BufferedOutputStream(
+						new FileOutputStream(file));
+				stream.write(bytes);
+				stream.close();
+				System.out.println("画像登録成功");
+			} catch(Exception e) {
+				System.out.println(e);
+			}
+			return "/images/"+ selfId +"_"+ multipartFile.getOriginalFilename();
+		}
+		return "/images/NOIMAGE.png";
+	}
+
 	@Override
 	public int insert(UserModel user, MultipartFile multipartFile) throws DataAccessException {
 		int id = insertAndGetId(user);
-		String imageName = ImageUpload.postImage(multipartFile, String.valueOf(id));
-		int userRowNumber = jdbc.update("UPDATE book SET image=?"+" WHERE id=?", imageName, id);
+		String imageName = postImage(multipartFile, user.getSelfId());
+		System.out.println(imageName);
+		int userRowNumber = jdbc.update("UPDATE user SET image=?"+" WHERE id=?", imageName, id);
 		return userRowNumber;
 	}
 
@@ -55,6 +79,7 @@ public class UserRepositoryJdbc implements UserRepository {
 		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM user"+" WHERE id = ?", id);
 		UserModel user = new UserModel();
 		user.setId((int) map.get("id"));
+		user.setImage((String) map.get("image"));
 		user.setCreatedAt((Date) map.get("created_at"));
 		user.setLastLogin((Date) map.get("last_login"));
 		user.setSelfId((String) map.get("self_id"));
@@ -68,6 +93,7 @@ public class UserRepositoryJdbc implements UserRepository {
 		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM user "+"WHERE self_id=?", selfId);
 		UserModel user = new UserModel();
 		user.setId((int) map.get("id"));
+		user.setImage((String) map.get("image"));
 		user.setCreatedAt((Date) map.get("created_at"));
 		user.setLastLogin((Date) map.get("last_login"));
 		user.setSelfId((String) map.get("self_id"));
@@ -83,6 +109,7 @@ public class UserRepositoryJdbc implements UserRepository {
 		for(Map<String, Object> map: getList) {
 			BookModel book = new BookModel();
 			book.setId((int) map.get("id"));
+			book.setImage(((String) map.get("image")));
 			book.setCreatedAt((Date) map.get("created_at"));
 			book.setTitle((String) map.get("title"));
 			book.setBody((String) map.get("body"));
@@ -106,6 +133,7 @@ public class UserRepositoryJdbc implements UserRepository {
 			UserModel user = new UserModel();
 			// Userインスタンスに取得したデータをセット
 			user.setId((int) map.get("id"));
+			user.setImage((String) map.get("image"));
 			user.setCreatedAt((Date) map.get("created_at"));
 			user.setLastLogin((Date) map.get("last_login"));
 			user.setSelfId((String) map.get("self_id"));
@@ -121,10 +149,9 @@ public class UserRepositoryJdbc implements UserRepository {
 	public int updateOne(UserModel user, MultipartFile multipartFile) throws DataAccessException {
 		// パスワード暗号化
 		String password = passwordEncoder.encode(user.getPassword());
-		String id = String.valueOf(user.getId());
 		String imageName = null;
 		if(!multipartFile.isEmpty()) {
-			imageName = ImageUpload.postImage(multipartFile, id);
+			imageName = postImage(multipartFile, user.getSelfId());
 		} else {
 			imageName = user.getImage();
 		}
