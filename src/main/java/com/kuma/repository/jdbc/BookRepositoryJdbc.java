@@ -1,5 +1,8 @@
 package com.kuma.repository.jdbc;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -66,10 +69,29 @@ public class BookRepositoryJdbc implements BookRepository {
 	    return (int) keyHolder.getKeys().get("id");
 	}
 
+	public static String postImage(MultipartFile multipartFile, String id) {
+		if(!multipartFile.isEmpty()) {
+			try {
+				String uploadPath = "src/main/resources/static/images/";
+				byte[] bytes = multipartFile.getBytes();
+				File file = new File(uploadPath+ id+"_"+ multipartFile.getOriginalFilename());
+				BufferedOutputStream stream = new BufferedOutputStream(
+						new FileOutputStream(file));
+				stream.write(bytes);
+				stream.close();
+				System.out.println("画像登録成功");
+			} catch(Exception e) {
+				System.out.println(e);
+			}
+			return "/images/"+ id +"_"+ multipartFile.getOriginalFilename();
+		}
+		return "/images/NOIMAGE.png";
+	}
+
 	@Override
 	public int insert(BookModel book, MultipartFile multipartFile) throws DataAccessException {
 		int id = insertAndGetId(book);
-		String imageName = ImageUpload.postImage(multipartFile, String.valueOf(id));
+		String imageName = postImage(multipartFile, String.valueOf(id));
 		int bookRowNumber = jdbc.update("UPDATE book SET image=?"+" WHERE id=?", imageName, id);
 		return bookRowNumber;
 	}
@@ -101,7 +123,7 @@ public class BookRepositoryJdbc implements BookRepository {
 		String id = String.valueOf(book.getId());
 		String imageName = null;
 		if(!multipartFile.isEmpty()) {
-			imageName = ImageUpload.postImage(multipartFile, id);
+			imageName = postImage(multipartFile, id);
 		} else {
 			System.out.println(book.getImage());
 			imageName = book.getImage();
