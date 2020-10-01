@@ -139,8 +139,13 @@ public class UserController {
 			, @RequestParam("image") MultipartFile multipartFile) {
 		UserModel user = new UserModel();
 		user.setId(form.getId());
+		user.setSelfId(form.getSelfId());
 		user.setPassword(form.getPassword());
 		user.setName(form.getName());
+		if(multipartFile.isEmpty()) {
+			String image = userService.selectOne(form.getId()).getImage();
+			user.setImage(image);
+		}
 		try {
 			boolean result = userService.updateOne(user, multipartFile);
 			if(result == true) {
