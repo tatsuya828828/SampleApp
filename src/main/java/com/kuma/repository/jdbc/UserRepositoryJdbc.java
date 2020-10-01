@@ -40,7 +40,6 @@ public class UserRepositoryJdbc implements UserRepository {
 	          ps.setString(1, user.getSelfId());
 	          ps.setString(2, password);
 	          ps.setString(3, user.getName());
-	          System.out.println("aiueo");
 	          return ps;
 	    }, keyHolder);
 	    return (int) keyHolder.getKeys().get("id");
@@ -69,7 +68,6 @@ public class UserRepositoryJdbc implements UserRepository {
 	public int insert(UserModel user, MultipartFile multipartFile) throws DataAccessException {
 		int id = insertAndGetId(user);
 		String imageName = postImage(multipartFile, user.getSelfId());
-		System.out.println(imageName);
 		int userRowNumber = jdbc.update("UPDATE user SET image=?"+" WHERE id=?", imageName, id);
 		return userRowNumber;
 	}
