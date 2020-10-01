@@ -9,8 +9,17 @@
 			<h1 class="text-center">新規登録</h1>
 			<div class="row">
 				<div class="col-lg-8 col-lg-offset-2">
-					<form method="post" th:action="@{/signup}" th:object="${signupForm}" style="margin-top: 10vh;">
+					<form method="post" th:action="@{/signup}" th:object="${signupForm}"
+					style="margin-top: 10vh;"  enctype="multipart/form-data">
 						<table class="table table-bordered table-hover">
+							<tr>
+							<th class="active col-sm-3">プロフィール画像</th>
+							<td>
+								<div class="form-group">
+									<input type="file" name="image">
+								</div>
+							</td>
+						</tr>
 							<tr>
 								<th class="active col-lg-4">ユーザーID<br><small><em>(メールアドレス形式)</em></small></th>
 								<td>
