@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kuma.model.BookModel;
 import com.kuma.model.UserModel;
@@ -22,8 +23,8 @@ public class UserService {
 		return result;
 	}
 	// insert用
-	public boolean insert(UserModel user) {
-		int rowNumber = userRepository.insert(user);
+	public boolean insert(UserModel user, MultipartFile multipartFile) {
+		int rowNumber = userRepository.insert(user, multipartFile);
 		return result(rowNumber);
 	}
 
@@ -49,8 +50,8 @@ public class UserService {
 	}
 
 	// 1件更新用
-	public boolean updateOne(UserModel user) {
-		int rowNumber = userRepository.updateOne(user);
+	public boolean updateOne(UserModel user, MultipartFile multipartFile) {
+		int rowNumber = userRepository.updateOne(user, multipartFile);
 		return result(rowNumber);
 	}
 
