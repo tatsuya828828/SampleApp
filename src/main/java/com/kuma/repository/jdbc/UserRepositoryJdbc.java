@@ -1,5 +1,7 @@
 package com.kuma.repository.jdbc;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,8 +10,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kuma.model.BookModel;
 import com.kuma.model.UserModel;
@@ -22,15 +27,26 @@ public class UserRepositoryJdbc implements UserRepository {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	@Override
-	public int insert(UserModel user) throws DataAccessException {
-		// パスワードを暗号化
+	public int insertAndGetId(UserModel user) throws DataAccessException {
 		String password = passwordEncoder.encode(user.getPassword());
-		System.out.println("暗号化されたパスワードは: "+ password);
-		// DBにデータを登録
-		int userRowNumber = jdbc.update("INSERT INTO user(created_at, last_login, self_id, "+"password, "+"name)"
-							+" VALUES(CURRENT_DATE, LOCALTIME,?,?,?)",
-							user.getSelfId(), password, user.getName());
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+	    jdbc.update(connection -> {
+	        PreparedStatement ps = connection
+	          .prepareStatement("INSERT INTO user(created_at, last_login, self_id, password, name"
+	          		+ " VALUES(CURRENT_DATE, LOCALTIME,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+	          ps.setString(1, user.getSelfId());
+	          ps.setString(2, password);
+	          ps.setString(3, user.getName());
+	          return ps;
+	    }, keyHolder);
+	    return (int) keyHolder.getKeys().get("id");
+	}
+
+	@Override
+	public int insert(UserModel user, MultipartFile multipartFile) throws DataAccessException {
+		int id = insertAndGetId(user);
+		String imageName = ImageUpload.postImage(multipartFile, String.valueOf(id));
+		int userRowNumber = jdbc.update("UPDATE book SET image=?"+" WHERE id=?", imageName, id);
 		return userRowNumber;
 	}
 
@@ -102,11 +118,19 @@ public class UserRepositoryJdbc implements UserRepository {
 	}
 
 	@Override
-	public int updateOne(UserModel user) throws DataAccessException {
+	public int updateOne(UserModel user, MultipartFile multipartFile) throws DataAccessException {
 		// パスワード暗号化
 		String password = passwordEncoder.encode(user.getPassword());
-		int userRowNumber = jdbc.update("UPDATE user "+"SET "+"self_id=?, "+"password=?, "+"name=? "+"WHERE id=?",
-							user.getSelfId(), password, user.getName(), user.getId());
+		String id = String.valueOf(user.getId());
+		String imageName = null;
+		if(!multipartFile.isEmpty()) {
+			imageName = ImageUpload.postImage(multipartFile, id);
+		} else {
+			imageName = user.getImage();
+		}
+		int userRowNumber = jdbc.update("UPDATE user SET self_id=?, password=?,"
+				+ " name=?, image=? WHERE id=?",
+				user.getSelfId(), password, user.getName(), imageName, user.getId());
 		return userRowNumber;
 	}
 
