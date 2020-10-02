@@ -21,7 +21,6 @@ import com.kuma.model.BookForm;
 import com.kuma.model.BookModel;
 import com.kuma.model.CommentForm;
 import com.kuma.model.CommentModel;
-import com.kuma.model.EvaluationModel;
 import com.kuma.model.UserModel;
 import com.kuma.model.ValidGroup;
 import com.kuma.service.BookService;
@@ -148,26 +147,6 @@ public class BookController {
 			model.addAttribute("result", "削除失敗");
 		}
 		return getBookList(model);
-	}
-
-	@PostMapping(value="/bookDetail/{bookId}/postEvaluation")
-	public String postEvaluation(@RequestParam("num") int num, Model model,
-			HttpServletRequest httpServletRequest, @PathVariable("bookId") int bookId) {
-		System.out.println("数値:"+ num);
-		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
-		BookModel book = bookService.selectOne(bookId);
-		EvaluationModel evaluation = new EvaluationModel();
-		evaluation.setEvaluation(num);
-		evaluation.setBook(book);
-		evaluation.setUser(user);
-		bookService.selectEvaluation(evaluation);
-		boolean result2 = bookService.evaluationAvg(bookId);
-		if(result2 == true) {
-			System.out.println("更新成功");
-		} else {
-			System.out.println("更新失敗");
-		}
-		return "redirect:/bookDetail/{bookId}";
 	}
 
 	@GetMapping("/author/{author}")
