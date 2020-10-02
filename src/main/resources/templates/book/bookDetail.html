@@ -41,31 +41,28 @@
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
 		<a class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${id}}">編集</a>
-		<div class="pull-left">
-			<form method="post" th:action="@{'/bookDetail/'+ ${book.id} +'/postEvaluation'}">
+		<div style="margin-top: 10vh;">
+			<h4>コメント・評価</h4>
+			<form method="post" th:action="@{${book.id} + '/postComment'}" th:object="${commentForm}">
+				<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
+					<textarea rows="5" class="form-control" th:field="*{comment}" required="true"></textarea>
+					<span class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">comment error</span>
+				</div>
 				<script>
 				  $.fn.raty.defaults.path = "/webjars/jquery-raty/2.7.0/images";
 			      $(function(){
 			        $('#star').raty({number: 5, score: 1, scoreName: 'num'});
 			      });
 			    </script>
-			    <div class="form-group" id="star">
+			    <div class="form-group pull-right">
+					<button class="btn btn-success form-control" type="submit">投稿</button>
+				</div>
+			    <div class="form-group pull-right" id="star" style="padding-right: 1vh;">
 			    	<span>評価:</span><input type="hidden" th:value="${num}">
-			    	<input class="pull-right btn btn-success" type="submit" value="評価送信" style="margin-left: 1vh;">
 			    </div>
 			</form>
 		</div>
-		<div style="margin-top: 10vh;">
-			<form method="post" th:action="@{${book.id} + '/postComment'}" th:object="${commentForm}">
-				<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
-					<textarea rows="5" class="form-control" th:field="*{comment}" required="true"></textarea>
-					<span class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">comment error</span>
-				</div>
-				<div class="form-group">
-					<button class="btn btn-success form-control" type="submit">コメント投稿</button>
-				</div>
-			</form>
-		</div>
+		<br>
 		<h4>コメント一覧</h4>
 		<table class="table" th:each="comment: ${comments}">
 			<tr>
