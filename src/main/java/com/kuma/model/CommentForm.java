@@ -7,7 +7,8 @@ import lombok.Data;
 @Data
 public class CommentForm {
 	public Date createdAt;
+	public int evaluation;
+	public String comment;
 	public UserModel user;
 	public BookModel book;
-	public String comment;
 }
