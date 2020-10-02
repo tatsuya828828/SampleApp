@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kuma.model.BookModel;
-import com.kuma.model.EvaluationModel;
 import com.kuma.repository.BookRepository;
 
 @Service
@@ -15,13 +14,18 @@ public class BookService {
 	@Autowired
 	BookRepository bookRepository;
 
-	public boolean insert(BookModel book, MultipartFile multipartFile) {
-		int rowNumber = bookRepository.insert(book, multipartFile);
+	// 共通処理をまとめたメソッド
+	public boolean result(int rowNumber) {
 		boolean result = false;
 		if(rowNumber>0) {
 			result = true;
 		}
 		return result;
+	}
+
+	public boolean insert(BookModel book, MultipartFile multipartFile) {
+		int rowNumber = bookRepository.insert(book, multipartFile);
+		return result(rowNumber);
 	}
 
 	public BookModel selectOne(int id) {
@@ -34,42 +38,17 @@ public class BookService {
 
 	public boolean updateOne(BookModel book, MultipartFile multipartFile) {
 		int rowNumber = bookRepository.updateOne(book, multipartFile);
-		boolean result = false;
-		if(rowNumber>0) {
-			result = true;
-		}
-		return result;
+		return result(rowNumber);
 	}
 
 	public boolean deleteOne(int id) {
 		int rowNumber = bookRepository.deleteOne(id);
-		boolean result = false;
-		if(rowNumber>0) {
-			result = true;
-		}
-		return result;
+		return result(rowNumber);
 	}
 
-	public void selectEvaluation(EvaluationModel evaluation) {
-		bookRepository.selectEvaluation(evaluation);
-	}
-
-	public boolean insertEvaluation(EvaluationModel evaluation) {
-		int rowNumber = bookRepository.insertEvaluation(evaluation);
-		boolean result = false;
-		if(rowNumber>0) {
-			result = true;
-		}
-		return result;
-	}
-
-	public boolean evaluationAvg(int bookId) {
-		int rowNumber = bookRepository.evaluationAvg(bookId);
-		boolean result = false;
-		if(rowNumber>0) {
-			result = true;
-		}
-		return result;
+	public boolean updateEvaluation(int bookId) {
+		int rowNumber = bookRepository.updateEvaluation(bookId);
+		return result(rowNumber);
 	}
 
 	public int evaluationCount(int bookId) {
