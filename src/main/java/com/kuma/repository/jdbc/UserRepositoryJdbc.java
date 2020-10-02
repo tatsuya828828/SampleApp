@@ -29,7 +29,7 @@ public class UserRepositoryJdbc implements UserRepository {
 	JdbcTemplate jdbc;
 	@Autowired
 	PasswordEncoder passwordEncoder;
-
+	// insertしたレコードのidを取得するメソッド
 	public int insertAndGetId(UserModel user) throws DataAccessException {
 		String password = passwordEncoder.encode(user.getPassword());
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -44,7 +44,7 @@ public class UserRepositoryJdbc implements UserRepository {
 	    }, keyHolder);
 	    return (int) keyHolder.getKeys().get("id");
 	}
-
+	// 画像登録用メソッド
 	public static String postImage(MultipartFile multipartFile, String selfId) {
 		if(!multipartFile.isEmpty()) {
 			try {
@@ -63,18 +63,8 @@ public class UserRepositoryJdbc implements UserRepository {
 		}
 		return "/images/NOIMAGE.png";
 	}
-
-	@Override
-	public int insert(UserModel user, MultipartFile multipartFile) throws DataAccessException {
-		int id = insertAndGetId(user);
-		String imageName = postImage(multipartFile, user.getSelfId());
-		int userRowNumber = jdbc.update("UPDATE user SET image=?"+" WHERE id=?", imageName, id);
-		return userRowNumber;
-	}
-
-	@Override
-	public UserModel selectOne(int id) throws DataAccessException {
-		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM user"+" WHERE id = ?", id);
+	// userセット用メソッド
+	public UserModel setUser(Map<String, Object> map) {
 		UserModel user = new UserModel();
 		user.setId((int) map.get("id"));
 		user.setImage((String) map.get("image"));
@@ -87,16 +77,24 @@ public class UserRepositoryJdbc implements UserRepository {
 	}
 
 	@Override
+	public int insert(UserModel user, MultipartFile multipartFile) throws DataAccessException {
+		int id = insertAndGetId(user);
+		String imageName = postImage(multipartFile, user.getSelfId());
+		int userRowNumber = jdbc.update("UPDATE user SET image=?"+" WHERE id=?", imageName, id);
+		return userRowNumber;
+	}
+
+	@Override
+	public UserModel selectOne(int id) throws DataAccessException {
+		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM user"+" WHERE id = ?", id);
+		UserModel user = setUser(map);
+		return user;
+	}
+
+	@Override
 	public UserModel currentUser(String selfId) throws DataAccessException {
 		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM user "+"WHERE self_id=?", selfId);
-		UserModel user = new UserModel();
-		user.setId((int) map.get("id"));
-		user.setImage((String) map.get("image"));
-		user.setCreatedAt((Date) map.get("created_at"));
-		user.setLastLogin((Date) map.get("last_login"));
-		user.setSelfId((String) map.get("self_id"));
-		user.setPassword((String) map.get("password"));
-		user.setName((String) map.get("name"));
+		UserModel user = setUser(map);
 		return user;
 	}
 
@@ -127,17 +125,7 @@ public class UserRepositoryJdbc implements UserRepository {
 		List<UserModel> userList = new ArrayList<>();
 		// 取得した結果をListに格納していく
 		for(Map<String, Object> map: getList) {
-			// Userインスタンスの生成
-			UserModel user = new UserModel();
-			// Userインスタンスに取得したデータをセット
-			user.setId((int) map.get("id"));
-			user.setImage((String) map.get("image"));
-			user.setCreatedAt((Date) map.get("created_at"));
-			user.setLastLogin((Date) map.get("last_login"));
-			user.setSelfId((String) map.get("self_id"));
-			user.setPassword((String) map.get("password"));
-			user.setName((String) map.get("name"));
-			// 結果返却用のListに追加
+			UserModel user = setUser(map);
 			userList.add(user);
 		}
 		return userList;
