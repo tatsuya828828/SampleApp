@@ -7,5 +7,5 @@ CREATE TABLE IF NOT EXISTS book(
 	body VARCHAR(100), author VARCHAR(50), genre VARCHAR(50)
 	, user_id INT REFERENCES user(id), evaluation INT, image VARCHAR(50));
 CREATE TABLE IF NOT EXISTS comment(
-	created_at DATE, user_id INT REFERENCES user(id), book_id INT REFERENCES book(id)
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, created_at DATE, user_id INT REFERENCES user(id), book_id INT REFERENCES book(id)
 	, comment VARCHAR(50), evaluation INT, PRIMARY KEY(user_id, book_id));
