@@ -8,6 +8,4 @@ CREATE TABLE IF NOT EXISTS book(
 	, user_id INT REFERENCES user(id), evaluation INT, image VARCHAR(50));
 CREATE TABLE IF NOT EXISTS comment(
 	created_at DATE, user_id INT REFERENCES user(id), book_id INT REFERENCES book(id)
-	, comment VARCHAR(50));
-CREATE TABLE IF NOT EXISTS evaluation(
-	evaluation INT, user_id INT REFERENCES user(id), book_id INT REFERENCES book(id), PRIMARY KEY(user_id, book_id))
+	, comment VARCHAR(50), evaluation INT, PRIMARY KEY(user_id, book_id));
