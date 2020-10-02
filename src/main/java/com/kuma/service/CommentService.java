@@ -13,13 +13,18 @@ public class CommentService {
 	@Autowired
 	CommentRepository commentRepository;
 
-	public boolean insert(CommentModel comment) {
-		int rowNumber = commentRepository.insert(comment);
+	// 共通処理をまとめたメソッド
+	public boolean result(int rowNumber) {
 		boolean result = false;
 		if(rowNumber>0) {
 			result = true;
 		}
 		return result;
+	}
+
+	public boolean selectComment(CommentModel comment) {
+		int rowNumber = commentRepository.selectComment(comment);
+		return result(rowNumber);
 	}
 
 	public List<CommentModel> selectMany(int bookId) {
@@ -28,10 +33,6 @@ public class CommentService {
 
 	public boolean delete(int userId, int bookId) {
 		int rowNumber = commentRepository.delete(userId, bookId);
-		boolean result = false;
-		if(rowNumber>0) {
-			result = true;
-		}
-		return result;
+		return result(rowNumber);
 	}
 }
