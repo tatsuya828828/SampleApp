@@ -42,14 +42,20 @@
 				<h1 class="text-center"><span th:text="*{user.name}"></span>さんの投稿一覧</h1>
 				<table class="table">
 					<tr>
+						<th></th>
 						<th>タイトル</th>
 						<th>著者</th>
 						<th>ジャンル</th>
 					</tr>
 					<tr th:each="book: ${books}">
-						<td><a th:href="@{'/bookDetail/' + ${book.id}}" th:text="${book.title}"></a></td>
-						<td><a th:text="${book.author}" th:href="@{'/author/' + *{book.author}}"></a></td>
-						<td><a th:text="*{book.genre}" th:href="@{'/genre/' + *{book.genre}}"></a></td>
+						<td>
+							<img th:src="@{*{book.image}}" height="80" width="60">
+						</td>
+						<td style="vertical-align: bottom;">
+							<a th:href="@{'/bookDetail/' + ${book.id}}" th:text="${book.title}"></a>
+						</td>
+						<td style="vertical-align: bottom;"><a th:text="${book.author}" th:href="@{'/author/' + *{book.author}}"></a></td>
+						<td style="vertical-align: bottom;"><a th:text="*{book.genre}" th:href="@{'/genre/' + *{book.genre}}"></a></td>
 					</tr>
 				</table>
 			</div>
