@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kuma.model.BookModel;
-import com.kuma.model.EvaluationModel;
 import com.kuma.repository.BookRepository;
 import com.kuma.service.UserService;
 
@@ -128,8 +127,8 @@ public class BookRepositoryJdbc implements BookRepository {
 			System.out.println(book.getImage());
 			imageName = book.getImage();
 		}
-		int bookRowNumber = jdbc.update("UPDATE book "+"SET "+"title=?, "+"body=?, "
-				+"author=?, "+"genre=?, "+"user_id=?, "+"image=? "+"WHERE id=?",
+		int bookRowNumber = jdbc.update("UPDATE book SET title=?, body=?, "
+				+"author=?, genre=?, user_id=?, image=? WHERE id=?",
 				book.getTitle(), book.getBody(), book.getAuthor(), book.getGenre()
 				, book.getUser().getId(), imageName, book.getId());
 		return bookRowNumber;
@@ -142,44 +141,15 @@ public class BookRepositoryJdbc implements BookRepository {
 	}
 
 	@Override
-	public void selectEvaluation(EvaluationModel evaluation) throws DataAccessException {
-		int num = jdbc.queryForObject("SELECT COUNT(user_id) FROM evaluation"
-	+" WHERE user_id="+ evaluation.getUser().getId() +"AND book_id="+ evaluation.getBook().getId(), Integer.class);
-		System.out.println("1");
-		System.out.println(num);
-		if(num == 0) {
-			insertEvaluation(evaluation);
-			System.out.println("評価登録成功");
-		} else {
-			updateEvaluation(evaluation);
-			System.out.println("評価更新成功");
-		}
-	}
-
-	@Override
-	public int insertEvaluation(EvaluationModel evaluation) throws DataAccessException {
-		int rowNumber = jdbc.update("INSERT INTO evaluation(evaluation, "+"user_id, "+"book_id) "+"VALUES(?,?,?)",
-				evaluation.getEvaluation(), evaluation.getUser().getId(), evaluation.getBook().getId());
-		return rowNumber;
-	}
-
-	@Override
-	public int updateEvaluation(EvaluationModel evaluation) throws DataAccessException {
-		int rowNumber = jdbc.update("UPDATE evaluation "+"SET "+"evaluation=? "+"WHERE user_id=?"+"AND book_id=?"
-					, evaluation.getEvaluation(), evaluation.getUser().getId(), evaluation.getBook().getId());
-		return rowNumber;
-	}
-
-	@Override
-	public int evaluationAvg(int bookId) throws DataAccessException {
-		int num = jdbc.queryForObject("SELECT AVG(evaluation) FROM evaluation WHERE book_id="+ bookId, Integer.class);
-		int rowNumber = jdbc.update("UPDATE book SET evaluation=? "+"WHERE id=?", num, bookId);
+	public int updateEvaluation(int bookId) throws DataAccessException {
+		int rowNumber = jdbc.update("UPDATE book SET evaluation="
+				+ "(SELECT AVG(evaluation) FROM comment WHERE book_id=?)", bookId);
 		return rowNumber;
 	}
 
 	@Override
 	public int evaluationCount(int bookId) throws DataAccessException {
-		int num = jdbc.queryForObject("SELECT COUNT(evaluation) FROM evaluation WHERE book_id="+ bookId, Integer.class);
+		int num = jdbc.queryForObject("SELECT COUNT(evaluation) FROM comment WHERE book_id="+ bookId, Integer.class);
 		return num;
 	}
 
