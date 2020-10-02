@@ -24,11 +24,29 @@ public class CommentRepositoryJdbc implements CommentRepository {
 	@Autowired
 	UserService userService;
 
-	@Override
 	public int insert(CommentModel comment) throws DataAccessException {
-		int rowNumber= jdbc.update("INSERT INTO comment(created_at, user_id, "+"book_id, "+"comment) "
-				+"VALUES(CURRENT_DATE,?,?,?)",
-				comment.getUser().getId(), comment.getBook().getId(), comment.getComment());
+		int rowNumber= jdbc.update("INSERT INTO comment(created_at, user_id, book_id, comment, evaluation) "
+				+"VALUES(CURRENT_DATE,?,?,?,?)",
+				comment.getUser().getId(), comment.getBook().getId(), comment.getComment(), comment.getEvaluation());
+		return rowNumber;
+	}
+
+	public int update(CommentModel comment) throws DataAccessException {
+		int rowNumber= jdbc.update("UPDATE comment SET "
+				+"comment=?, evaluation=? WHERE user_id=? AND book_id=?"
+				, comment.getComment(), comment.getEvaluation()
+				, comment.getUser().getId(), comment.getBook().getId());
+		return rowNumber;
+	}
+
+	@Override
+	public int selectComment(CommentModel comment) throws DataAccessException {
+		int rowNumber = 0;
+		if(comment.getId() == 0) {
+			rowNumber = insert(comment);
+		} else {
+			rowNumber = update(comment);
+		}
 		return rowNumber;
 	}
 
@@ -42,6 +60,7 @@ public class CommentRepositoryJdbc implements CommentRepository {
 			comment.setUser(userService.selectOne((int) map.get("user_id")));
 			comment.setBook(bookService.selectOne((int) map.get("book_id")));
 			comment.setComment((String) map.get("comment"));
+			comment.setEvaluation((int) map.get("evaluation"));
 			commentList.add(comment);
 		}
 		return commentList;
