@@ -22,13 +22,22 @@ public class CommentService {
 		return result;
 	}
 
-	public boolean selectAction(CommentModel comment) {
-		int rowNumber = commentRepository.selectAction(comment);
+	public boolean insert(CommentModel comment) {
+		int rowNumber = commentRepository.insert(comment);
 		return result(rowNumber);
 	}
 
-	public boolean selectOne(int userId, int bookId) {
-		boolean result = commentRepository.selectOne(userId, bookId);
+	public CommentModel selectOne(int commentId) {
+		return commentRepository.selectOne(commentId);
+	}
+
+	public boolean update(CommentModel comment) {
+		int rowNumber = commentRepository.update(comment);
+		return result(rowNumber);
+	}
+
+	public boolean confirmComment(int userId, int bookId) {
+		boolean result = commentRepository.confirmComment(userId, bookId);
 		return result;
 	}
 
