@@ -143,7 +143,8 @@ public class BookRepositoryJdbc implements BookRepository {
 	@Override
 	public int updateEvaluation(int bookId) throws DataAccessException {
 		int rowNumber = jdbc.update("UPDATE book SET evaluation="
-				+ "(SELECT AVG(evaluation) FROM comment WHERE book_id=?)", bookId);
+				+ "(SELECT AVG(evaluation) FROM comment WHERE book_id=?) "
+				+ "WHERE id=?", bookId, bookId);
 		return rowNumber;
 	}
 
