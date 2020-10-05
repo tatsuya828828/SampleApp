@@ -22,9 +22,14 @@ public class CommentService {
 		return result;
 	}
 
-	public boolean selectComment(CommentModel comment) {
-		int rowNumber = commentRepository.selectComment(comment);
+	public boolean selectAction(CommentModel comment) {
+		int rowNumber = commentRepository.selectAction(comment);
 		return result(rowNumber);
+	}
+
+	public boolean selectOne(int userId, int bookId) {
+		boolean result = commentRepository.selectOne(userId, bookId);
+		return result;
 	}
 
 	public List<CommentModel> selectMany(int bookId) {
