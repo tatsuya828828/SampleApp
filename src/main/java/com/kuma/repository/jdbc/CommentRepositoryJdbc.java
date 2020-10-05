@@ -40,7 +40,7 @@ public class CommentRepositoryJdbc implements CommentRepository {
 	}
 
 	@Override
-	public int selectComment(CommentModel comment) throws DataAccessException {
+	public int selectAction(CommentModel comment) throws DataAccessException {
 		int rowNumber = 0;
 		if(comment.getId() == 0) {
 			rowNumber = insert(comment);
@@ -48,6 +48,20 @@ public class CommentRepositoryJdbc implements CommentRepository {
 			rowNumber = update(comment);
 		}
 		return rowNumber;
+	}
+
+	@Override
+	public boolean selectOne(int userId, int bookId) throws DataAccessException {
+		System.out.println("1");
+		int num = jdbc.queryForObject("SELECT COUNT(*) FROM comment"
+				+ " WHERE user_id="+ userId +" AND book_id="+ bookId
+									, Integer.class);
+		System.out.println("2");
+		boolean result = false;
+		if(num >= 1) {
+			result = true;
+		}
+		return result;
 	}
 
 	@Override
