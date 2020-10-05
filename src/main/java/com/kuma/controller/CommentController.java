@@ -46,7 +46,7 @@ public class CommentController {
 		comment.setBook(book);
 		comment.setComment((String) form.getComment());
 		comment.setEvaluation(num);
-		boolean result = commentService.selectComment(comment);
+		boolean result = commentService.selectAction(comment);
 		if(result == true) {
 			System.out.println(word +"成功");
 		} else {
