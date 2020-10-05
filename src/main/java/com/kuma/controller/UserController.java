@@ -111,6 +111,7 @@ public class UserController {
 		model.addAttribute("user", user);
 		List<BookModel> books = userService.hasBook(user.getId());
 		model.addAttribute("books", books);
+		model.addAttribute("result", "true");
 		return "/header";
 	}
 

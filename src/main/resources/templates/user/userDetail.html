@@ -32,7 +32,7 @@
 						<tr>
 							<td class="col-lg-3" th:text="*{user.name}"></td>
 						</tr>
-						<tr>
+						<tr th:if="${result == 'true'}">
 							<td><br><br><a class="btn btn-primary col-lg-6" th:href="@{'/userEdit/' + ${user.id}}">編集</a></td>
 						</tr>
 					</table>
