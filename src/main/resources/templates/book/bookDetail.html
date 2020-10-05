@@ -64,16 +64,24 @@
 		</div>
 		<br>
 		<h4>コメント一覧</h4>
-		<table class="table" th:each="comment: ${comments}">
-			<tr>
-				<td th:text="*{comment.comment}" style="background-color: orange;"></td>
-			</tr>
-			<tr>
+		<table class="table">
+			<tr style="word-wrap: break-word;" th:each="comment: ${comments}">
 				<td>
+					<p th:text="*{comment.comment}"></p>
+					<span th:id="'evaluation' + *{comment.id}" class="pull-right" style="padding-left: 1vh;"></span>
 					<a class="pull-right" th:href="@{'/userDetail/' + *{comment.user.id}}"
 					th:text="*{comment.user.name}" style="padding-left: 1vh;"></a>
-					<p class="pull-right" th:text="*{#dates.format(book.createdAt, 'yyyy/MM/dd')}"></p>
+					<span class="pull-right" th:text="*{#dates.format(book.createdAt, 'yyyy/MM/dd')}"></span>
+					<script th:inline="javascript">
+					  $.fn.raty.defaults.path = "/webjars/jquery-raty/2.7.0/images";
+				      $(function(){
+				        $('#evaluation'+ [[*{comment.id}]]).raty({number: 5, score: /*[[*{comment.evaluation}]]*/, readOnly: true});
+				      });
+				    </script>
 				</td>
+			</tr>
+			<tr>
+
 			</tr>
 		</table>
 	</div>
