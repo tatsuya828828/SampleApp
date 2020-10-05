@@ -24,6 +24,18 @@ public class CommentRepositoryJdbc implements CommentRepository {
 	@Autowired
 	UserService userService;
 
+	public CommentModel getComment(Map<String, Object> map) throws DataAccessException {
+		CommentModel comment = new CommentModel();
+		comment.setId((int) map.get("id"));
+		comment.setCreatedAt((Date) map.get("created_at"));
+		comment.setUser(userService.selectOne((int) map.get("user_id")));
+		comment.setBook(bookService.selectOne((int) map.get("book_id")));
+		comment.setComment((String) map.get("comment"));
+		comment.setEvaluation((int) map.get("evaluation"));
+		return comment;
+	}
+
+	@Override
 	public int insert(CommentModel comment) throws DataAccessException {
 		int rowNumber= jdbc.update("INSERT INTO comment(created_at, user_id, book_id, comment, evaluation) "
 				+"VALUES(CURRENT_DATE,?,?,?,?)",
@@ -31,27 +43,24 @@ public class CommentRepositoryJdbc implements CommentRepository {
 		return rowNumber;
 	}
 
+	@Override
+	public CommentModel selectOne(int commentId) throws DataAccessException {
+		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM comment WHERE id=?", commentId);
+		CommentModel comment = getComment(map);
+		return comment;
+	}
+
+	@Override
 	public int update(CommentModel comment) throws DataAccessException {
 		int rowNumber= jdbc.update("UPDATE comment SET "
-				+"comment=?, evaluation=? WHERE user_id=? AND book_id=?"
+				+"comment=?, evaluation=? WHERE id=?"
 				, comment.getComment(), comment.getEvaluation()
-				, comment.getUser().getId(), comment.getBook().getId());
+				, comment.getId());
 		return rowNumber;
 	}
 
 	@Override
-	public int selectAction(CommentModel comment) throws DataAccessException {
-		int rowNumber = 0;
-		if(comment.getId() == 0) {
-			rowNumber = insert(comment);
-		} else {
-			rowNumber = update(comment);
-		}
-		return rowNumber;
-	}
-
-	@Override
-	public boolean selectOne(int userId, int bookId) throws DataAccessException {
+	public boolean confirmComment(int userId, int bookId) throws DataAccessException {
 		int num = jdbc.queryForObject("SELECT COUNT(*) FROM comment"
 				+ " WHERE user_id="+ userId +" AND book_id="+ bookId
 									, Integer.class);
@@ -67,13 +76,7 @@ public class CommentRepositoryJdbc implements CommentRepository {
 		List<Map<String, Object>> getList = jdbc.queryForList("SELECT * FROM comment"+" WHERE book_id=?", bookId);
 		List<CommentModel> commentList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
-			CommentModel comment = new CommentModel();
-			comment.setId((int) map.get("id"));
-			comment.setCreatedAt((Date) map.get("created_at"));
-			comment.setUser(userService.selectOne((int) map.get("user_id")));
-			comment.setBook(bookService.selectOne((int) map.get("book_id")));
-			comment.setComment((String) map.get("comment"));
-			comment.setEvaluation((int) map.get("evaluation"));
+			CommentModel comment = getComment(map);
 			commentList.add(comment);
 		}
 		return commentList;
@@ -81,7 +84,7 @@ public class CommentRepositoryJdbc implements CommentRepository {
 
 	@Override
 	public int delete(int userId, int bookId) throws DataAccessException {
-		int bookRowNumber = jdbc.update("DELETE FROM comment WHERE user_id=? AND book_id=?", userId, bookId);
-		return bookRowNumber;
+		int rowNumber = jdbc.update("DELETE FROM comment WHERE user_id=? AND book_id=?", userId, bookId);
+		return rowNumber;
 	}
 }
