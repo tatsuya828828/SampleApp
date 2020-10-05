@@ -56,6 +56,9 @@
 						</td>
 						<td style="vertical-align: bottom;"><a th:text="${book.author}" th:href="@{'/author/' + *{book.author}}"></a></td>
 						<td style="vertical-align: bottom;"><a th:text="*{book.genre}" th:href="@{'/genre/' + *{book.genre}}"></a></td>
+						<td th:if="${result == 'true'}" style="vertical-align: bottom;">
+							<a th:href="@{'/bookEdit/' + ${book.id}}" class="btn btn-primary">編集</a>
+						</td>
 					</tr>
 				</table>
 			</div>
