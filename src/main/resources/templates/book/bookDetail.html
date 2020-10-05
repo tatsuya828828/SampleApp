@@ -41,7 +41,7 @@
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
 		<a class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${id}}">編集</a>
-		<div style="margin-top: 10vh;">
+		<div style="margin-top: 10vh;" th:if="${result == false}">
 			<h4>コメント・評価</h4>
 			<form method="post" th:action="@{${book.id} + '/postComment'}" th:object="${commentForm}">
 				<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
