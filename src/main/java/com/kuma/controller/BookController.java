@@ -76,7 +76,9 @@ public class BookController {
 	}
 
 	@GetMapping("/bookDetail/{id}")
-	public String getBookDetail(@ModelAttribute CommentForm form, Model model, @PathVariable("id") int id) {
+	public String getBookDetail(@ModelAttribute CommentForm form, Model model, @PathVariable("id") int id
+			, HttpServletRequest httpServletRequest) {
+		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 		if(String.valueOf(id).length() > 0) {
 			BookModel book = bookService.selectOne(id);
@@ -85,6 +87,8 @@ public class BookController {
 			model.addAttribute("comments", comments);
 			int count = bookService.evaluationCount(id);
 			model.addAttribute("count", count);
+			boolean result = commentService.selectOne(user.getId(), book.getId());
+			model.addAttribute("result", result);
 		}
 		return "/header";
 	}
