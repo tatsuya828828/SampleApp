@@ -52,11 +52,9 @@ public class CommentRepositoryJdbc implements CommentRepository {
 
 	@Override
 	public boolean selectOne(int userId, int bookId) throws DataAccessException {
-		System.out.println("1");
 		int num = jdbc.queryForObject("SELECT COUNT(*) FROM comment"
 				+ " WHERE user_id="+ userId +" AND book_id="+ bookId
 									, Integer.class);
-		System.out.println("2");
 		boolean result = false;
 		if(num >= 1) {
 			result = true;
@@ -70,6 +68,7 @@ public class CommentRepositoryJdbc implements CommentRepository {
 		List<CommentModel> commentList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			CommentModel comment = new CommentModel();
+			comment.setId((int) map.get("id"));
 			comment.setCreatedAt((Date) map.get("created_at"));
 			comment.setUser(userService.selectOne((int) map.get("user_id")));
 			comment.setBook(bookService.selectOne((int) map.get("book_id")));
