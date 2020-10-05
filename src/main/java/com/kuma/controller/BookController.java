@@ -87,8 +87,9 @@ public class BookController {
 			model.addAttribute("comments", comments);
 			int count = bookService.evaluationCount(id);
 			model.addAttribute("count", count);
-			boolean result = commentService.selectOne(user.getId(), book.getId());
+			boolean result = commentService.confirmComment(user.getId(), book.getId());
 			model.addAttribute("result", result);
+			model.addAttribute("userId", user.getId());
 		}
 		return "/header";
 	}
