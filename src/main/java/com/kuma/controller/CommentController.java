@@ -1,10 +1,14 @@
 package com.kuma.controller;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,22 +39,15 @@ public class CommentController {
 		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 		BookModel book = bookService.selectOne(bookId);
 		CommentModel comment = new CommentModel();
-		int id = 0;
-		String word = "登録";
-		if(form.getId()>0) {
-			id = form.getId();
-			word = "更新";
-		}
-		comment.setId(id);
 		comment.setUser(user);
 		comment.setBook(book);
 		comment.setComment((String) form.getComment());
 		comment.setEvaluation(num);
-		boolean result = commentService.selectAction(comment);
+		boolean result = commentService.insert(comment);
 		if(result == true) {
-			System.out.println(word +"成功");
+			System.out.println("登録成功");
 		} else {
-			System.out.println(word +"処理失敗");
+			System.out.println("登録処理失敗");
 		}
 		boolean result2 = bookService.updateEvaluation(comment.getBook().getId());
 		if(result2 == true) {
@@ -59,5 +56,61 @@ public class CommentController {
 			System.out.println("平均評価更新失敗");
 		}
 		return "redirect:/bookDetail/{bookId}";
+	}
+
+	@GetMapping("/bookDetail/{id}/editComment/{commentId}")
+	public String getEditComment(@ModelAttribute CommentForm form, Model model, @PathVariable("id") int id
+			, HttpServletRequest httpServletRequest, @PathVariable("commentId") int commentId) {
+		System.out.println("0");
+		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
+		System.out.println("1");
+		if(String.valueOf(id).length() > 0) {
+			BookModel book = bookService.selectOne(id);
+			UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
+			CommentModel comment = commentService.selectOne(commentId);
+			if(comment.getUser().equals(user)) {
+				form.setId(id);
+				form.setCreatedAt((Date) comment.getCreatedAt());
+				form.setComment((String) comment.getComment());
+				form.setEvaluation((int) comment.getEvaluation());
+				form.setBook(book);
+				form.setUser(user);
+				model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
+				model.addAttribute("bookForm", form);
+				model.addAttribute("editId", commentId);
+			}
+			model.addAttribute("book", book);
+			List<CommentModel> comments = commentService.selectMany(id);
+			model.addAttribute("comments", comments);
+			int count = bookService.evaluationCount(id);
+			model.addAttribute("count", count);
+			boolean result = commentService.confirmComment(user.getId(), book.getId());
+			model.addAttribute("result", result);
+		}
+		return "/header";
+	}
+
+	@PostMapping("/bookDetail/{id}/editComment/{commentId}")
+	public String postEditComment(@ModelAttribute CommentForm form, Model model, @RequestParam("num") int num) {
+		CommentModel comment = new CommentModel();
+		comment.setId((int) form.getId());
+		comment.setComment((String) form.getComment());
+		comment.setEvaluation((int) num);
+		comment.setUser((UserModel) form.getUser());
+		comment.setBook((BookModel) form.getBook());
+		boolean result = commentService.update(comment);
+		if(result == true) {
+			System.out.println("コメント更新成功");
+		} else {
+			System.out.println("コメント更新失敗");
+		}
+		boolean result2 = bookService.updateEvaluation(form.getId());
+		if(result2 == true) {
+			System.out.println("平均評価更新成功");
+		} else {
+			System.out.println("平均評価更新失敗");
+		}
+		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
+		return "redirect:/bookDetail/{id}";
 	}
 }
