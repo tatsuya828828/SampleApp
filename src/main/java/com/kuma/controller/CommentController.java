@@ -59,16 +59,16 @@ public class CommentController {
 		return "redirect:/bookDetail/{bookId}";
 	}
 
-	@GetMapping("/bookDetail/{id}/editComment/{commentId}")
-	public String getEditComment(@ModelAttribute CommentForm form, Model model, @PathVariable("id") int id
+	@GetMapping("/bookDetail/{bookId}/editComment/{commentId}")
+	public String getEditComment(@ModelAttribute CommentForm form, Model model, @PathVariable("bookId") int bookId
 			, HttpServletRequest httpServletRequest, @PathVariable("commentId") int commentId) {
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
-		if(String.valueOf(id).length() > 0) {
-			BookModel book = bookService.selectOne(id);
+		if(String.valueOf(bookId).length() > 0) {
+			BookModel book = bookService.selectOne(bookId);
 			UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 			CommentModel comment = commentService.selectOne(commentId);
 			if(comment.getUser().equals(user)) {
-				form.setId(id);
+				form.setId(commentId);
 				form.setCreatedAt((Date) comment.getCreatedAt());
 				form.setComment((String) comment.getComment());
 				form.setEvaluation((int) comment.getEvaluation());
@@ -80,9 +80,9 @@ public class CommentController {
 				return "redirect:/bookDetail/{id}";
 			}
 			model.addAttribute("book", book);
-			List<CommentModel> comments = commentService.selectMany(id);
+			List<CommentModel> comments = commentService.selectMany(bookId);
 			model.addAttribute("comments", comments);
-			int count = bookService.evaluationCount(id);
+			int count = bookService.evaluationCount(bookId);
 			model.addAttribute("count", count);
 			boolean result = commentService.confirmComment(user.getId(), book.getId());
 			model.addAttribute("result", result);
