@@ -13,4 +13,4 @@ CREATE TABLE IF NOT EXISTS comment(
 
 CREATE TABLE IF NOT EXISTS reply(
 	id INT NOT NULL AUTO_INCREMENT, created_at DATE, user_id INT REFERENCES user(id), comment_id INT REFERENCES comment(id)
-	, reply VARCHAR(500), PRIMARY KEY(user_id, comment_id, reply_id));
+	, reply VARCHAR(500), PRIMARY KEY(user_id, comment_id));
