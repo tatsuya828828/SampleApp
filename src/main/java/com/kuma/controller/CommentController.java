@@ -31,6 +31,15 @@ public class CommentController {
 	@Autowired
 	private BookService bookService;
 
+	// 成否を知らせるメソッド
+	public void result(boolean result, String word) {
+		if(result == true) {
+			System.out.println(word+"成功");
+		} else {
+			System.out.println(word+"失敗");
+		}
+	}
+
 	@PostMapping("/bookDetail/{bookId}/postComment")
 	public String postComment(@ModelAttribute CommentForm form,
 			Model model, HttpServletRequest httpServletRequest
@@ -44,26 +53,16 @@ public class CommentController {
 		comment.setComment((String) form.getComment());
 		comment.setEvaluation(num);
 		boolean result = commentService.insert(comment);
-		if(result == true) {
-			System.out.println("登録成功");
-		} else {
-			System.out.println("登録処理失敗");
-		}
+		result(result, "登録");
 		boolean result2 = bookService.updateEvaluation(comment.getBook().getId());
-		if(result2 == true) {
-			System.out.println("平均評価更新成功");
-		} else {
-			System.out.println("平均評価更新失敗");
-		}
+		result(result2, "評価平均更新");
 		return "redirect:/bookDetail/{bookId}";
 	}
 
 	@GetMapping("/bookDetail/{id}/editComment/{commentId}")
 	public String getEditComment(@ModelAttribute CommentForm form, Model model, @PathVariable("id") int id
 			, HttpServletRequest httpServletRequest, @PathVariable("commentId") int commentId) {
-		System.out.println("0");
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
-		System.out.println("1");
 		if(String.valueOf(id).length() > 0) {
 			BookModel book = bookService.selectOne(id);
 			UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
@@ -76,8 +75,9 @@ public class CommentController {
 				form.setBook(book);
 				form.setUser(user);
 				model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
-				model.addAttribute("bookForm", form);
 				model.addAttribute("editId", commentId);
+			} else {
+				return "redirect:/bookDetail/{id}";
 			}
 			model.addAttribute("book", book);
 			List<CommentModel> comments = commentService.selectMany(id);
@@ -99,17 +99,9 @@ public class CommentController {
 		comment.setUser((UserModel) form.getUser());
 		comment.setBook((BookModel) form.getBook());
 		boolean result = commentService.update(comment);
-		if(result == true) {
-			System.out.println("コメント更新成功");
-		} else {
-			System.out.println("コメント更新失敗");
-		}
+		result(result, "コメント更新");
 		boolean result2 = bookService.updateEvaluation(form.getId());
-		if(result2 == true) {
-			System.out.println("平均評価更新成功");
-		} else {
-			System.out.println("平均評価更新失敗");
-		}
+		result(result2, "評価平均更新");
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 		return "redirect:/bookDetail/{id}";
 	}
