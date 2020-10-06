@@ -3,10 +3,11 @@ package com.kuma.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.kuma.model.ReplyModel;
 import com.kuma.repository.ReplyRepository;
-
+@Service
 public class ReplyService {
 	@Autowired
 	ReplyRepository replyRepository;
