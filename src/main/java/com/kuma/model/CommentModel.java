@@ -1,6 +1,7 @@
 package com.kuma.model;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -12,4 +13,5 @@ public class CommentModel {
 	private String comment;
 	private UserModel user;
 	private BookModel book;
+	private List<ReplyModel> reply;
 }
