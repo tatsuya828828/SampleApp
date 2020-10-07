@@ -44,7 +44,6 @@ public class CommentController {
 	public String postComment(@ModelAttribute CommentForm form,
 			Model model, HttpServletRequest httpServletRequest
 			, @PathVariable("bookId") int bookId, @RequestParam("num") int num) {
-		System.out.println("数値:"+ num);
 		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 		BookModel book = bookService.selectOne(bookId);
 		CommentModel comment = new CommentModel();
