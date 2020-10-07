@@ -29,7 +29,7 @@ public class ReplyRepositoryJdbc implements ReplyRepository {
 		reply.setId((int) map.get("id"));
 		reply.setCreatedAt((Date) map.get("created_at"));
 		reply.setUser(userService.selectOne((int)map.get("user_id")));
-		reply.setComment(commentService.selectOne((int) map.get("id")));
+		reply.setComment(commentService.selectOne((int) map.get("comment_id")));
 		reply.setReply((String) map.get("reply"));
 		return reply;
 	}
@@ -37,7 +37,7 @@ public class ReplyRepositoryJdbc implements ReplyRepository {
 	@Override
 	public int insert(ReplyModel reply) throws DataAccessException{
 		int rowNumber = jdbc.update("INSERT INTO reply(created_at, user_id, comment_id, reply) "
-				+ "VALUES(CURRET_DATE,?,?,?)"
+				+ "VALUES(CURRENT_DATE,?,?,?)"
 				, reply.getUser().getId(), reply.getComment().getId(), reply.getReply());
 		return rowNumber;
 	}
