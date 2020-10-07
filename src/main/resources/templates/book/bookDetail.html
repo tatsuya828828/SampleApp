@@ -67,12 +67,14 @@
 		<table class="table" th:each="comment: ${comments}">
 			<tr style="word-wrap: break-word;" th:if="${editId == null}">
 				<p th:text="*{comment.comment}"></p>
-				<h5 style="background-color: blue; color: white;" class="text-center">コメントへの返信</h5>
-				<div th:if="*{comment.reply != null}" th:each="replys: *{comment.reply}">
-					<div th:if="*{comment.id == replys.comment.id}">
-			   			<p><span th:text="*{replys.user.name}"></span>: <span th:text="*{replys.reply}"></span></p>
+				<details th:if="${not #lists.isEmpty(comment.reply)}">
+					<summary>コメントへの返信</summary>
+					<div th:each="replys: *{comment.reply}">
+						<div th:if="*{comment.id == replys.comment.id}">
+				   			<p><span th:text="*{replys.user.name}"></span>: <span th:text="*{replys.reply}"></span></p>
+						</div>
 					</div>
-				</div>
+				</details>
 				<a class="btn btn-success pull-right" style="margin-left: 1vh;"
 					th:if="${reply != true}"
 					th:href="@{'/bookDetail/'+ ${book.id} +'/postReply/'+ *{comment.id}}">返信
