@@ -62,6 +62,13 @@ public class ReplyRepositoryJdbc implements ReplyRepository {
 	}
 
 	@Override
+	public int countReply(int commentId) throws DataAccessException {
+		int num = jdbc.queryForObject("SELECT COUNT(*) FROM reply WHERE comment_id="+ commentId
+				, Integer.class);
+		return num;
+	}
+
+	@Override
 	public int update(ReplyModel reply) throws DataAccessException {
 		int rowNumber = jdbc.update("UPDATE reply SET reply=? WHERE id=?"
 				, reply.getReply(), reply.getId());
