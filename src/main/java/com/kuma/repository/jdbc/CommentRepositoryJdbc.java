@@ -83,6 +83,8 @@ public class CommentRepositoryJdbc implements CommentRepository {
 			CommentModel comment = getComment(map);
 			List<ReplyModel> reply = replyService.hasReply(comment.getId());
 			comment.setReply(reply);
+			int num = replyService.countReply(comment.getId());
+			comment.setCountReply(num);
 			commentList.add(comment);
 		}
 		return commentList;
