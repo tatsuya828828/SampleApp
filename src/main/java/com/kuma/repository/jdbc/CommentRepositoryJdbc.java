@@ -11,8 +11,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kuma.model.CommentModel;
+import com.kuma.model.ReplyModel;
 import com.kuma.repository.CommentRepository;
 import com.kuma.service.BookService;
+import com.kuma.service.ReplyService;
 import com.kuma.service.UserService;
 
 @Repository("CommentRepositoryJdbc")
@@ -23,6 +25,8 @@ public class CommentRepositoryJdbc implements CommentRepository {
 	BookService bookService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	ReplyService replyService;
 
 	public CommentModel getComment(Map<String, Object> map) throws DataAccessException {
 		CommentModel comment = new CommentModel();
@@ -77,6 +81,8 @@ public class CommentRepositoryJdbc implements CommentRepository {
 		List<CommentModel> commentList = new ArrayList<>();
 		for(Map<String, Object> map: getList) {
 			CommentModel comment = getComment(map);
+			List<ReplyModel> reply = replyService.hasReply(comment.getId());
+			comment.setReply(reply);
 			commentList.add(comment);
 		}
 		return commentList;
