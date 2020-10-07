@@ -33,6 +33,10 @@ public class ReplyService {
 		return replyRepository.selectOne(replyId);
 	}
 
+	public int countReply(int commentId) {
+		return replyRepository.countReply(commentId);
+	}
+
 	public boolean update(ReplyModel reply) {
 		int rowNumber = replyRepository.update(reply);
 		return result(rowNumber);
