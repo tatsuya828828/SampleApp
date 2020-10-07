@@ -12,5 +12,5 @@ CREATE TABLE IF NOT EXISTS comment(
 	, comment VARCHAR(500), evaluation INT, PRIMARY KEY(user_id, book_id));
 
 CREATE TABLE IF NOT EXISTS reply(
-	id INT NOT NULL AUTO_INCREMENT, created_at DATE, user_id INT REFERENCES user(id), comment_id INT REFERENCES comment(id)
-	, reply VARCHAR(500), PRIMARY KEY(user_id, comment_id));
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, created_at DATE, user_id INT REFERENCES user(id), comment_id INT REFERENCES comment(id)
+	, reply VARCHAR(500));
