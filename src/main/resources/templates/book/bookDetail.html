@@ -41,7 +41,7 @@
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
 		<a th:if="${userId == book.user.id}" class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${id}}">編集</a>
-		<div style="margin-top: 10vh;" th:if="${result == false}">
+		<div style="margin-top: 10vh;" th:if="${result == false && reply != true}">
 			<h4>コメント・評価</h4>
 			<form method="post" th:action="@{${book.id} + '/postComment'}" th:object="${commentForm}">
 				<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
@@ -67,6 +67,12 @@
 		<table class="table" th:each="comment: ${comments}">
 			<tr style="word-wrap: break-word;" th:if="${editId == null}">
 				<p th:text="*{comment.comment}"></p>
+				<h5 style="background-color: blue; color: white;" class="text-center">コメントへの返信</h5>
+				<div th:if="*{comment.reply != null}" th:each="replys: *{comment.reply}">
+					<div th:if="*{comment.id == replys.comment.id}">
+			   			<p><span th:text="*{replys.user.name}"></span>: <span th:text="*{replys.reply}"></span></p>
+					</div>
+				</div>
 				<a class="btn btn-success pull-right" style="margin-left: 1vh;"
 					th:if="${reply != true}"
 					th:href="@{'/bookDetail/'+ ${book.id} +'/postReply/'+ *{comment.id}}">返信
@@ -124,9 +130,8 @@
 			</tr>
 			<!-- 返信 -->
 			<tr th:if="${reply == true && commentId == comment.id}">
-				<form method="post"
-				th:action="@{'/bookDetail/'+ ${book.id} + '/postReply/'+ ${comment.id}}"
-				th:object="${replyForm}">
+				<form method="post" th:object="${replyForm}"
+					th:action="@{'/bookDetail/'+ ${book.id} + '/postReply/'+ ${comment.id}}">
 					<div class="form-group">
 						<textarea rows="5" class="form-control" required="true" th:field="*{reply}"></textarea>
 					</div>
