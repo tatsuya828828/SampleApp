@@ -10,10 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.kuma.model.BookModel;
 import com.kuma.model.CommentModel;
 import com.kuma.model.ReplyForm;
+import com.kuma.model.ReplyModel;
 import com.kuma.model.UserModel;
 import com.kuma.service.BookService;
 import com.kuma.service.CommentService;
@@ -32,7 +34,7 @@ public class ReplyController {
 	UserService userService;
 
 	@GetMapping("/bookDetail/{bookId}/postReply/{commentId}")
-	public String postReply(@ModelAttribute ReplyForm form, Model model
+	public String getPostReply(@ModelAttribute ReplyForm form, Model model
 			, @PathVariable("bookId") int bookId, @PathVariable("commentId") int commentId
 			, HttpServletRequest httpServletRequest) {
 		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
@@ -51,5 +53,23 @@ public class ReplyController {
 			model.addAttribute("commentId", commentId);
 		}
 	return "/header";
+	}
+
+	@PostMapping("/bookDetail/{bookId}/postReply/{commentId}")
+	public String postReply(@ModelAttribute ReplyForm form, HttpServletRequest httpServletRequest
+			, @PathVariable("commentId") int commentId, @PathVariable("bookId") int bookId) {
+		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
+		CommentModel comment = commentService.selectOne(commentId);
+		ReplyModel reply = new ReplyModel();
+		reply.setReply(form.getReply());
+		reply.setUser(user);
+		reply.setComment(comment);
+		boolean result = replyService.insert(reply);
+		if(result == true) {
+			System.out.println("返信成功");
+		} else {
+			System.out.println("返信失敗");
+		}
+		return "redirect:/bookDetail/{bookId}";
 	}
 }
