@@ -14,4 +14,5 @@ public class CommentModel {
 	private UserModel user;
 	private BookModel book;
 	private List<ReplyModel> reply;
+	private int countReply;
 }
