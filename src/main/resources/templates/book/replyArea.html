@@ -1,0 +1,13 @@
+<div th:fragment="reply_area">
+	<tr>
+		<form method="post" th:object="${replyForm}"
+			th:action="@{'/bookDetail/'+ ${book.id} + '/postReply/'+ ${comment.id}}">
+			<div class="form-group">
+				<textarea rows="5" class="form-control" required="true" th:field="*{reply}"></textarea>
+			</div>
+			<div class="form-group pull-right">
+				<button class="btn btn-success form-control" type="submit">返信</button>
+			</div>
+		</form>
+	</tr>
+</div>

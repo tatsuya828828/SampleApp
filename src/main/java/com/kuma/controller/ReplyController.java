@@ -40,6 +40,7 @@ public class ReplyController {
 		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 		model.addAttribute("commentList", "book/commentList :: comment_list");
+		model.addAttribute("replyArea", "book/replyArea :: reply_area");
 		if(String.valueOf(bookId).length() > 0) {
 			BookModel book = bookService.selectOne(bookId);
 			model.addAttribute("book", book);
