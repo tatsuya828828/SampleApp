@@ -62,7 +62,6 @@ public class CommentController {
 	public String getEditComment(@ModelAttribute CommentForm form, Model model, @PathVariable("bookId") int bookId
 			, HttpServletRequest httpServletRequest, @PathVariable("commentId") int commentId) {
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
-		model.addAttribute("commentList", "book/commentList :: comment_list");
 		if(String.valueOf(bookId).length() > 0) {
 			BookModel book = bookService.selectOne(bookId);
 			UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
@@ -75,6 +74,8 @@ public class CommentController {
 				form.setBook(book);
 				form.setUser(user);
 				model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
+				model.addAttribute("commentList", "book/commentList :: comment_list");
+				model.addAttribute("editComment", "book/editComment :: edit_comment");
 				model.addAttribute("editId", commentId);
 			} else {
 				return "redirect:/bookDetail/{id}";
@@ -91,18 +92,18 @@ public class CommentController {
 	}
 
 	@PostMapping("/bookDetail/{id}/editComment/{commentId}")
-	public String postEditComment(@ModelAttribute CommentForm form, Model model, @RequestParam("num") int num) {
+	public String postEditComment(@ModelAttribute CommentForm form, Model model
+			, @RequestParam("num") int num) {
 		CommentModel comment = new CommentModel();
 		comment.setId((int) form.getId());
 		comment.setComment((String) form.getComment());
-		comment.setEvaluation((int) num);
+		comment.setEvaluation((int) form.getEvaluation());
 		comment.setUser((UserModel) form.getUser());
 		comment.setBook((BookModel) form.getBook());
 		boolean result = commentService.update(comment);
 		result(result, "コメント更新");
 		boolean result2 = bookService.updateEvaluation(form.getId());
 		result(result2, "評価平均更新");
-		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 		return "redirect:/bookDetail/{id}";
 	}
 }
