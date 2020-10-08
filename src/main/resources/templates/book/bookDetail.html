@@ -41,26 +41,8 @@
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
 		<a th:if="${userId == book.user.id}" class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${id}}">編集</a>
-		<div style="margin-top: 10vh;" th:if="${result == false && reply != true}">
-			<h4>コメント・評価</h4>
-			<form method="post" th:action="@{${book.id} + '/postComment'}" th:object="${commentForm}">
-				<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
-					<textarea rows="5" class="form-control" th:field="*{comment}" required="true"></textarea>
-					<span class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">comment error</span>
-				</div>
-				<script>
-				  $.fn.raty.defaults.path = "/webjars/jquery-raty/2.7.0/images";
-			      $(function(){
-			        $('#star').raty({number: 5, score: 1, scoreName: 'num'});
-			      });
-			    </script>
-			    <div class="form-group pull-right">
-					<button class="btn btn-success form-control" type="submit">投稿</button>
-				</div>
-			    <div class="form-group pull-right" id="star" style="padding-right: 1vh;">
-			    	<span>評価:</span><input type="hidden" th:value="${num}">
-			    </div>
-			</form>
+		<div style="margin-top: 5vh;" th:if="${result == false && reply != true}">
+			<div th:include="__${commentArea}__"></div>
 		</div>
 		<br>
 		<!-- コメント一覧 -->
