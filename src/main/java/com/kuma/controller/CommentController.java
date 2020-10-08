@@ -62,6 +62,7 @@ public class CommentController {
 	public String getEditComment(@ModelAttribute CommentForm form, Model model, @PathVariable("bookId") int bookId
 			, HttpServletRequest httpServletRequest, @PathVariable("commentId") int commentId) {
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
+		model.addAttribute("commentList", "book/commentList :: comment_list");
 		if(String.valueOf(bookId).length() > 0) {
 			BookModel book = bookService.selectOne(bookId);
 			UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
