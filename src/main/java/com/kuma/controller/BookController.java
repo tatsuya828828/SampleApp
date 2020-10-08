@@ -81,6 +81,7 @@ public class BookController {
 		UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 		model.addAttribute("commentList", "book/commentList :: comment_list");
+		model.addAttribute("replyList", "book/replyList :: reply_list");
 		if(String.valueOf(id).length() > 0) {
 			BookModel book = bookService.selectOne(id);
 			model.addAttribute("book", book);

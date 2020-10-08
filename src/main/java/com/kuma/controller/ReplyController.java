@@ -41,6 +41,7 @@ public class ReplyController {
 		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 		model.addAttribute("commentList", "book/commentList :: comment_list");
 		model.addAttribute("replyArea", "book/replyArea :: reply_area");
+		model.addAttribute("replyList", "book/replyList :: reply_list");
 		if(String.valueOf(bookId).length() > 0) {
 			BookModel book = bookService.selectOne(bookId);
 			model.addAttribute("book", book);

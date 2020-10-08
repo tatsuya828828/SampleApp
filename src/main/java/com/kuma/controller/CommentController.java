@@ -76,6 +76,7 @@ public class CommentController {
 				model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 				model.addAttribute("commentList", "book/commentList :: comment_list");
 				model.addAttribute("editComment", "book/editComment :: edit_comment");
+				model.addAttribute("replyList", "book/replyList :: reply_list");
 				model.addAttribute("editId", commentId);
 			} else {
 				return "redirect:/bookDetail/{id}";

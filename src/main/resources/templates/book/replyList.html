@@ -1,0 +1,10 @@
+<div th:fragment="reply_list">
+	<details>
+		<summary>コメントへの返信([[*{comment.countReply}]])</summary>
+		<div th:each="replys: *{comment.reply}">
+			<div th:if="*{comment.id == replys.comment.id}">
+	   			<p><span th:text="*{replys.user.name}"></span>: <span th:text="*{replys.reply}"></span></p>
+			</div>
+		</div>
+	</details>
+</div>
