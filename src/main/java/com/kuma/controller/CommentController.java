@@ -65,7 +65,7 @@ public class CommentController {
 			BookModel book = bookService.selectOne(bookId);
 			UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 			CommentModel comment = commentService.selectOne(commentId);
-			if(comment.getUser().equals(user)) {
+			if(comment.getUser().getId() == user.getId()) {
 				form.setId(commentId);
 				form.setCreatedAt((Date) comment.getCreatedAt());
 				form.setComment((String) comment.getComment());
