@@ -1,7 +1,7 @@
 <div th:fragment="comment_list">
 	<h4>コメント</h4>
 	<table class="table" th:each="comment: ${comments}">
-		<tr style="word-wrap: break-word;" th:if="${editId == null}">
+		<tr style="word-wrap: break-word;" th:if="${editId != comment.id}">
 			<p th:text="*{comment.comment}"></p>
 			<!-- 返信一覧 -->
 			<div  th:if="${not #lists.isEmpty(comment.reply)}">
@@ -31,10 +31,6 @@
 			<!-- 投稿日 -->
 			<span class="pull-right" th:text="*{#dates.format(book.createdAt, 'yyyy/MM/dd')}"></span>
 		</tr>
-		<!-- コメント編集 -->
-		<div th:if="${editId != null}">
-			<div th:include="__${editComment}__"></div>
-		</div>
 		<!-- 返信 -->
 		<div  th:if="${reply == true && commentId == comment.id}">
 			<div th:include="__${replyArea}__"></div>
