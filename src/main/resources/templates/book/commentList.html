@@ -3,13 +3,10 @@
 	<table class="table" th:each="comment: ${comments}">
 		<tr style="word-wrap: break-word;" th:if="${editId != comment.id}">
 			<p th:text="*{comment.comment}"></p>
-			<!-- 返信一覧 -->
-			<div  th:if="${not #lists.isEmpty(comment.reply)}">
-				<div th:include="__${replyList}__"></div>
-			</div>
+
 			<!-- 返信用ボタン -->
 			<a class="btn btn-success pull-right" style="margin-left: 1vh;"
-				th:if="${reply != true}"
+				th:if="${reply != true && editReplyId == null}"
 				th:href="@{'/bookDetail/'+ ${book.id} +'/postReply/'+ *{comment.id}}">返信
 			</a>
 			<!-- 編集用ボタン -->
@@ -30,9 +27,13 @@
 			th:text="*{comment.user.name}" style="padding-left: 1vh;"></a>
 			<!-- 投稿日 -->
 			<span class="pull-right" th:text="*{#dates.format(book.createdAt, 'yyyy/MM/dd')}"></span>
+			<!-- 返信一覧 -->
+			<div  th:if="${not #lists.isEmpty(comment.reply)}">
+				<div th:include="__${replyList}__"></div>
+			</div>
 		</tr>
 		<!-- 返信 -->
-		<div  th:if="${reply == true && commentId == comment.id}">
+		<div th:if="${reply == true && commentId == comment.id}" style="margin-top: 10vh;">
 			<div th:include="__${replyArea}__"></div>
 		</div>
 	</table>
