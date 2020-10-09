@@ -61,7 +61,6 @@ public class CommentController {
 	@GetMapping("/bookDetail/{bookId}/editComment/{commentId}")
 	public String getEditComment(@ModelAttribute CommentForm form, Model model, @PathVariable("bookId") int bookId
 			, HttpServletRequest httpServletRequest, @PathVariable("commentId") int commentId) {
-		model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 		if(String.valueOf(bookId).length() > 0) {
 			BookModel book = bookService.selectOne(bookId);
 			UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
@@ -75,8 +74,9 @@ public class CommentController {
 				form.setUser(user);
 				model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 				model.addAttribute("commentList", "book/commentList :: comment_list");
-				model.addAttribute("editComment", "book/editComment :: edit_comment");
 				model.addAttribute("replyList", "book/replyList :: reply_list");
+				model.addAttribute("commentArea", "book/commentArea :: comment_area");
+				model.addAttribute("editComment", "book/editComment :: edit_comment");
 				model.addAttribute("editId", commentId);
 			} else {
 				return "redirect:/bookDetail/{id}";
@@ -92,19 +92,20 @@ public class CommentController {
 		return "/header";
 	}
 
-	@PostMapping("/bookDetail/{id}/editComment/{commentId}")
+	@PostMapping("/bookDetail/{bookId}/editComment/{commentId}")
 	public String postEditComment(@ModelAttribute CommentForm form, Model model
+			, @PathVariable("commentId") int commentId, @PathVariable("bookId") int bookId
 			, @RequestParam("num") int num) {
 		CommentModel comment = new CommentModel();
-		comment.setId((int) form.getId());
-		comment.setComment((String) form.getComment());
-		comment.setEvaluation((int) form.getEvaluation());
-		comment.setUser((UserModel) form.getUser());
-		comment.setBook((BookModel) form.getBook());
+		comment.setId(commentId);
+		comment.setComment(form.getComment());
+		comment.setEvaluation(num);
+		comment.setUser(form.getUser());
+		comment.setBook(form.getBook());
 		boolean result = commentService.update(comment);
 		result(result, "コメント更新");
-		boolean result2 = bookService.updateEvaluation(form.getId());
+		boolean result2 = bookService.updateEvaluation(bookId);
 		result(result2, "評価平均更新");
-		return "redirect:/bookDetail/{id}";
+		return "redirect:/bookDetail/{bookId}";
 	}
 }
