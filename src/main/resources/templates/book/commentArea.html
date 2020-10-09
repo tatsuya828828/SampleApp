@@ -1,6 +1,6 @@
 <div th:fragment="comment_area">
-	<h4>コメント・評価</h4>
 	<form method="post" th:action="@{${book.id} + '/postComment'}" th:object="${commentForm}">
+		 <h4>コメント・評価</h4>
 		<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
 			<textarea rows="5" class="form-control" th:field="*{comment}" required="true"></textarea>
 			<span class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">comment error</span>
