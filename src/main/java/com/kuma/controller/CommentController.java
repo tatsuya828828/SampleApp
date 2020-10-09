@@ -1,6 +1,5 @@
 package com.kuma.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,11 +66,8 @@ public class CommentController {
 			CommentModel comment = commentService.selectOne(commentId);
 			if(comment.getUser().getId() == user.getId()) {
 				form.setId(commentId);
-				form.setCreatedAt((Date) comment.getCreatedAt());
 				form.setComment((String) comment.getComment());
 				form.setEvaluation((int) comment.getEvaluation());
-				form.setBook(book);
-				form.setUser(user);
 				model.addAttribute("contents", "book/bookDetail :: bookDetail_contents");
 				model.addAttribute("commentList", "book/commentList :: comment_list");
 				model.addAttribute("replyList", "book/replyList :: reply_list");
@@ -79,7 +75,7 @@ public class CommentController {
 				model.addAttribute("editComment", "book/editComment :: edit_comment");
 				model.addAttribute("editId", commentId);
 			} else {
-				return "redirect:/bookDetail/{id}";
+				return "redirect:/bookDetail/{bookId}";
 			}
 			model.addAttribute("book", book);
 			List<CommentModel> comments = commentService.selectMany(bookId);
@@ -100,8 +96,6 @@ public class CommentController {
 		comment.setId(commentId);
 		comment.setComment(form.getComment());
 		comment.setEvaluation(num);
-		comment.setUser(form.getUser());
-		comment.setBook(form.getBook());
 		boolean result = commentService.update(comment);
 		result(result, "コメント更新");
 		boolean result2 = bookService.updateEvaluation(bookId);
