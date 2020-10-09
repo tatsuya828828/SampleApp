@@ -28,10 +28,10 @@
 					<script th:inline="javascript">
 					  $.fn.raty.defaults.path = "/webjars/jquery-raty/2.7.0/images";
 				      $(function(){
-				        $('#evaluation').raty({number: 5, score: [[${book.evaluation}]], readOnly: true});
+				        $('#avg').raty({number: 5, score: [[${book.evaluation}]], readOnly: true});
 				      });
 				    </script>
-				    <span id="evaluation"></span><small>([[${count}]]件)</small>
+				    <span id="avg"></span><small>([[${count}]]件)</small>
 				</td>
 			</tr>
 			<tr>
@@ -41,8 +41,13 @@
 		</table>
 		<h4>投稿者: <a th:href="@{'/userDetail/' + ${book.user.id}}"><span th:text="*{book.user.name}"></span></a></h4>
 		<a th:if="${userId == book.user.id}" class="btn btn-primary pull-right" th:href="@{'/bookEdit/' + ${id}}">編集</a>
+		<!-- コメントフォーム -->
 		<div style="margin-top: 5vh;" th:if="${result == false && reply != true}">
 			<div th:include="__${commentArea}__"></div>
+		</div>
+		<!-- コメント編集 -->
+		<div style="margin-top: 5vh;" th:if="${editId != null}">
+			<div th:include="__${editComment}__"></div>
 		</div>
 		<br>
 		<!-- コメント一覧 -->
