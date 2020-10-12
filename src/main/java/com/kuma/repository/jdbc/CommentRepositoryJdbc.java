@@ -93,7 +93,7 @@ public class CommentRepositoryJdbc implements CommentRepository {
 	@Override
 	public int delete(int commentId) throws DataAccessException {
 		int rowNumber = jdbc.update("DELETE FROM reply WHERE comment_id=?", commentId);
-		rowNumber += jdbc.update("DELETE FROM comment WHERE comment_id=?", commentId);
+		rowNumber += jdbc.update("DELETE FROM comment WHERE id=?", commentId);
 		return rowNumber;
 	}
 }
