@@ -14,7 +14,9 @@
 					<tr th:each="user: ${userList}">
 						<td th:text="${#dates.format(user.createdAt, 'yyyy/MM/dd')}" style="vertical-align: bottom;"></td>
 						<td>
-							<img th:src="@{*{user.image}}" width="100" height="100">
+							<a th:href="@{'/userDetail/' + ${user.id}}">
+								<img th:src="@{*{user.image}}" width="100" height="100">
+							</a>
 							<br>
 							<a th:href="@{'/userDetail/' + ${user.id}}" th:text="${user.name}"></a>
 						</td>
