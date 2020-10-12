@@ -99,7 +99,8 @@ public class UserController {
 			}
 			model.addAttribute("user", user);
 			List<BookModel> books = userService.hasBook(id);
-			model.addAttribute("books", books);
+			model.addAttribute("bookList", books);
+			model.addAttribute("bookTable", "book/bookTable :: book_table");
 		}
 		return "/header";
 	}
@@ -110,7 +111,8 @@ public class UserController {
 		UserModel user = currentUser(httpServletRequest);
 		model.addAttribute("user", user);
 		List<BookModel> books = userService.hasBook(user.getId());
-		model.addAttribute("books", books);
+		model.addAttribute("bookList", books);
+		model.addAttribute("bookTable", "book/bookTable :: book_table");
 		model.addAttribute("result", "true");
 		return "/header";
 	}

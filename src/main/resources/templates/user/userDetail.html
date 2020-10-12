@@ -1,7 +1,7 @@
 <body>
 	<div th:fragment="userDetail_contents">
 		<div class="row" th:each="user: ${user}">
-			<div class="col-lg-4">
+			<div class="col-lg-3">
 				<div style="margin-top: 10vh;">
 					<table>
 						<tr>
@@ -38,29 +38,9 @@
 					</table>
 				</div>
 			</div>
-			<div class="col-lg-8">
+			<div class="col-lg-9">
 				<h1 class="text-center"><span th:text="*{user.name}"></span>さんの投稿一覧</h1>
-				<table class="table">
-					<tr>
-						<th></th>
-						<th>タイトル</th>
-						<th>著者</th>
-						<th>ジャンル</th>
-					</tr>
-					<tr th:each="book: ${books}">
-						<td>
-							<img th:src="@{*{book.image}}" height="80" width="60">
-						</td>
-						<td style="vertical-align: bottom;">
-							<a th:href="@{'/bookDetail/' + ${book.id}}" th:text="${book.title}"></a>
-						</td>
-						<td style="vertical-align: bottom;"><a th:text="${book.author}" th:href="@{'/author/' + *{book.author}}"></a></td>
-						<td style="vertical-align: bottom;"><a th:text="*{book.genre}" th:href="@{'/genre/' + *{book.genre}}"></a></td>
-						<td th:if="${result == 'true'}" style="vertical-align: bottom;">
-							<a th:href="@{'/bookEdit/' + ${book.id}}" class="btn btn-primary">編集</a>
-						</td>
-					</tr>
-				</table>
+				<div th:include="__${bookTable}__"></div>
 			</div>
 		</div>
 	</div>
