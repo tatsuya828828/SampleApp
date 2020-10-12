@@ -7,8 +7,13 @@
 			<textarea rows="5" class="form-control" required="true" th:field="*{comment}"></textarea>
 			<span class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">comment error</span>
 		</div>
+		<div class="pull-right">
+			<button class="btn btn-danger" type="submit" name="delete">
+				削除
+			</button>
+		</div>
 	    <div class="form-group pull-right">
-			<button class="btn btn-success form-control" type="submit">投稿</button>
+			<button class="btn btn-success form-control" type="submit">編集完了</button>
 		</div>
 		<script>
 		  $.fn.raty.defaults.path = "/webjars/jquery-raty/2.7.0/images";
