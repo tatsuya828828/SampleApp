@@ -60,7 +60,7 @@ public class CommentController {
 	@GetMapping("/bookDetail/{bookId}/editComment/{commentId}")
 	public String getEditComment(@ModelAttribute CommentForm form, Model model, @PathVariable("bookId") int bookId
 			, HttpServletRequest httpServletRequest, @PathVariable("commentId") int commentId) {
-		if(String.valueOf(bookId).length() > 0) {
+		if(String.valueOf(bookId).length() > 0 && String.valueOf(commentId).length()>0) {
 			BookModel book = bookService.selectOne(bookId);
 			UserModel user = userService.currentUser(httpServletRequest.getRemoteUser());
 			CommentModel comment = commentService.selectOne(commentId);
@@ -100,6 +100,17 @@ public class CommentController {
 		result(result, "コメント更新");
 		boolean result2 = bookService.updateEvaluation(bookId);
 		result(result2, "評価平均更新");
+		return "redirect:/bookDetail/{bookId}";
+	}
+
+	@PostMapping(value="/bookDetail/{bookId}/editComment/{commentId}", params="delete")
+	public String deleteComment(Model model, @PathVariable("commentId") int commentId
+			, @PathVariable("bookId") int bookId) {
+		System.out.println("かいし");
+		if(String.valueOf(bookId).length()>0 && String.valueOf(commentId).length()>0) {
+			boolean result = commentService.delete(commentId);
+			result(result, "コメント削除");
+		}
 		return "redirect:/bookDetail/{bookId}";
 	}
 }
