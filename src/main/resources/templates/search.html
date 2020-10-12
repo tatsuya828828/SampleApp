@@ -12,7 +12,9 @@
 		<tr th:each="book: ${bookList}">
 			<td th:text="*{#dates.format(book.createdAt, 'yyyy/MM/dd')}" style="vertical-align: bottom;"></td>
 			<td>
-				<img th:src="@{*{book.image}}" height="100" width="80">
+				<a th:href="@{'/bookDetail/' + *{book.id}}">
+					<img th:src="@{*{book.image}}" height="100" width="80">
+				</a>
 				<br>
 				<a th:href="@{'/bookDetail/' + *{book.id}}" th:text="*{book.title}"></a>
 			</td>
