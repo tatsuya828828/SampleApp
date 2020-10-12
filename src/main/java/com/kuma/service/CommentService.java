@@ -45,8 +45,8 @@ public class CommentService {
 		return commentRepository.selectMany(bookId);
 	}
 
-	public boolean delete(int userId, int bookId) {
-		int rowNumber = commentRepository.delete(userId, bookId);
-		return result(rowNumber);
+	public boolean delete(int commentId) {
+		int rowNumber = commentRepository.delete(commentId);
+		return result(rowNumber-1);
 	}
 }
