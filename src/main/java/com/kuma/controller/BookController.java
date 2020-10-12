@@ -68,6 +68,7 @@ public class BookController {
 	@GetMapping("/bookList")
 	public String getBookList(Model model) {
 		model.addAttribute("contents", "book/bookList :: bookList_contents");
+		model.addAttribute("bookTable", "book/bookTable :: book_table");
 		List<BookModel> bookList = bookService.selectMany();
 		model.addAttribute("bookList", bookList);
 		List<String> genres = bookService.selectGenres();
