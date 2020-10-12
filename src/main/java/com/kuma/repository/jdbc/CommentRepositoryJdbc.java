@@ -91,8 +91,9 @@ public class CommentRepositoryJdbc implements CommentRepository {
 	}
 
 	@Override
-	public int delete(int userId, int bookId) throws DataAccessException {
-		int rowNumber = jdbc.update("DELETE FROM comment WHERE user_id=? AND book_id=?", userId, bookId);
+	public int delete(int commentId) throws DataAccessException {
+		int rowNumber = jdbc.update("DELETE FROM reply WHERE comment_id=?", commentId);
+		rowNumber += jdbc.update("DELETE FROM comment WHERE comment_id=?", commentId);
 		return rowNumber;
 	}
 }

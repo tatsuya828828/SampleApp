@@ -12,5 +12,5 @@ public interface CommentRepository {
 	public int update(CommentModel comment) throws DataAccessException;
 	public boolean confirmComment(int userId, int bookId) throws DataAccessException;
 	public List<CommentModel> selectMany(int bookId) throws DataAccessException;
-	public int delete(int userId, int bookId) throws DataAccessException;
+	public int delete(int commentId) throws DataAccessException;
 }
