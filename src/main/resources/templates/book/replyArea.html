@@ -1,5 +1,5 @@
 <div th:fragment="reply_area">
-	<form method="post" th:object="${replyForm}"
+	<form method="post" th:object="${replyForm}" id="reply"
 		th:action="@{'/bookDetail/'+ ${book.id} + '/postReply/'+ ${comment.id}}">
 		<div class="form-group">
 			<textarea rows="5" class="form-control" required="true" th:field="*{reply}"></textarea>

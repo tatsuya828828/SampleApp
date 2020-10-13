@@ -7,7 +7,7 @@
 			<!-- 返信用ボタン -->
 			<a class="btn btn-success pull-right" style="margin-left: 1vh;"
 				th:if="${reply != true && editReplyId == null}"
-				th:href="@{'/bookDetail/'+ ${book.id} +'/postReply/'+ *{comment.id}}">返信
+				th:href="@{'/bookDetail/'+ ${book.id} +'/postReply/'+ *{comment.id} +'#reply'}">返信
 			</a>
 			<!-- 編集用ボタン -->
 			<a th:if="${userId == comment.user.id}"

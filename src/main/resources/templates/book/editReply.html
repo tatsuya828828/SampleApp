@@ -1,7 +1,7 @@
 <div th:fragment="edit_reply">
 	<form method="post" th:object="${replyForm}"
 		th:action="@{'/bookDetail/'+ ${book.id} + '/editReply/'+ ${editReplyId}}">
-		<div class="form-group">
+		<div class="form-group" th:id="'reply' + ${editReplyId}">
 			<textarea rows="5" class="form-control" required="true" th:field="*{reply}"></textarea>
 		</div>
 		<div class="form-group pull-right">

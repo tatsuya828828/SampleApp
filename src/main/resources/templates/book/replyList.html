@@ -1,11 +1,11 @@
 <div th:fragment="reply_list">
-	<details>
+	<details th:open="${comment.id == commentId}">
 		<summary>コメントへの返信([[*{comment.countReply}]])</summary>
 		<div th:each="replys: *{comment.reply}">
-			<div th:if="*{comment.id == replys.comment.id}">
+			<div th:if="*{comment.id == replys.comment.id}" th:id="'reply' + *{replys.id}">
 	   			<p th:if="${editReplyId != replys.id}">
 	   				<span th:text="*{replys.user.name}"></span>: <span th:text="*{replys.reply}"></span>
-	   				<a th:href="@{'/bookDetail/'+ ${book.id} +'/editReply/'+ ${replys.id}}"
+	   				<a th:href="@{'/bookDetail/'+ ${book.id} +'/editReply/'+ ${replys.id} +'#reply'+ ${replys.id}}"
 	   					th:if="${userId == replys.user.id}"
 	   					class="btn btn-primary">編集</a>
 				</p>
@@ -14,5 +14,6 @@
 				</div>
 			</div>
 		</div>
+		<div th:id="'bottom'+ *{comment.id}"></div>
 	</details>
 </div>
