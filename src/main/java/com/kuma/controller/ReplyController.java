@@ -101,7 +101,6 @@ public class ReplyController {
 				model.addAttribute("commentList", "book/commentList :: comment_list");
 				model.addAttribute("editReply", "book/editReply :: edit_reply");
 				model.addAttribute("replyList", "book/replyList :: reply_list");
-				model.addAttribute("test", "open");
 				model.addAttribute("editReplyId", replyId);
 				model.addAttribute("commentId", reply.getComment().getId());
 			} else {
