@@ -123,4 +123,13 @@ public class ReplyController {
 		result(result, "更新");
 		return "redirect:/bookDetail/{bookId}";
 	}
+
+	@PostMapping(value="/bookDetail/{bookId}/editReply/{replyId}", params="delete")
+	public String deleteReply(@PathVariable("bookId") int bookId, @PathVariable("replyId") int replyId) {
+		if(String.valueOf(bookId).length()>0 && String.valueOf(replyId).length()>0) {
+			boolean result = replyService.delete(replyId);
+			result(result, "リプライ削除");
+		}
+		return "redirect:/bookDetail/{bookId}";
+	}
 }
