@@ -106,7 +106,6 @@ public class CommentController {
 	@PostMapping(value="/bookDetail/{bookId}/editComment/{commentId}", params="delete")
 	public String deleteComment(@PathVariable("commentId") int commentId
 			, @PathVariable("bookId") int bookId) {
-		System.out.println("かいし");
 		if(String.valueOf(bookId).length()>0 && String.valueOf(commentId).length()>0) {
 			boolean result = commentService.delete(commentId);
 			result(result, "コメント削除");
