@@ -2,7 +2,7 @@
 	<h4>コメント</h4>
 	<table class="table" th:each="comment: ${comments}">
 		<tr style="word-wrap: break-word;" th:if="${editId != comment.id}">
-			<p th:text="*{comment.comment}"></p>
+			<p th:text="*{comment.comment}" th:id="'comment'+ ${comment.id}"></p>
 
 			<!-- 返信用ボタン -->
 			<a class="btn btn-success pull-right" style="margin-left: 1vh;"
@@ -11,7 +11,7 @@
 			</a>
 			<!-- 編集用ボタン -->
 			<a th:if="${userId == comment.user.id}"
-				th:href="@{'/bookDetail/'+ ${book.id} +'/editComment/'+ *{comment.id}}"
+				th:href="@{'/bookDetail/'+ ${book.id} +'/editComment/'+ *{comment.id} + '#comment' + *{comment.id}}"
 				class="btn btn-primary pull-right" style="margin-left: 1vh;">編集
 			</a>
 			<!-- 評価 -->
