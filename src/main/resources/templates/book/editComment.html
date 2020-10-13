@@ -3,7 +3,8 @@
 		th:action="@{'/bookDetail/'+ ${book.id} + '/editComment/'+ ${commentId}}"
 		th:object="${commentForm}">
 		<h4>コメント・評価 編集</h4>
-		<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
+		<div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'"
+			th:id="'comment'+ ${commentId}">
 			<textarea rows="5" class="form-control" required="true" th:field="*{comment}"></textarea>
 			<span class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">comment error</span>
 		</div>

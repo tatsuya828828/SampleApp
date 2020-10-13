@@ -54,7 +54,7 @@ public class CommentController {
 		result(result, "登録");
 		boolean result2 = bookService.updateEvaluation(comment.getBook().getId());
 		result(result2, "評価平均更新");
-		return "redirect:/bookDetail/{bookId}";
+		return "redirect:/bookDetail/{bookId}#bottom";
 	}
 
 	@GetMapping("/bookDetail/{bookId}/editComment/{commentId}")
@@ -100,7 +100,7 @@ public class CommentController {
 		result(result, "コメント更新");
 		boolean result2 = bookService.updateEvaluation(bookId);
 		result(result2, "評価平均更新");
-		return "redirect:/bookDetail/{bookId}";
+		return "redirect:/bookDetail/{bookId}#comment{commentId}";
 	}
 
 	@PostMapping(value="/bookDetail/{bookId}/editComment/{commentId}", params="delete")
