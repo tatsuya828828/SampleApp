@@ -166,7 +166,7 @@ public class UserController {
 	public String postUserDelete(@ModelAttribute SignupForm form, Model model, HttpServletRequest httpServletRequest) {
 		boolean result = userService.deleteOne(form.getId());
 		if(result == true) {
-			model.addAttribute("result", "削除成功");
+			System.out.println("削除成功");
 			try {
 				httpServletRequest.logout();
 			} catch (ServletException e) {
@@ -174,7 +174,7 @@ public class UserController {
 			}
 			return "redirect:/login";
 		} else {
-			model.addAttribute("result", "削除失敗");
+			System.out.println("削除失敗");
 		}
 		return "redirect:/userList";
 	}
