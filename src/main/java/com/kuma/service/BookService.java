@@ -43,7 +43,8 @@ public class BookService {
 
 	public boolean deleteOne(int id) {
 		int rowNumber = bookRepository.deleteOne(id);
-		return result(rowNumber);
+		System.out.println(rowNumber);
+		return result(rowNumber-2);
 	}
 
 	public boolean updateEvaluation(int bookId) {
