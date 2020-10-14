@@ -58,7 +58,7 @@ public class UserService {
 	// 1件削除用
 	public boolean deleteOne(int id) {
 		int rowNumber = userRepository.deleteOne(id);
-		return result(rowNumber);
+		return result(rowNumber-3);
 	}
 
 	public boolean saveLoginTime(String selfId) {
