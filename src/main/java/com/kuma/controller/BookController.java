@@ -155,7 +155,7 @@ public class BookController {
 		} else {
 			model.addAttribute("result", "削除失敗");
 		}
-		return getBookList(model);
+		return "redirect:/bookList";
 	}
 
 	@GetMapping("/author/{author}")
