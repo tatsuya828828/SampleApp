@@ -136,8 +136,11 @@ public class BookRepositoryJdbc implements BookRepository {
 
 	@Override
 	public int deleteOne(int id) throws DataAccessException {
-		int bookRowNumber = jdbc.update("DELETE FROM book WHERE id=?", id);
-		return bookRowNumber;
+		int rowNumber = jdbc.update("DELETE FROM reply WHERE comment_id="
+				+ "(SELECT id FROM comment WHERE book_id=?)", id);
+		rowNumber += jdbc.update("DELETE FROM comment WHERE book_id=?", id);
+		rowNumber += jdbc.update("DELETE FROM book WHERE id=?", id);
+		return rowNumber;
 	}
 
 	@Override
