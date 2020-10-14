@@ -86,8 +86,9 @@ public class UserRepositoryJdbc implements UserRepository {
 
 	@Override
 	public UserModel selectOne(int id) throws DataAccessException {
+		UserModel user = new UserModel();
 		Map<String, Object> map = jdbc.queryForMap("SELECT * FROM user"+" WHERE id = ?", id);
-		UserModel user = setUser(map);
+		user = setUser(map);
 		return user;
 	}
 
@@ -150,9 +151,15 @@ public class UserRepositoryJdbc implements UserRepository {
 
 	@Override
 	public int deleteOne(int id) throws DataAccessException {
-		// 1件削除
-		int userRowNumber = jdbc.update("DELETE FROM user WHERE id=?", id);
-		return userRowNumber;
+		int rowNumber = jdbc.update("DELETE FROM reply WHERE comment_id="
+				+ "(SELECT id FROM comment WHERE user_id=? OR book_id="
+					+ "(SELECT id FROM book WHERE user_id=?)"
+				+ ")", id, id);
+		rowNumber += jdbc.update("DELETE FROM comment WHERE user_id=? OR book_id="
+				+ "(SELECT id FROM book WHERE user_id=?)", id, id);
+		rowNumber += jdbc.update("DELETE FROM book WHERE user_id=?", id);
+		rowNumber = jdbc.update("DELETE FROM user WHERE id=?", id);
+		return rowNumber;
 	}
 
 	@Override
